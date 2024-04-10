@@ -1,0 +1,13 @@
+<ul>
+  <li *ngFor="let edition of editions">
+    <a [routerLink]="['/edition', edition.slug]">
+      <img *ngIf="edition.featuredMedia" [src]="edition.featuredMedia.size.thumbnail?.source" [alt]="edition.title" />
+      <h2 class="title">{{ edition.title }}</h2>
+      <div [innerHTML]="edition.content"></div>
+    </a>
+  </li>
+</ul>
+
+<div class="pagination" *ngIf="hasMore">
+  <span class="load-more-btn" (click)="loadMore()">Load More</span>
+</div>

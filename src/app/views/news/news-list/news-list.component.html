@@ -1,0 +1,14 @@
+<ul>
+  <li *ngFor="let newsItem of news">
+    <a [routerLink]="['/news', newsItem.slug]">
+      <img *ngIf="newsItem.featuredMedia" [src]="newsItem.featuredMedia.size.thumbnail?.source"
+        [alt]="newsItem.title" />
+      <h2 class="title">{{ newsItem.title }}</h2>
+      <div [innerHTML]="newsItem.excerpt"></div>
+    </a>
+  </li>
+</ul>
+
+<div class="pagination" *ngIf="hasMore">
+  <span class="load-more-btn" (click)="loadMore()">Load More</span>
+</div>
