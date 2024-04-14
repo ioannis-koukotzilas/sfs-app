@@ -1,0 +1,161 @@
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+/* Box sizing
+--------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+/* App
+--------------------------------------------- */
+
+app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main > *:not(router-outlet) {
+  flex-grow: 1;
+}
+
+/* Typography
+--------------------------------------------- */
+
+html {
+  font-size: 14px;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body,
+button,
+input,
+select,
+optgroup,
+textarea {
+  font-family: var(--font-sans);
+  font-size: var(--font-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-base);
+  color: rgb(var(--color-primary-200));
+  font-feature-settings: 'pnum' 1,'kern' 1,'ss01' 1,'ss03' 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-base);
+  margin: 0;
+}
+
+h1 {
+  line-height: 1.2;
+}
+
+h3 {
+  line-height: 1.2;
+}
+
+p {
+  margin: 0 0 1.5rem;
+}
+
+/* Elements
+--------------------------------------------- */
+
+body {
+  background: rgb(var(--color-primary-950));
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+figure {
+  margin: 1rem 0;
+}
+
+picture {
+  display: block;
+}
+
+/* Links
+--------------------------------------------- */
+a {
+  cursor: pointer;
+  display: inline-block;
+  color: rgb(var(--color-primary-200));
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+a:visited {
+  color: rgb(var(--color-primary-200));
+}
+
+a:hover,
+a:focus {
+  color: rgb(var(--color-primary-50));
+}
+
+a:focus,
+a:hover,
+a:active {
+  outline: 0;
+}
+
+.underline {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25rem;
+  text-decoration-color: rgb(var(--color-accent-150));
+}
+
+.underline:hover {
+  color: rgb(var(--color-primary-50));
+}
+
+/* Buttons
+--------------------------------------------- */
+
+button {
+  background-color: transparent;
+  border: none;
+  color: rgb(var(--color-primary-200));
+  cursor: pointer;
+  padding: 0;
+}

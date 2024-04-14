@@ -40,37 +40,44 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
           const slug = params.get('slug');
           return slug ? this._wpService.getEdition(slug) : of(null);
         }),
-        switchMap((edition) => {
+        tap((edition) => {
           if (edition) {
             this.initEdition(edition);
-            return this._wpService.getMediaById(this.edition.featuredMediaId);
           } else {
-            return of(null);
+            throw new Error('No edition found');
           }
+        }),
+        switchMap(() => {
+          if (this.edition.featuredMediaId && this.edition.featuredMediaId > 0) {
+            return this._wpService.getMediaById(this.edition.featuredMediaId);
+          }
+
+          return of(null);
         }),
         switchMap((featuredMedia) => {
           if (featuredMedia) {
             this.edition.featuredMedia = this.initFeaturedMedia(featuredMedia);
-            return this._wpService.getMediaByIds(this.edition.galleryMediaIds);
-          } else {
-            return of(null);
           }
+
+          if (this.edition.galleryMediaIds && this.edition.galleryMediaIds.length > 0) {
+            return this._wpService.getMediaByIds(this.edition.galleryMediaIds);
+          }
+
+          return of(null);
         }),
         switchMap((galleryMedia) => {
           if (galleryMedia) {
             this.edition.galleryMedia = this.initGalleryMedia(galleryMedia);
-            return this._wpService.getEventsByEditionId(this.edition.id, 8);
-          } else {
-            return of(null);
           }
+
+          return this._wpService.getEventsByEditionId(this.edition.id, 8);
         }),
         switchMap((events) => {
           if (events && events.length > 0) {
             this.initEvents(events);
-            return this._wpService.getNewsByEditionId(this.edition.id, 8);
-          } else {
-            return of(null);
           }
+
+          return this._wpService.getNewsByEditionId(this.edition.id, 8);
         }),
         tap((news) => {
           if (news && news.length > 0) {

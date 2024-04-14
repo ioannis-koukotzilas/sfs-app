@@ -1,13 +1,23 @@
-<ul>
-  <li *ngFor="let event of events">
-    <a [routerLink]="['/event', event.slug]">
-      <img *ngIf="event.featuredMedia" [src]="event.featuredMedia.size.thumbnail?.source" [alt]="event.title" />
-      <h2 class="title">{{ event.title }}</h2>
-      <div [innerHTML]="event.excerpt"></div>
-    </a>
-  </li>
-</ul>
+<div class="container">
 
-<div class="pagination" *ngIf="hasMore">
-  <span class="load-more-btn" (click)="loadMore()">Load More</span>
+  <header class="header">
+    <div class="wrapper">
+      <h1 class="title">Events</h1>
+    </div>
+  </header>
+
+  <ul>
+    <li *ngFor="let event of events">
+      <a [routerLink]="['/event', event.slug]">
+        <img *ngIf="event.featuredMedia" [src]="event.featuredMedia.size.thumbnail?.source" [alt]="event.title" />
+        <h2 class="title">{{ event.title }}</h2>
+        <div [innerHTML]="event.excerpt"></div>
+      </a>
+    </li>
+  </ul>
+
+  <div class="pagination" *ngIf="hasMore">
+    <span class="load-more-btn" (click)="loadMore()">Load More</span>
+  </div>
+
 </div>

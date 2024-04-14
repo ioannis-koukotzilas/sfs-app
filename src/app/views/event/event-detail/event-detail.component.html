@@ -1,7 +1,9 @@
-<div class="edition" *ngIf="event">
+<ng-container *ngIf="event">
   <div class="container">
     <header class="header">
-      <h1 class="title">{{ event.title }}</h1>
+      <div class="wrapper">
+        <h1 class="title">{{ event.title }}</h1>
+      </div>
     </header>
 
     <div class="content" *ngIf="event.content" [innerHTML]="event.content"></div>
@@ -31,4 +33,4 @@
       </ul>
     </div>
   </div>
-</div>
+</ng-container>

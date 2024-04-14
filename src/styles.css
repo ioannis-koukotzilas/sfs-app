@@ -1,22 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
-
-html {
-  font-size: 14px;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: normal;
-  background-color: #111;
-  color: #eee;
-}
-
-a, a:hover, a:visited {
-  color: #eee;
-}
-
-h1 {
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
+@import url('./assets/styles/normalize.css');
+@import url('./assets/styles/fonts.css');
+@import url('./assets/styles/variables.css');
+@import url('./assets/styles/main.css');

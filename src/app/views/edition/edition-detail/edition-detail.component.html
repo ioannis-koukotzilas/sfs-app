@@ -1,7 +1,9 @@
-<div class="edition" *ngIf="edition">
+<ng-container *ngIf="edition">
   <div class="container">
     <header class="header">
-      <h1 class="title">{{ edition.title }}</h1>
+      <div class="wrapper">
+        <h1 class="title">{{ edition.title }}</h1>
+      </div>
     </header>
 
     <div class="content" *ngIf="edition.content" [innerHTML]="edition.content"></div>
@@ -10,13 +12,13 @@
       <img [src]="edition.featuredMedia.size.thumbnail?.source" alt="" />
     </div>
 
-    <ng-container *ngIf="edition.galleryMedia">
-      <ul>
-        <li *ngFor="let media of edition.galleryMedia">
+    <div class="gallery" *ngIf="edition.galleryMedia">
+      <ul class="gallery-items">
+        <li class="gallery-item" *ngFor="let media of edition.galleryMedia">
           <img [src]="media.size.thumbnail?.source" />
         </li>
       </ul>
-    </ng-container>
+    </div>
 
     <div *ngIf="events && events.length">
       <h2>Related Event</h2>
@@ -44,4 +46,4 @@
       </ul>
     </div>
   </div>
-</div>
+</ng-container>

@@ -11,6 +11,7 @@ import { NewsListComponent } from './views/news/news-list/news-list.component';
 const routes: Routes = [
   { path: 'page/:slug', component: PageDefaultComponent },
   { path: 'editions', component: EditionListComponent },
+  { path: 'editions/page/:page', component: EditionListComponent },
   { path: 'edition/:slug', component: EditionDetailComponent },
   { path: 'news', component: NewsListComponent },
   { path: 'news/:slug', component: NewsDetailComponent },

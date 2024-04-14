@@ -6,6 +6,7 @@ import { Subscription, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edition-list',
@@ -18,31 +19,38 @@ export class EditionListComponent implements OnInit, OnDestroy {
 
   editions: Edition[] = [];
 
-  page: number = 1;
+  currentPage: number = 1;
   perPage: number = 1;
-  hasMore = true;
+  totalPages: number = 0;
 
-  constructor(private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
 
   ngOnInit(): void {
-    this.getEditions(this.page, this.perPage);
+    this.checkRouteParams();
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
+  private checkRouteParams(): void {
+    const routeParamsSubscription = this._activatedRoute.params.subscribe(params => {
+      this.currentPage = params['page'] ? +params['page'] : 1;
+      this.getEditions(this.currentPage, this.perPage);
+    })
+
+    this._subscriptions.add(routeParamsSubscription);
+  }
+
   private getEditions(page: number, perPage: number): void {
-    const editionsSubscription = this._wpService
+    this.editions = [];
+    const getEditionsSubscription = this._wpService
       .getEditions(page, perPage)
       .pipe(
         switchMap(({ data, headers }) => {
           if (data && data.length > 0) {
             this.initEditions(data);
-            const totalPages = Number(headers.get('X-WP-TotalPages'));
-            if (page >= totalPages) {
-              this.hasMore = false;
-            }
+            this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           } else {
@@ -64,12 +72,11 @@ export class EditionListComponent implements OnInit, OnDestroy {
         },
       });
 
-      this._subscriptions.add(editionsSubscription);
+      this._subscriptions.add(getEditionsSubscription);
   }
 
-  loadMore(): void {
-    this.page += 1;
-    this.getEditions(this.page, this.perPage);
+  paginate(page: number): void {
+    this._router.navigate(['/editions/page', page]);
   }
 
   private initEditions(editions: any[]): void {
