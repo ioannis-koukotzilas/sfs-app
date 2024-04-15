@@ -155,4 +155,6 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       this._titleService.setTitle(this._appTitle);
     }
   }
+
+  
 }

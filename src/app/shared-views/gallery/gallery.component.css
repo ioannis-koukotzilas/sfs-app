@@ -1,0 +1,86 @@
+.modal {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--color-primary-950), 0.75);
+}
+
+.modal > .wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.modal .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .swiper-slide img {
+  max-width: calc(100% - 20px);
+  max-height: calc(100% - 110px);
+  object-fit: contain;
+}
+
+.modal .swiper-slide .caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgb(var(--color-primary-1000));
+  color: rgb(var(--color-primary-50));
+}
+
+.modal .swiper-slide .caption > .wrapper {
+  padding: 20px;
+  text-align: center;
+  font-size: var(--font-sm);
+}
+
+.modal .navigation {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal .navigation button {
+  position: relative;
+  z-index: 2;
+}
+
+.modal .close-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  margin: 20px;
+  cursor: pointer;
+  font-size: var(--font-2xl);
+  color: rgb(var(--color-primary-50));
+}
+
+
+
+
+
+.modal .swiper-pagination {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  color: rgb(var(--color-primary-50));
+}

@@ -159,3 +159,13 @@ button {
   cursor: pointer;
   padding: 0;
 }
+
+
+
+
+
+
+
+body.gallery-modal-active {
+  overflow: hidden;
+}

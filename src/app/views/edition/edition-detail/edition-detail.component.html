@@ -12,13 +12,11 @@
       <img [src]="edition.featuredMedia.size.thumbnail?.source" alt="" />
     </div>
 
-    <div class="gallery" *ngIf="edition.galleryMedia">
-      <ul class="gallery-items">
-        <li class="gallery-item" *ngFor="let media of edition.galleryMedia">
-          <img [src]="media.size.thumbnail?.source" />
-        </li>
-      </ul>
-    </div>
+
+
+
+    <app-gallery *ngIf="edition.galleryMedia" [galleryMedia]="edition.galleryMedia"></app-gallery>
+    
 
     <div *ngIf="events && events.length">
       <h2>Related Event</h2>
@@ -46,4 +44,19 @@
       </ul>
     </div>
   </div>
+
+
+
 </ng-container>
+
+
+
+<!-- <swiper-container #swiper [config]="swiperConfig">
+  <swiper-slide>Slide 1</swiper-slide>
+  <swiper-slide>Slide 2</swiper-slide>
+  <swiper-slide>Slide 3</swiper-slide>
+  ...
+</swiper-container> -->
+
+
+

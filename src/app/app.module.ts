@@ -17,6 +17,7 @@ import { EventDetailComponent } from './views/event/event-detail/event-detail.co
 import { HttpErrorInterceptor } from './interceptor/http-error.interceptor';
 import { LoadingProgressComponent } from './core/loading-progress/loading-progress.component';
 import { HttpLoadingInterceptor } from './interceptor/http-loading.interceptor';
+import { GalleryComponent } from './shared-views/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { HttpLoadingInterceptor } from './interceptor/http-loading.interceptor';
     EventListComponent,
     EventDetailComponent,
     LoadingProgressComponent,
+    GalleryComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [
