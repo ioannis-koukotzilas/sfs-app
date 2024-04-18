@@ -38,31 +38,37 @@ export class EventDetailComponent {
           const slug = params.get('slug');
           return slug ? this._wpService.getEvent(slug) : of(null);
         }),
-        switchMap((event) => {
+        tap((event) => {
           if (event) {
             this.initEvent(event);
-            if(this.event.featuredMediaId === 0) return of(null);
-            return this._wpService.getMediaById(this.event.featuredMediaId);
           } else {
-            return of(null);
+            throw new Error('No event found');
           }
+        }),
+        switchMap(() => {
+          if (this.event.featuredMediaId && this.event.featuredMediaId > 0) {
+            return this._wpService.getMediaById(this.event.featuredMediaId);
+          }
+
+          return of(null);
         }),
         switchMap((featuredMedia) => {
           if (featuredMedia) {
             this.event.featuredMedia = this.initFeaturedMedia(featuredMedia);
-            if(!this.event.galleryMediaIds) return of(null);
-            return this._wpService.getMediaByIds(this.event.galleryMediaIds);
-          } else {
-            return of(null);
           }
+
+          if (this.event.galleryMediaIds && this.event.galleryMediaIds.length > 0) {
+            return this._wpService.getMediaByIds(this.event.galleryMediaIds);
+          }
+
+          return of(null);
         }),
         switchMap((galleryMedia) => {
           if (galleryMedia) {
             this.event.galleryMedia = this.initGalleryMedia(galleryMedia);
-            return this._wpService.getNewsByEventId(this.event.id, 8);
-          } else {
-            return of(null);
           }
+
+          return this._wpService.getNewsByEventId(this.event.id, 8);
         }),
         tap((news) => {
           if (news && news.length > 0) {
@@ -106,7 +112,6 @@ export class EventDetailComponent {
       galleryItem.id = media.id;
       galleryItem.link = media.link;
       galleryItem.size = this._mediaService.mapMediaSize(media);
-
       return galleryItem;
     });
 
@@ -116,7 +121,10 @@ export class EventDetailComponent {
   private initNews(news: any[]): void {
     this.news = news.map((data) => {
       let news = new News();
+      news.slug = data.slug;
+      news.date = data.date;
       news.title = data.title.rendered;
+      news.excerpt = data.excerpt.rendered;
       news.content = data.content.rendered;
       return news;
     });
