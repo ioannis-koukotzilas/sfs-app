@@ -1,0 +1,24 @@
+<app-progress-bar [loading]="loading"></app-progress-bar>
+
+<div class="page" *ngIf="page">
+  <div class="container">
+    <header class="header">
+      <h1 class="title">{{ page.title }}</h1>
+    </header>
+
+    <div class="content" *ngIf="page.content" [innerHTML]="page.content"></div>
+  </div>
+</div>
+
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submitForm()">
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" formControlName="email" required>
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name" required>
+  </div>
+  <!-- Add more input fields as needed -->
+  <button type="submit">Submit</button>
+</form>

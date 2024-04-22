@@ -15,9 +15,22 @@ import { NewsListComponent } from './views/news/news-list/news-list.component';
 import { EventListComponent } from './views/event/event-list/event-list.component';
 import { EventDetailComponent } from './views/event/event-detail/event-detail.component';
 import { HttpErrorInterceptor } from './interceptor/http-error.interceptor';
-import { LoadingProgressComponent } from './core/loading-progress/loading-progress.component';
-import { HttpLoadingInterceptor } from './interceptor/http-loading.interceptor';
 import { GalleryComponent } from './shared-views/gallery/gallery.component';
+import { ListPaginationComponent } from './shared-views/list-pagination/list-pagination.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ProgressBarComponent } from './shared-views/progress-bar/progress-bar.component';
+import { RemoveGreekAccentsPipe } from './pipes/remove-greek-accents.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PageInfoComponent } from './views/page/page-info/page-info.component';
+import { PageContactComponent } from './views/page/page-contact/page-contact.component';
+import { PageWrapperComponent } from './views/page/page-wrapper/page-wrapper.component';
+import { IsoDatePipe } from './pipes/iso-date.pipe';
+import { DateTimePipe } from './pipes/date-time.pipe';
+import { DatePipe } from './pipes/date.pipe';
+import { PageAboutComponent } from './views/page/page-about/page-about.component';
+import { NavigatorShareComponent } from './shared-views/navigator-share/navigator-share.component';
+import { NewsCategoryDetailComponent } from './views/category/news-category-detail/news-category-detail.component';
+import { EventCategoryDetailComponent } from './views/category/event-category-detail/event-category-detail.component';
 
 @NgModule({
   declarations: [
@@ -32,21 +45,35 @@ import { GalleryComponent } from './shared-views/gallery/gallery.component';
     NewsDetailComponent,
     EventListComponent,
     EventDetailComponent,
-    LoadingProgressComponent,
-    GalleryComponent
+    GalleryComponent,
+    ListPaginationComponent,
+    ProgressBarComponent,
+
+    // Pipes
+    RemoveGreekAccentsPipe,
+     
+
+     PageInfoComponent,
+     PageContactComponent,
+     PageWrapperComponent,
+     IsoDatePipe,
+     DateTimePipe,
+     DatePipe,
+     PageAboutComponent,
+     NavigatorShareComponent,
+     NewsCategoryDetailComponent,
+     EventCategoryDetailComponent,
+
+     
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpLoadingInterceptor,
-      multi: true,
-    },
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent],
 })

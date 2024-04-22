@@ -1,0 +1,16 @@
+body.route-about {
+  background-color: rgb(var(--cod-gray-950));
+  color: rgb(var(--punch-400));
+}
+
+/* body.route-news {
+  background-color: rgb(var(--corn-500));
+} */
+
+app-page-about .content h2 {
+  /* font-family: var(--font-sans-condensed); */
+  font-weight: var(--font-bold);
+  font-size: var(--font-2xl);
+  line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
+}

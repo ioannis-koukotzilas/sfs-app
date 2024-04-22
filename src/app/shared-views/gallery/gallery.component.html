@@ -1,7 +1,7 @@
 <div class="gallery" *ngIf="galleryMedia && galleryMedia.length">
   <ul class="gallery-items">
     <li class="gallery-item" *ngFor="let media of galleryMedia; let i = index" (click)="openModal(i)">
-      <img [src]="media.size.thumbnail?.source" alt="Gallery item">
+      <img [src]="media.size.thumbnail?.src" alt="Gallery item">
     </li>
   </ul>
 </div>
@@ -28,7 +28,7 @@
     <div class="swiper" #swiper>
       <div class="swiper-wrapper">
         <div class="swiper-slide" *ngFor="let media of galleryMedia">
-          <img [src]="media.size.large?.source" alt="Gallery image" />
+          <img [src]="media.size.large?.src" alt="Gallery image" />
         </div>
       </div>
       <div class="swiper-navigation">

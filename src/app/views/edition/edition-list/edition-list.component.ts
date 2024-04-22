@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { WpService } from '../../../services/wp.service';
 import { Edition } from '../../../models/entities/edition';
@@ -17,13 +17,21 @@ export class EditionListComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
+  loading = false;
+
   editions: Edition[] = [];
 
   currentPage: number = 1;
   perPage: number = 1;
   totalPages: number = 0;
 
-  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title
+  ) {}
 
   ngOnInit(): void {
     this.checkRouteParams();
@@ -34,21 +42,22 @@ export class EditionListComponent implements OnInit, OnDestroy {
   }
 
   private checkRouteParams(): void {
-    const routeParamsSubscription = this._activatedRoute.params.subscribe(params => {
+    const routeParamsSubscription = this._activatedRoute.params.subscribe((params) => {
       this.currentPage = params['page'] ? +params['page'] : 1;
       this.getEditions(this.currentPage, this.perPage);
-    })
+    });
 
     this._subscriptions.add(routeParamsSubscription);
   }
 
   private getEditions(page: number, perPage: number): void {
-    this.editions = [];
+    this.loading = true;
     const getEditionsSubscription = this._wpService
       .getEditions(page, perPage)
       .pipe(
         switchMap(({ data, headers }) => {
           if (data && data.length > 0) {
+            this.editions = [];
             this.initEditions(data);
             this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
@@ -66,16 +75,18 @@ export class EditionListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
+          this.loading = false;
         },
       });
 
-      this._subscriptions.add(getEditionsSubscription);
+    this._subscriptions.add(getEditionsSubscription);
   }
 
-  paginate(page: number): void {
+  onPageChange(page: number): void {
     this._router.navigate(['/editions/page', page]);
   }
 

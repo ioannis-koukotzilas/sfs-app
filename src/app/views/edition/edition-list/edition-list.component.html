@@ -1,35 +1,21 @@
+<app-progress-bar [loading]="loading"></app-progress-bar>
 
-  <div class="container">
+<div class="container">
+  <header class="header">
+    <div class="wrapper">
+      <h1 class="title">Editions</h1>
+    </div>
+  </header>
 
-    <header class="header">
-      <div class="wrapper">
-        <h1 class="title">Editions</h1>
-      </div>
-    </header>
+  <ul>
+    <li *ngFor="let edition of editions">
+      <a [routerLink]="['/edition', edition.slug]">
+        <img *ngIf="edition.featuredMedia" [src]="edition.featuredMedia.size.thumbnail?.src" [alt]="edition.title" />
+        <h2 class="title">{{ edition.title }}</h2>
+        <div [innerHTML]="edition.content"></div>
+      </a>
+    </li>
+  </ul>
 
-    <ul>
-      <li *ngFor="let edition of editions">
-        <a [routerLink]="['/edition', edition.slug]">
-          <img *ngIf="edition.featuredMedia" [src]="edition.featuredMedia.size.thumbnail?.source"
-            [alt]="edition.title" />
-          <h2 class="title">{{ edition.title }}</h2>
-          <div [innerHTML]="edition.content"></div>
-        </a>
-      </li>
-    </ul>
-
-    <nav aria-label="Edition pagination">
-      <ul class="pagination">
-        <li class="page-item" *ngIf="currentPage > 1" (click)="paginate(currentPage - 1)">
-          <a class="page-link">Previous</a>
-        </li>
-        <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index"
-          [class.active]="currentPage === i + 1" (click)="paginate(i + 1)">
-          <a class="page-link">{{ i + 1 }}</a>
-        </li>
-        <li class="page-item" *ngIf="currentPage < totalPages" (click)="paginate(currentPage + 1)">
-          <a class="page-link">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+</div>

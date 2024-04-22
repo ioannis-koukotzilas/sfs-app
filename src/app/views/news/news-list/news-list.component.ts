@@ -6,6 +6,7 @@ import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
 import { News } from '../../../models/entities/news';
 import { Media } from '../../../models/entities/media';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-news-list',
@@ -16,33 +17,49 @@ export class NewsListComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
+  loading = false;
+
   news: News[] = [];
 
-  page: number = 1;
-  perPage: number = 1;
-  hasMore = true;
+  currentPage: number = 1;
+  perPage: number = 2;
+  totalPages: number = 0;
 
-  constructor(private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title
+  ) {}
 
   ngOnInit(): void {
-    this.getNews(this.page, this.perPage);
+    this.checkRouteParams();
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
+  private checkRouteParams(): void {
+    const routeParamsSubscription = this._activatedRoute.params.subscribe((params) => {
+      this.currentPage = params['page'] ? +params['page'] : 1;
+      this.getNews(this.currentPage, this.perPage);
+    });
+
+    this._subscriptions.add(routeParamsSubscription);
+  }
+
   private getNews(page: number, perPage: number): void {
+    this.loading = true;
     const newsSubscription = this._wpService
       .getNewsList(page, perPage)
       .pipe(
         switchMap(({ data, headers }) => {
           if (data && data.length > 0) {
+            this.news = [];
             this.initNews(data);
-            const totalPages = Number(headers.get('X-WP-TotalPages'));
-            if (page >= totalPages) {
-              this.hasMore = false;
-            }
+            this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           } else {
@@ -58,18 +75,19 @@ export class NewsListComponent {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
+          this.loading = false;
         },
       });
 
     this._subscriptions.add(newsSubscription);
   }
 
-  loadMore(): void {
-    this.page += 1;
-    this.getNews(this.page, this.perPage);
+  onPageChange(page: number): void {
+    this._router.navigate(['/news/page', page]);
   }
 
   private initNews(news: any[]): void {
@@ -77,9 +95,9 @@ export class NewsListComponent {
       let newsItem = new News();
       newsItem.slug = data.slug;
       newsItem.title = data.title.rendered;
+      newsItem.date = data.date;
       newsItem.excerpt = data.excerpt.rendered;
       newsItem.featuredMediaId = data.featured_media;
-
       return newsItem;
     });
 

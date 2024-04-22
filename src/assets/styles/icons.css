@@ -1,0 +1,67 @@
+/*--------------------------------------------------------------
+# Material Icons
+--------------------------------------------------------------*/
+
+.icon-text,
+.icon-hyperlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-text > .icon,
+.icon-hyperlink > .icon {
+  font-size: var(--font-base);
+}
+
+.icon {
+  font-family: var(--font-icon);
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*--------------------------------------------------------------
+# Material Symbols
+--------------------------------------------------------------*/
+
+.symbol-text,
+.symbol-hyperlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.symbol-text > .symbol,
+.symbol-hyperlink > .symbol {
+  font-size: var(--font-base);
+}
+
+.symbol {
+  font-family: var(--font-symbol);
+  font-weight: normal;
+  font-style: normal;
+  font-size: var(--font-2xl);
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga";
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}

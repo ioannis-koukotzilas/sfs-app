@@ -1,3 +1,6 @@
+<app-progress-bar [loading]="loading"></app-progress-bar>
+
+
 <ng-container *ngIf="event">
   <div class="container">
     <header class="header">
@@ -9,13 +12,13 @@
     <div class="content" *ngIf="event.content" [innerHTML]="event.content"></div>
 
     <div *ngIf="event.featuredMedia">
-      <img [src]="event.featuredMedia.size.thumbnail?.source" alt="" />
+      <img [src]="event.featuredMedia.size.thumbnail?.src" alt="" />
     </div>
 
     <ng-container *ngIf="event.galleryMedia">
       <ul>
         <li *ngFor="let media of event.galleryMedia">
-          <img [src]="media.size.thumbnail?.source" />
+          <img [src]="media.size.thumbnail?.src" />
         </li>
       </ul>
     </ng-container>
@@ -25,7 +28,7 @@
       <ul>
         <li *ngFor="let newsItem of news">
           <a [routerLink]="['/news', newsItem.slug]">
-            <div>{{ newsItem.date | date:'dd.MM.yy' }}</div>
+            <!-- <div>{{ newsItem.date | date:'dd.MM.yy' }}</div> -->
             <h2 class="title">{{ newsItem.title }}</h2>
             <div [innerHTML]="newsItem.excerpt"></div>
           </a>

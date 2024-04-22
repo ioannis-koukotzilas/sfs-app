@@ -1,0 +1,9 @@
+nav {
+  margin-top: 3rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}

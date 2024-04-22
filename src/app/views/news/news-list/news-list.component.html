@@ -1,24 +1,38 @@
-<div class="container">
+<app-progress-bar [loading]="loading"></app-progress-bar>
 
+<div class="container">
   <header class="header">
     <div class="wrapper">
-      <h1 class="title">News</h1>
+      <h1 class="title">{{ "Ενημέρωση" | removeGreekAccents }}</h1>
     </div>
   </header>
 
-  <ul>
-    <li *ngFor="let newsItem of news">
-      <a [routerLink]="['/news', newsItem.slug]">
-        <img *ngIf="newsItem.featuredMedia" [src]="newsItem.featuredMedia.size.thumbnail?.source"
-          [alt]="newsItem.title" />
-        <h2 class="title">{{ newsItem.title }}</h2>
-        <div [innerHTML]="newsItem.excerpt"></div>
-      </a>
-    </li>
-  </ul>
+  <ng-container *ngIf="news && news.length; else noData">
+    <div class="articles">
+      <article class="article" *ngFor="let article of news">
+        <a class="grid" [routerLink]="['/news', article.slug]">
+          <div class="col">
+            <img class="featured-media" *ngIf="article.featuredMedia" [src]="article.featuredMedia.size.mediumLarge?.src" [alt]="article.title" />
+          </div>
 
-  <div class="pagination" *ngIf="hasMore">
-    <span class="load-more-btn" (click)="loadMore()">Load More</span>
-  </div>
+          <div class="col">
+            <header class="header">
+              <h2 class="title">{{ article.title }}</h2>
+              <time class="date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+            </header>
 
+            <div class="content">
+              <div [innerHTML]="article.excerpt"></div>
+            </div>
+          </div>
+        </a>
+      </article>
+    </div>
+
+    <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+  </ng-container>
+
+  <ng-template #noData>
+    <p>No data available.</p>
+  </ng-template>
 </div>

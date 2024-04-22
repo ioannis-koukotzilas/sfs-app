@@ -6,6 +6,7 @@ import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
 import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
@@ -16,33 +17,49 @@ export class EventListComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
+  loading = false;
+
   events: Event[] = [];
 
-  page: number = 1;
+  currentPage: number = 1;
   perPage: number = 1;
-  hasMore = true;
+  totalPages: number = 0;
 
-  constructor(private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title
+  ) {}
 
   ngOnInit(): void {
-    this.getEvents(this.page, this.perPage);
+    this.checkRouteParams();
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
+  private checkRouteParams(): void {
+    const routeParamsSubscription = this._activatedRoute.params.subscribe((params) => {
+      this.currentPage = params['page'] ? +params['page'] : 1;
+      this.getEvents(this.currentPage, this.perPage);
+    });
+
+    this._subscriptions.add(routeParamsSubscription);
+  }
+
   private getEvents(page: number, perPage: number): void {
+    this.loading = true;
     const eventsSubscription = this._wpService
       .getEvents(page, perPage)
       .pipe(
         switchMap(({ data, headers }) => {
           if (data && data.length > 0) {
+            this.events = [];
             this.initEvents(data);
-            const totalPages = Number(headers.get('X-WP-TotalPages'));
-            if (page >= totalPages) {
-              this.hasMore = false;
-            }
+            this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           } else {
@@ -58,18 +75,23 @@ export class EventListComponent {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
+          this.loading = false;
         },
       });
 
     this._subscriptions.add(eventsSubscription);
   }
 
-  loadMore(): void {
-    this.page += 1;
-    this.getEvents(this.page, this.perPage);
+  onPageChange(page: number): void {
+    if (page === 1) {
+      this._router.navigate(['/events']);
+    } else {
+      this._router.navigate(['/events/page', page]);
+    }
   }
 
   private initEvents(events: any[]): void {

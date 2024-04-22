@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+button {
+  font-size: var(--font-sm);
+}

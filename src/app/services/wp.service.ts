@@ -7,6 +7,7 @@ import { Edition } from '../models/entities/edition';
 import { News } from '../models/entities/news';
 import { Event } from '../models/entities/event';
 import { Media } from '../models/entities/media';
+import { Category } from '../models/entities/category';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,7 @@ export class WpService {
     return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?slug=${slug}`).pipe(map((data) => data[0] || null));
   }
 
+  // Αν δεν υπάρχει link object θα τα φέρει όλα
   getNewsByEventId(eventId: number, postsPerPage: number = 10): Observable<News[]> {
     return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?event_id=${eventId}&posts_per_page=${postsPerPage}`);
   }
@@ -69,6 +71,7 @@ export class WpService {
     return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?slug=${slug}`).pipe(map((data) => data[0] || null));
   }
 
+  // Αν δεν υπάρχει link object θα τα φέρει όλα
   getEventsByNewsId(newsId: number, postsPerPage: number = 10): Observable<Event[]> {
     return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?news_id=${newsId}&posts_per_page=${postsPerPage}`);
   }
@@ -93,4 +96,43 @@ export class WpService {
     const idsParam = mediaIds.join(',');
     return this._http.get<Media[]>(`${this._wpJsonBaseUrl}/media?include=${idsParam}`);
   }
+
+  // taxonomies
+
+  getCategoriesByPostId(id: number): Observable<Category[]> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/tax_category?post=${id}`);
+  }
+
+  getCategory(slug: string): Observable<Category> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/tax_category?slug=${slug}`).pipe(map((data) => data[0] || null));
+  }
+
+  // getNewsByCategoryIds(ids: number[]): Observable<Media[]> {
+  //   const idsParam = ids.join(',');
+  //   return this._http.get<Media[]>(`${this._wpJsonBaseUrl}/media?include=${idsParam}`);
+  // }
+
+  // getNewsByCategoryId(id: number): Observable<News[]> {
+  //   return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?tax_category=${id}`);
+  // }
+
+  getNewsByCategoryId(categoryId: number, page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
+    return this._http
+      .get<News[]>(`${this._wpJsonBaseUrl}/news`, {
+        params: {
+          tax_category: categoryId.toString(),
+          page: page.toString(),
+          per_page: perPage.toString(),
+        },
+        observe: 'response',
+      })
+      .pipe(map(({ body, headers }) => ({ news: body as News[], headers })));
+  }
+
+
+
+  getEventsByCategoryId(id: number): Observable<Event[]> {
+    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?tax_category=${id}`);
+  }
+
 }

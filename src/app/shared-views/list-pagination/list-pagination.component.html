@@ -1,0 +1,15 @@
+<nav aria-label="Pagination">
+  <ul class="pagination">
+    <li>
+      <span>Σελίδα {{ currentPage }} από {{ totalPages }}</span>
+    </li>
+
+    <li>
+      <button (click)="paginate(currentPage - 1)" type="button" [disabled]="currentPage <= 1">Προηγούμενη σελίδα</button>
+    </li>
+
+    <li>
+      <button (click)="paginate(currentPage + 1)" type="button" [disabled]="currentPage >= totalPages">Επόμενη σελίδα</button>
+    </li>
+  </ul>
+</nav>

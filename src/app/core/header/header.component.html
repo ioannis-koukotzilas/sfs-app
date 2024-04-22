@@ -1,14 +1,53 @@
 <div class="site-header">
   <div class="container">
-    <a routerLink="/">
-      <h1 class="site-title">Struggle for Skouries</h1>
-    </a>
+    <!-- <a class="site-brand" routerLink="/">
+     
 
+      <h1 class="title">Struggle for Skouries</h1>
+    </a> -->
+
+    <button class="toggle-sidebar-btn" #toggleSidebarBtn [class.active]="sidebarActive" (click)="toggleSidebar()">
+      <span class="icon">{{ sidebarActive ? "close" : "menu" }}</span>
+    </button>
+
+
+    <!-- move to home 
     <ul class="menu">
-      <li><a routerLink="/page/sample-page">About</a></li>
-      <li><a routerLink="/editions">Editions</a></li>
-      <li><a routerLink="/news">News</a></li>
-      <li><a routerLink="/events">Events</a></li>
-    </ul>
+      <li>
+        <a routerLink="/about">{{ "Σχετικά με το SFS" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/editions">{{ "Δεκαήμερο Αγώνα" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/news">{{ "Ενημέρωση" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/events">{{ "Δράσεις - Εκδηλώσεις" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/">{{ "Βιβλιοθήκη" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/info">{{ "Πληροφορίες" | removeGreekAccents }}</a>
+      </li>
+      <li>
+        <a routerLink="/contact">{{ "Επικοινωνία" | removeGreekAccents }}</a>
+      </li>
+    </ul> -->
   </div>
 </div>
+
+<aside class="sidebar" #sidebar *ngIf="sidebarActive" [@sidebarAnimation]="sidebarActive ? 'expanded' : 'collapsed'">
+  <div class="wrapper">
+    <ul class="primary-menu">
+      <li><a (click)="navigateAfterCloseSidebar(['/about'])">Σχετικά με το SFS</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/editions'])">Δεκαήμερο Αγώνα</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/news'])">Ενημέρωση</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/events'])">Δράσεις - Εκδηλώσεις</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/'])">Βιβλιοθήκη</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/info'])">Πληροφορίες</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/contact'])">Επικοινωνία</a></li>
+    </ul>
+  </div>
+</aside>

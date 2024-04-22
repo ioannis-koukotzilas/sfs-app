@@ -1,3 +1,5 @@
+<app-progress-bar [loading]="loading"></app-progress-bar>
+
 <ng-container *ngIf="edition">
   <div class="container">
     <header class="header">
@@ -9,54 +11,35 @@
     <div class="content" *ngIf="edition.content" [innerHTML]="edition.content"></div>
 
     <div *ngIf="edition.featuredMedia">
-      <img [src]="edition.featuredMedia.size.thumbnail?.source" alt="" />
+      <img [src]="edition.featuredMedia.size.thumbnail?.src" alt="" />
     </div>
 
-
-
-
     <app-gallery *ngIf="edition.galleryMedia" [galleryMedia]="edition.galleryMedia"></app-gallery>
-    
 
-    <div *ngIf="events && events.length">
+    <ng-container *ngIf="events && events.length">
       <h2>Related Event</h2>
       <ul>
         <li *ngFor="let event of events">
           <a [routerLink]="['/event', event.slug]">
-            <div>{{ event.date | date:'dd.MM.yy' }}</div>
+            <!-- <div>{{ event.date | date : "dd.MM.yy" }}</div> -->
             <h2 class="title">{{ event.title }}</h2>
             <div [innerHTML]="event.excerpt"></div>
           </a>
         </li>
       </ul>
-    </div>
+    </ng-container>
 
-    <div *ngIf="news && news.length">
+    <ng-container *ngIf="news && news.length">
       <h3>Related News</h3>
       <ul>
         <li *ngFor="let newsItem of news">
           <a [routerLink]="['/news', newsItem.slug]">
-            <div>{{ newsItem.date | date:'dd.MM.yy' }}</div>
+            <!-- <div>{{ newsItem.date | date : "dd.MM.yy" }}</div> -->
             <h2 class="title">{{ newsItem.title }}</h2>
             <div [innerHTML]="newsItem.excerpt"></div>
           </a>
         </li>
       </ul>
-    </div>
+    </ng-container>
   </div>
-
-
-
 </ng-container>
-
-
-
-<!-- <swiper-container #swiper [config]="swiperConfig">
-  <swiper-slide>Slide 1</swiper-slide>
-  <swiper-slide>Slide 2</swiper-slide>
-  <swiper-slide>Slide 3</swiper-slide>
-  ...
-</swiper-container> -->
-
-
-

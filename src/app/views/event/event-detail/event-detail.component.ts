@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subscription, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +18,8 @@ export class EventDetailComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
+  loading = false;
+
   event!: Event;
   news!: News[];
 
@@ -31,13 +33,19 @@ export class EventDetailComponent {
     this._subscriptions.unsubscribe();
   }
 
+  private checkRouteParams(): Observable<Event | null> {
+    return this._route.paramMap.pipe(
+      switchMap((params) => {
+        const slug = params.get('slug');
+        return slug ? this._wpService.getEvent(slug) : of(null);
+      })
+    );
+  }
+
   private getEvent(): void {
-    const eventSubscription = this._route.paramMap
+    this.loading = true;
+    const routeParamsSubscription = this.checkRouteParams()
       .pipe(
-        switchMap((params) => {
-          const slug = params.get('slug');
-          return slug ? this._wpService.getEvent(slug) : of(null);
-        }),
         tap((event) => {
           if (event) {
             this.initEvent(event);
@@ -79,13 +87,15 @@ export class EventDetailComponent {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
+          this.loading = false;
         },
       });
 
-    this._subscriptions.add(eventSubscription);
+    this._subscriptions.add(routeParamsSubscription);
   }
 
   private initEvent(event: any): void {

@@ -7,9 +7,12 @@
 
 :root {
   --font-sans: "GT-America Standard", sans-serif;
+  /* --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
   --font-sans-condensed: "GT-America Condensed", sans-serif;
+  --font-serif: "Georgia", serif;
   --font-mono: "GT-America Mono", monospace;
   --font-symbol: "Material Symbols Outlined";
+  --font-icon: "Material Icons Outlined";
 
   --font-xs: 0.75rem;
   --font-sm: 0.875rem;
@@ -26,6 +29,7 @@
   --font-regular: 400;
   --font-medium: 500;
   --font-bold: 700;
+  --font-black: 900;
 
   --font-normal: normal;
   --font-italic: italic;
@@ -35,57 +39,6 @@
   --leading-snug: 1.375;
   --leading-base: 1.5;
 
-  --color-primary-0: 255, 255, 255;
-  --color-primary-50: 246, 246, 246;
-  --color-primary-100: 231, 231, 231;
-  --color-primary-200: 209, 209, 209;
-  --color-primary-300: 176, 176, 176;
-  --color-primary-400: 136, 136, 136;
-  --color-primary-500: 109, 109, 109;
-  --color-primary-600: 93, 93, 93;
-  --color-primary-700: 79, 79, 79;
-  --color-primary-800: 69, 69, 69;
-  --color-primary-900: 61, 61, 61;
-  --color-primary-950: 0, 0, 0;
-
-  /* --color-primary-0: 255, 255, 255;
-  --color-primary-50: 245, 247, 250;
-  --color-primary-100: 234, 238, 244;
-  --color-primary-200: 208, 218, 231;
-  --color-primary-300: 167, 187, 210;
-  --color-primary-400: 119, 152, 185;
-  --color-primary-500: 86, 123, 161;
-  --color-primary-600: 66, 97, 135;
-  --color-primary-700: 55, 79, 109;
-  --color-primary-800: 48, 68, 92;
-  --color-primary-900: 44, 59, 78;
-  --color-primary-950: 13, 17, 23; */
-
-  /* --color-primary-0: 255, 255, 255;
-  --color-primary-50: 243, 246, 248;
-  --color-primary-100: 225, 233, 236;
-  --color-primary-200: 198, 211, 219;
-  --color-primary-300: 159, 182, 193;
-  --color-primary-400: 113, 143, 159;
-  --color-primary-500: 85, 116, 133;
-  --color-primary-600: 73, 96, 113;
-  --color-primary-700: 64, 82, 94;
-  --color-primary-800: 58, 70, 80;
-  --color-primary-900: 52, 61, 69;
-  --color-primary-950: 27, 33, 39; */
-
-  --color-accent-50: 236, 238, 255;
-  --color-accent-100: 221, 225, 255;
-  --color-accent-200: 194, 199, 255;
-  --color-accent-300: 156, 161, 255;
-  --color-accent-400: 122, 117, 255;
-  --color-accent-500: 102, 83, 255;
-  --color-accent-600: 90, 54, 245;
-  --color-accent-700: 78, 42, 216;
-  --color-accent-800: 63, 37, 174;
-  --color-accent-900: 54, 38, 137;
-  --color-accent-950: 34, 22, 80;
-
   --max-w-base: 2560px;
   --max-w-sm: 540px;
   --max-w-md: 720px;
@@ -93,10 +46,96 @@
   --max-w-xl: 1140px;
   --max-w-xxl: 1320px;
   --max-w-full: 100%;
+
+  --color-primary-50: var(--cod-gray-50);
+  --color-primary-100: var(--cod-gray-100);
+  --color-primary-200: var(--cod-gray-200);
+  --color-primary-300: var(--cod-gray-300);
+  --color-primary-400: var(--cod-gray-400);
+  --color-primary-500: var(--cod-gray-500);
+  --color-primary-600: var(--cod-gray-600);
+  --color-primary-700: var(--cod-gray-700);
+  --color-primary-800: var(--cod-gray-800);
+  --color-primary-900: var(--cod-gray-900);
+  --color-primary-950: var(--cod-gray-950);
+
+  --color-accent-50: var(--fuchsia-blue-50);
+  --color-accent-100: var(--fuchsia-blue-100);
+  --color-accent-200: var(--fuchsia-blue-200);
+  --color-accent-300: var(--fuchsia-blue-300);
+  --color-accent-400: var(--fuchsia-blue-400);
+  --color-accent-500: var(--fuchsia-blue-500);
+  --color-accent-600: var(--fuchsia-blue-600);
+  --color-accent-700: var(--fuchsia-blue-700);
+  --color-accent-800: var(--fuchsia-blue-800);
+  --color-accent-900: var(--fuchsia-blue-900);
+  --color-accent-950: var(--fuchsia-blue-950);
+
+  --cod-gray-50: 246, 246, 246;
+  --cod-gray-100: 231, 231, 231;
+  --cod-gray-200: 209, 209, 209;
+  --cod-gray-300: 176, 176, 176;
+  --cod-gray-400: 136, 136, 136;
+  --cod-gray-500: 109, 109, 109;
+  --cod-gray-600: 93, 93, 93;
+  --cod-gray-700: 79, 79, 79;
+  --cod-gray-800: 69, 69, 69;
+  --cod-gray-900: 61, 61, 61;
+  --cod-gray-950: 17, 17, 17;
+
+  --fuchsia-blue-50: 236, 238, 255;
+  --fuchsia-blue-100: 221, 225, 255;
+  --fuchsia-blue-200: 194, 199, 255;
+  --fuchsia-blue-300: 156, 161, 255;
+  --fuchsia-blue-400: 122, 117, 255;
+  --fuchsia-blue-500: 102, 83, 255;
+  --fuchsia-blue-600: 90, 54, 245;
+  --fuchsia-blue-700: 78, 42, 216;
+  --fuchsia-blue-800: 63, 37, 174;
+  --fuchsia-blue-900: 54, 38, 137;
+  --fuchsia-blue-950: 34, 22, 80;
+
+  --punch-50: 255, 240, 241;
+  --punch-100: 255, 222, 224;
+  --punch-200: 255, 194, 198;
+  --punch-300: 255, 152, 158;
+  --punch-400: 255, 93, 103;
+  --punch-500: 255, 43, 56;
+  --punch-600: 247, 11, 26;
+  --punch-700: 227, 5, 19;
+  --punch-800: 172, 8, 18;
+  --punch-900: 142, 14, 22;
+  --punch-950: 78, 1, 6;
+
+  --corn-50: 255, 255, 231;
+  --corn-100: 255, 255, 193;
+  --corn-200: 255, 251, 134;
+  --corn-300: 255, 241, 65;
+  --corn-400: 255, 225, 13;
+  --corn-500: 228, 188, 0;
+  --corn-600: 209, 154, 0;
+  --corn-700: 166, 110, 2;
+  --corn-800: 137, 86, 10;
+  --corn-900: 116, 70, 15;
+  --corn-950: 68, 36, 4;
 }
 
 @media (max-width: 720px) {
   :root {
     --font-3xl: var(--font-2xl);
   }
+}
+
+body.dark {
+  --color-primary-50: var(--cod-gray-950);
+  --color-primary-100: var(--cod-gray-900);
+  --color-primary-200: var(--cod-gray-800);
+  --color-primary-300: var(--cod-gray-700);
+  --color-primary-400: var(--cod-gray-600);
+  --color-primary-500: var(--cod-gray-500);
+  --color-primary-600: var(--cod-gray-400);
+  --color-primary-700: var(--cod-gray-300);
+  --color-primary-800: var(--cod-gray-200);
+  --color-primary-900: var(--cod-gray-100);
+  --color-primary-950: var(--cod-gray-50);
 }

@@ -3,7 +3,7 @@ import { Edition } from '../../../models/entities/edition';
 import { ActivatedRoute } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { Title } from '@angular/platform-browser';
-import { Subscription, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
 import { News } from '../../../models/entities/news';
 import { Event } from '../../../models/entities/event';
 import { environment } from '../../../../environments/environment';
@@ -19,6 +19,8 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
+  loading = false;
+
   edition!: Edition;
   events!: Event[];
   news!: News[];
@@ -33,13 +35,19 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
+  private checkRouteParams(): Observable<Edition | null> {
+    return this._route.paramMap.pipe(
+      switchMap((params) => {
+        const slug = params.get('slug');
+        return slug ? this._wpService.getEdition(slug) : of(null);
+      })
+    );
+  }
+
   private getEdition(): void {
-    const editionSubscription = this._route.paramMap
+    this.loading = true;
+    const routeParamsSubscription = this.checkRouteParams()
       .pipe(
-        switchMap((params) => {
-          const slug = params.get('slug');
-          return slug ? this._wpService.getEdition(slug) : of(null);
-        }),
         tap((edition) => {
           if (edition) {
             this.initEdition(edition);
@@ -88,13 +96,15 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
-        },
+          this.loading = false;
+        }
       });
 
-    this._subscriptions.add(editionSubscription);
+    this._subscriptions.add(routeParamsSubscription);
   }
 
   private initEdition(edition: any): void {
@@ -155,6 +165,4 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       this._titleService.setTitle(this._appTitle);
     }
   }
-
-  
 }

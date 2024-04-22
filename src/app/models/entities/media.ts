@@ -2,14 +2,16 @@ export class Media {
   id!: number;
   link!: string;
   size!: {
-    medium?: MediaSize;
-    large?: MediaSize;
     thumbnail?: MediaSize;
+    medium?: MediaSize;
     mediumLarge?: MediaSize;
+    large?: MediaSize;
+    xLarge?: MediaSize;
+    xxLarge?: MediaSize;
     full?: MediaSize;
   };
 }
 
 export class MediaSize {
-  source!: string;
+  src!: string;
 }
