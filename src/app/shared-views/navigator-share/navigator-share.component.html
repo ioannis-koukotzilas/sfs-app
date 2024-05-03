@@ -5,5 +5,5 @@
 <ng-template #copyToClipBoard>
   <button class="transparent" (click)="copyToClipboard()"><span class="icon">share</span> Κοινοποίηση</button>
 
-  <div *ngIf="copiedToClipboard" class="alert">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.</div>
+  <div class="alert" *ngIf="copiedToClipboard">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.</div>
 </ng-template>

@@ -1,19 +1,40 @@
-.site-footer {
-  background-color: #333;
+:host {
+  background-color: rgb(var(--color-primary-50));
 }
 
-.site-footer > .container {
+:host > .container {
   max-width: var(--max-w-full);
   margin: 0 auto;
-  padding: 1rem 20px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 1.5rem 20px;
 }
 
-.site-footer .site-title {
-  font-family: var(--font-sans-condensed);
-  font-weight: var(--font-bold);
-  font-size: var(--font-2xl);
+.cc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cc-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cc-icons svg {
+  display: block;
+  width: var(--font-3xl);
+  height: var(--font-3xl);
+  fill: transparent;
+}
+
+.cc-icons svg path {
+  fill: rgb(var(--color-primary-500));
+}
+
+.cc-text {
+  /* font-family: var(--font-mono); */
+  font-size: var(--font-xs);
+  line-height: var(--leading-snug);
+  max-width: var(--max-w-sm);
+  color: rgb(var(--color-primary-500));;
 }

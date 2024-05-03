@@ -5,6 +5,7 @@ export class Edition {
   slug!: string;
   title!: string;
   content!: string;
+  excerpt!: string;
   featuredMediaId!: number;
   featuredMedia?: Media;
   galleryMediaIds!: number[];

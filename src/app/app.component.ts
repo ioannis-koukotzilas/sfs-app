@@ -17,10 +17,13 @@ export class AppComponent implements OnDestroy {
   private classMapping: { [key: string]: string } = {
     home: 'dark',
     about: 'dark',
+    editions: 'dark',
+    edition: 'dark',
   };
 
   constructor(private router: Router, private renderer: Renderer2) {
     this.checkRouteParams();
+    // this.windowScrollOnNavigationEnd();
   }
 
   ngOnDestroy() {
@@ -33,6 +36,19 @@ export class AppComponent implements OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.updateBodyClass(event);
       });
+
+    this._subscriptions.add(routerParamsSubscription);
+  }
+
+  private windowScrollOnNavigationEnd(): void {
+    const routerParamsSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
 
     this._subscriptions.add(routerParamsSubscription);
   }

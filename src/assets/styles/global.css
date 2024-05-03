@@ -3,9 +3,15 @@ body.route-about {
   color: rgb(var(--punch-400));
 }
 
-/* body.route-news {
-  background-color: rgb(var(--corn-500));
+/* body.route-editions {
+  background-color: rgb(var(--cod-gray-950));
+  color: rgb(var(--cod-gray-50));
 } */
+
+body.route-editions,
+body.route-edition {
+  background-color: rgb(var(--cod-gray-950));
+}
 
 app-page-about .content h2 {
   /* font-family: var(--font-sans-condensed); */

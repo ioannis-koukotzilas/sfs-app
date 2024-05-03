@@ -22,7 +22,7 @@ export class NewsListComponent {
   news: News[] = [];
 
   currentPage: number = 1;
-  perPage: number = 2;
+  perPage: number = 8;
   totalPages: number = 0;
 
   constructor(
@@ -104,14 +104,24 @@ export class NewsListComponent {
     this.news = [...this.news, ...mappedNews];
   }
 
+  // private mapMedia(media: any[]): void {
+  //   media.forEach((mediaItem) => {
+  //     const event = this.news.find((x) => x.featuredMediaId === mediaItem.id);
+  //     if (event) {
+  //       event.featuredMedia = this.initFeaturedMedia(mediaItem);
+  //     }
+  //   });
+  // }
+
   private mapMedia(media: any[]): void {
     media.forEach((mediaItem) => {
-      const event = this.news.find((x) => x.featuredMediaId === mediaItem.id);
-      if (event) {
-        event.featuredMedia = this.initFeaturedMedia(mediaItem);
-      }
+      // Filter to find all news items with the same featuredMediaId
+      this.news.filter((x) => x.featuredMediaId === mediaItem.id).forEach((newsItem) => {
+        newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      });
     });
   }
+  
 
   private initFeaturedMedia(media: any): Media {
     let featuredMedia = new Media();
@@ -123,6 +133,6 @@ export class NewsListComponent {
   }
 
   private initTitle(): void {
-    this._titleService.setTitle('Editions' + ' - ' + this._appTitle);
+    this._titleService.setTitle('Νέα' + ' - ' + this._appTitle);
   }
 }

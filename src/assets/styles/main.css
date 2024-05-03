@@ -2,6 +2,10 @@
 # Base
 --------------------------------------------------------------*/
 
+/* html, body {
+  scroll-behavior: smooth;
+} */
+
 /* Box sizing
 --------------------------------------------- */
 
@@ -119,7 +123,7 @@ a {
   display: inline-block;
   color: rgb(var(--color-primary-950));
   text-decoration: none;
-  transition: background-color 0.2s, color 0.2s;
+  /* transition: background-color 0.2s, color 0.2s, opacity 0.2s; */
 }
 
 a:visited {
@@ -136,6 +140,38 @@ a:hover,
 a:active {
   outline: 0;
 }
+
+/* a light */
+
+a.light {
+  color: rgb(var(--color-primary-50));
+}
+
+a.light:visited {
+  color: rgb(var(--color-primary-50));
+}
+
+a.light:hover,
+a.light:focus {
+  color: rgb(var(--color-primary-400));
+}
+
+/* a accent */
+
+a.accent {
+  color: rgb(var(--color-accent-500));
+}
+
+a.accent:visited {
+  color: rgb(var(--color-accent-500));
+}
+
+a.accent:hover,
+a.accent:focus {
+  color: rgb(var(--color-accent-400));
+}
+
+
 
 .underline {
   cursor: pointer;
@@ -180,6 +216,13 @@ input[type="submit"]:active,
 input[type="submit"]:focus {
   background: rgb(var(--color-accent-400));
   border-color: rgb(var(--color-accent-400));
+}
+
+button:disabled {
+  background: rgb(var(--color-primary-950));
+  opacity: 0.1;
+  cursor: unset;
+  pointer-events: none;
 }
 
 button.transparent {

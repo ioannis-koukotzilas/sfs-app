@@ -41,11 +41,11 @@
 <aside class="sidebar" #sidebar *ngIf="sidebarActive" [@sidebarAnimation]="sidebarActive ? 'expanded' : 'collapsed'">
   <div class="wrapper">
     <ul class="primary-menu">
-      <li><a (click)="navigateAfterCloseSidebar(['/about'])">Σχετικά με το SFS</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/news'])">Νέα</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/events'])">Εκδηλώσεις</a></li>
       <li><a (click)="navigateAfterCloseSidebar(['/editions'])">Δεκαήμερο Αγώνα</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/news'])">Ενημέρωση</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/events'])">Δράσεις - Εκδηλώσεις</a></li>
       <li><a (click)="navigateAfterCloseSidebar(['/'])">Βιβλιοθήκη</a></li>
+      <li><a (click)="navigateAfterCloseSidebar(['/about'])">Ταυτότητα</a></li>
       <li><a (click)="navigateAfterCloseSidebar(['/info'])">Πληροφορίες</a></li>
       <li><a (click)="navigateAfterCloseSidebar(['/contact'])">Επικοινωνία</a></li>
     </ul>

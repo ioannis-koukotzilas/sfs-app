@@ -1,38 +1,40 @@
 <app-progress-bar [loading]="loading"></app-progress-bar>
 
 <div class="container">
-  <header class="header">
-    <div class="wrapper">
-      <h1 class="title">{{ "Ενημέρωση" | removeGreekAccents }}</h1>
+  <header class="page-header">
+    <h1 class="page-title">Νέα</h1>
+    <div class="page-description">
+      <p>
+        Με τον όρο Lorem ipsum αναφέρονται τα κείμενα εκείνα τα οποία είναι ακατάληπτα, δεν μπορεί δηλαδή κάποιος να βγάλει κάποιο λογικό νόημα από
+        αυτά, και έχουν δημιουργηθεί με σκοπό να παρουσιάσουν στον αναγνώστη μόνο τα γραφιστικά χαρακτηριστικά.
+      </p>
     </div>
   </header>
 
-  <ng-container *ngIf="news && news.length; else noData">
+  <ng-container *ngIf="news && news.length > 0">
     <div class="articles">
-      <article class="article" *ngFor="let article of news">
-        <a class="grid" [routerLink]="['/news', article.slug]">
+      <a class="group" *ngFor="let article of news" [routerLink]="['/news', article.slug]">
+        <article class="article">
           <div class="col">
-            <img class="featured-media" *ngIf="article.featuredMedia" [src]="article.featuredMedia.size.mediumLarge?.src" [alt]="article.title" />
+            <picture class="article-media" *ngIf="article.featuredMedia">
+              <img [src]="article.featuredMedia.size.mediumLarge?.src" [alt]="article.title" />
+            </picture>
           </div>
 
           <div class="col">
-            <header class="header">
-              <h2 class="title">{{ article.title }}</h2>
-              <time class="date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+            <header class="article-header">
+              <h2 class="article-title">{{ article.title }}</h2>
+              <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
             </header>
 
-            <div class="content">
+            <div class="article-excerpt">
               <div [innerHTML]="article.excerpt"></div>
             </div>
           </div>
-        </a>
-      </article>
+        </article>
+      </a>
     </div>
 
-    <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+    <app-list-pagination *ngIf="totalPages > 1" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
   </ng-container>
-
-  <ng-template #noData>
-    <p>No data available.</p>
-  </ng-template>
 </div>

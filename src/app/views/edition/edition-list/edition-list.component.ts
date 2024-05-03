@@ -22,7 +22,7 @@ export class EditionListComponent implements OnInit, OnDestroy {
   editions: Edition[] = [];
 
   currentPage: number = 1;
-  perPage: number = 1;
+  perPage: number = 2;
   totalPages: number = 0;
 
   constructor(
@@ -96,6 +96,7 @@ export class EditionListComponent implements OnInit, OnDestroy {
       edition.slug = data.slug;
       edition.title = data.title.rendered;
       edition.content = data.content.rendered;
+      edition.excerpt = data.excerpt.rendered;
       edition.featuredMediaId = data.featured_media;
       return edition;
     });

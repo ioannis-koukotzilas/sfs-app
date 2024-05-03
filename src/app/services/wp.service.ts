@@ -116,11 +116,11 @@ export class WpService {
   //   return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?tax_category=${id}`);
   // }
 
-  getNewsByCategoryId(categoryId: number, page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
+  getNewsByCategoryIds(categoryIds: number[], page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
     return this._http
       .get<News[]>(`${this._wpJsonBaseUrl}/news`, {
         params: {
-          tax_category: categoryId.toString(),
+          tax_category: categoryIds.join(', '),
           page: page.toString(),
           per_page: perPage.toString(),
         },

@@ -3,8 +3,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 999;
-  padding: 2px;
+  z-index: 99999999999;
+  padding: 1px;
 }
 
 .loader > .loaderBar {
@@ -13,7 +13,7 @@
   right: 100%;
   bottom: 0;
   left: 0;
-  background-color: #29d;
+  background-color: rgb(var(--color-accent-500));
   width: 0;
   animation: borealisBar 1.5s linear infinite;
 }

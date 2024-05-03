@@ -17,13 +17,14 @@ import { MediaService } from '../../../services/media.service';
 })
 export class EditionDetailComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
-  private _appTitle = environment.appTitle;
+  appTitle = environment.appTitle;
 
   loading = false;
 
   edition!: Edition;
   events!: Event[];
   news!: News[];
+  shareData?: ShareData;
 
   constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
 
@@ -83,25 +84,54 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
         switchMap((events) => {
           if (events && events.length > 0) {
             this.initEvents(events);
+            const mediaIds = this.events.map((x) => x.featuredMediaId).filter((id) => id !== null);
+
+            if (mediaIds && mediaIds.length > 0) {
+              return this._wpService.getMediaByIds(mediaIds);
+            } else {
+              return of([]);
+            }
+          }
+
+          return of([]);
+        }),
+        switchMap((eventsFeaturedMedia) => {
+          if (eventsFeaturedMedia && eventsFeaturedMedia.length > 0) {
+            this.mapEventsMedia(eventsFeaturedMedia);
           }
 
           return this._wpService.getNewsByEditionId(this.edition.id, 8);
         }),
-        tap((news) => {
+        switchMap((news) => {
           if (news && news.length > 0) {
             this.initNews(news);
+            const mediaIds = this.news.map((x) => x.featuredMediaId).filter((id) => id !== null);
+
+            if (mediaIds && mediaIds.length > 0) {
+              return this._wpService.getMediaByIds(mediaIds);
+            } else {
+              return of([]);
+            }
+          }
+          return of([]);
+        }),
+
+        tap((newsFeaturedMedia) => {
+          if (newsFeaturedMedia && newsFeaturedMedia.length > 0) {
+            this.mapNewsMedia(newsFeaturedMedia);
           }
         })
       )
       .subscribe({
         next: () => {
           this.initTitle();
+          this.initShareData();
           this.loading = false;
         },
         error: (error) => {
           console.error('Error:', error);
           this.loading = false;
-        }
+        },
       });
 
     this._subscriptions.add(routeParamsSubscription);
@@ -112,6 +142,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this.edition.id = edition.id;
     this.edition.title = edition.title.rendered;
     this.edition.content = edition.content.rendered;
+    this.edition.excerpt = edition.excerpt.rendered;
     this.edition.featuredMediaId = edition.featured_media;
     this.edition.galleryMediaIds = edition.acf.gallery;
   }
@@ -143,7 +174,17 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       event.date = data.date;
       event.title = data.title.rendered;
       event.excerpt = data.excerpt.rendered;
+      event.featuredMediaId = data.featured_media;
       return event;
+    });
+  }
+
+  private mapEventsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      const eventItem = this.events.find((x) => x.featuredMediaId === mediaItem.id);
+      if (eventItem) {
+        eventItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      }
     });
   }
 
@@ -154,15 +195,32 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       news.date = data.date;
       news.title = data.title.rendered;
       news.excerpt = data.excerpt.rendered;
+      news.featuredMediaId = data.featured_media;
       return news;
+    });
+  }
+
+  private mapNewsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      const newsItem = this.news.find((x) => x.featuredMediaId === mediaItem.id);
+      if (newsItem) {
+        newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      }
     });
   }
 
   private initTitle(): void {
     if (this.edition.title) {
-      this._titleService.setTitle(this.edition.title + ' - ' + this._appTitle);
+      this._titleService.setTitle(this.edition.title + ' - ' + this.appTitle);
     } else {
-      this._titleService.setTitle(this._appTitle);
+      this._titleService.setTitle(this.appTitle);
     }
+  }
+
+  initShareData() {
+    this.shareData = { title: '', text: '', url: '' };
+    this.shareData.title = this.edition.title.replace(/<[^>]*>/g, '');
+    this.shareData.text = this.edition.excerpt.replace(/<[^>]*>/g, '');
+    this.shareData.url = window.location.href;
   }
 }

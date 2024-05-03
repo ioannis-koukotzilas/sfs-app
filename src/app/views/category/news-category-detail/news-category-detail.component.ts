@@ -83,7 +83,7 @@ export class NewsCategoryDetailComponent {
           }
         }),
         switchMap(({ category, page }) => {
-          return this._wpService.getNewsByCategoryId(this.category.id, page, this.perPage);
+          return this._wpService.getNewsByCategoryIds([this.category.id], page, this.perPage);
         }),
         switchMap(({ news, headers }) => {
           if (news && news.length > 0) {

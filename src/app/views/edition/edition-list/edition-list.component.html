@@ -1,21 +1,42 @@
 <app-progress-bar [loading]="loading"></app-progress-bar>
 
 <div class="container">
-  <header class="header">
-    <div class="wrapper">
-      <h1 class="title">Editions</h1>
+  <header class="page-header">
+    <h1 class="page-title">Δεκαήμερο Αγώνα</h1>
+    <div class="page-description">
+      <p>
+        Με τον όρο Lorem ipsum αναφέρονται τα κείμενα εκείνα τα οποία είναι ακατάληπτα, δεν μπορεί δηλαδή κάποιος να βγάλει κάποιο λογικό νόημα από
+        αυτά, και έχουν δημιουργηθεί με σκοπό να παρουσιάσουν στον αναγνώστη μόνο τα γραφιστικά χαρακτηριστικά.
+      </p>
     </div>
   </header>
 
-  <ul>
-    <li *ngFor="let edition of editions">
-      <a [routerLink]="['/edition', edition.slug]">
-        <img *ngIf="edition.featuredMedia" [src]="edition.featuredMedia.size.thumbnail?.src" [alt]="edition.title" />
-        <h2 class="title">{{ edition.title }}</h2>
-        <div [innerHTML]="edition.content"></div>
-      </a>
-    </li>
-  </ul>
+  <ng-container *ngIf="editions && editions.length > 0">
+    <div class="articles">
+      <article class="article" *ngFor="let article of editions">
+        <a class="grid" [routerLink]="['/edition', article.slug]">
+          <div class="col">
+            <img
+              class="article-featured-media"
+              *ngIf="article.featuredMedia"
+              [src]="article.featuredMedia.size.mediumLarge?.src"
+              [alt]="article.title"
+            />
+          </div>
 
-  <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+          <div class="col">
+            <header class="article-header">
+              <h2 class="article-title">{{ article.title }}</h2>
+            </header>
+
+            <div class="article-excerpt">
+              <div [innerHTML]="article.excerpt"></div>
+            </div>
+          </div>
+        </a>
+      </article>
+    </div>
+
+    <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+  </ng-container>
 </div>

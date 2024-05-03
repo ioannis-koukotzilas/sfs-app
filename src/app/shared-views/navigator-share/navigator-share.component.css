@@ -5,3 +5,9 @@
 button {
   font-size: var(--font-sm);
 }
+
+.alert {
+  margin-top: 0.5rem;
+  font-size: var(--font-xs);
+  color: rgb(var(--color-accent-500));
+}

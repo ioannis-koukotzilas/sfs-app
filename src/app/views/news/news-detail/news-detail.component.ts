@@ -9,6 +9,7 @@ import { Title } from '@angular/platform-browser';
 import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
 import { Category } from '../../../models/entities/category';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-news-detail',
@@ -17,16 +18,18 @@ import { Category } from '../../../models/entities/category';
 })
 export class NewsDetailComponent {
   private _subscriptions: Subscription = new Subscription();
-  private _appTitle = environment.appTitle;
-
+  appTitle = environment.appTitle;
   loading = false;
-
   news!: News;
-  events!: Event[];
-
   shareData?: ShareData;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title,
+    private viewportScroller: ViewportScroller
+  ) {}
 
   ngOnInit(): void {
     this.getNews();
@@ -46,12 +49,13 @@ export class NewsDetailComponent {
   }
 
   private getNews(): void {
-    this.loading = true;
     const routeParamsSubscription = this.checkRouteParams()
       .pipe(
         tap((news) => {
           if (news) {
+            this.loading = true;
             this.initNews(news);
+            this.viewportScroller.scrollToPosition([0, 0]);
           } else {
             throw new Error('No news found');
           }
@@ -90,11 +94,26 @@ export class NewsDetailComponent {
             this.news.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
-          return this._wpService.getEventsByNewsId(this.news.id, 8);
+          return this._wpService.getNewsByCategoryIds(this.news.categoryIds, 1, 10);
         }),
-        tap((events) => {
-          if (events && events.length > 0) {
-            this.initEvents(events);
+        switchMap(({ news, headers }) => {
+          if (news && news.length > 0) {
+            const filteredNews = news.filter((article) => article.id !== this.news.id);
+            this.news.relatedNews = this.initRelatedNews(filteredNews);
+            const mediaIds = this.news.relatedNews.map((x) => x.featuredMediaId).filter((id) => id !== null);
+
+            if (mediaIds && mediaIds.length > 0) {
+              return this._wpService.getMediaByIds(mediaIds);
+            } else {
+              return of([]);
+            }
+          }
+
+          return of([]);
+        }),
+        tap((relatedNewsFeaturedMedia) => {
+          if (relatedNewsFeaturedMedia && relatedNewsFeaturedMedia.length > 0) {
+            this.mapRelatedNewsMedia(relatedNewsFeaturedMedia);
           }
         })
       )
@@ -162,21 +181,34 @@ export class NewsDetailComponent {
     return galleryMedia;
   }
 
-  private initEvents(events: any[]): void {
-    this.events = events.map((data) => {
-      let event = new Event();
-      event.slug = data.slug;
-      event.title = data.title.rendered;
-      event.excerpt = data.excerpt.rendered;
-      return event;
+  private initRelatedNews(news: any[]): News[] {
+    const relatedNews = news.map((data) => {
+      let relatedNewsItem = new News();
+      relatedNewsItem.slug = data.slug;
+      relatedNewsItem.date = data.date;
+      relatedNewsItem.title = data.title.rendered;
+      relatedNewsItem.excerpt = data.excerpt.rendered;
+      relatedNewsItem.featuredMediaId = data.featured_media;
+      return relatedNewsItem;
+    });
+
+    return relatedNews;
+  }
+
+  private mapRelatedNewsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      const newsItem = this.news.relatedNews?.find((x) => x.featuredMediaId === mediaItem.id);
+      if (newsItem) {
+        newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      }
     });
   }
 
   private initTitle(): void {
     if (this.news.title) {
-      this._titleService.setTitle(this.news.title + ' - ' + this._appTitle);
+      this._titleService.setTitle(this.news.title + ' - ' + this.appTitle);
     } else {
-      this._titleService.setTitle(this._appTitle);
+      this._titleService.setTitle(this.appTitle);
     }
   }
 

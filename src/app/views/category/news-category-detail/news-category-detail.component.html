@@ -1,9 +1,9 @@
 <app-progress-bar [loading]="loading"></app-progress-bar>
 
 <div class="container">
-  <header class="header">
+  <header class="header" *ngIf="category">
     <div class="wrapper">
-      <h1 class="title" *ngIf="category.name">{{ category.name | removeGreekAccents }}</h1>
+      <h1 class="title">{{ category.name }}</h1>
     </div>
   </header>
 

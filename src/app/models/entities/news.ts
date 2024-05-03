@@ -14,4 +14,5 @@ export class News {
   categories?: Category[];
   galleryMediaIds!: number[];
   galleryMedia?: Media[];
+  relatedNews?: News[];
 }
