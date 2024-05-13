@@ -90,23 +90,19 @@
   cursor: pointer;
   font-family: var(--font-symbol);
   line-height: 1;
-  margin: 20px;
-  background-color: rgb(var(--color-primary-1000));
-  color: rgb(var(--color-primary-50));
-  border-radius: 50%;
-  padding: 0.25rem;
+  padding: 0.5rem 1rem 0.5rem;
+  color: rgb(var(--primary-50));
   font-size: var(--font-2xl);
 }
 
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-  background-color: rgb(var(--color-primary-950));
+  color: rgb(var(--primary-400));
 }
 
 .swiper-button-prev.swiper-button-disabled,
 .swiper-button-next.swiper-button-disabled {
-  background-color: rgb(var(--color-primary-500));
-  color: rgb(var(--color-primary-300));
+  opacity: 0.25;
   cursor: auto;
   /* pointer-events: none; */
 }

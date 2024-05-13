@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, map, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Category } from '../../../models/entities/category';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
@@ -21,24 +21,43 @@ export class EventCategoryDetailComponent {
   loading = false;
 
   category!: Category;
-
   events?: Event[];
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  currentPage: number = 1;
+  perPage: number = 1;
+  totalPages: number = 0;
+
+  constructor(
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title
+  ) {}
 
   ngOnInit(): void {
-    this.getCategory();
+    const routeSubscription = this._route.paramMap.subscribe(() => {
+      this.getCategory();
+    });
+
+    this._subscriptions.add(routeSubscription);
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): Observable<Category | null> {
+  private checkRouteParams(): Observable<{ category: Category | null; page: number }> {
     return this._route.paramMap.pipe(
       switchMap((params) => {
         const slug = params.get('slug');
-        return slug ? this._wpService.getCategory(slug) : of(null);
+        const page = Number(params.get('page')) || 1;
+
+        if (slug) {
+          return this._wpService.getEventCategory(slug).pipe(map((category) => ({ category, page })));
+        } else {
+          return of({ category: null, page });
+        }
       })
     );
   }
@@ -47,28 +66,34 @@ export class EventCategoryDetailComponent {
     this.loading = true;
     const routeParamsSubscription = this.checkRouteParams()
       .pipe(
-        tap((category) => {
+        tap(({ category, page }) => {
           if (category) {
             this.initCategory(category);
+
+            if (this.currentPage !== page) {
+              this.currentPage = page;
+            }
           } else {
             throw new Error('No category found');
           }
         }),
-        switchMap(() => {
-          return this._wpService.getEventsByCategoryId(this.category.id);
+        switchMap(({ category, page }) => {
+          return this._wpService.getEventsByEventCategoriesIds([this.category.id], page, this.perPage);
         }),
-        switchMap((events) => {
-          if (events) {
+        switchMap(({ events, headers }) => {
+          if (events && events.length > 0) {
+            this.events = [];
             this.category.events = this.initEvents(events);
+            this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = events.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           }
 
-          return of(null);
+          return of([]);
         }),
-        tap((featuredMedia) => {
-          if (featuredMedia && featuredMedia.length > 0) {
-            this.mapMedia(featuredMedia);
+        tap((eventsfeaturedMedia) => {
+          if (eventsfeaturedMedia && eventsfeaturedMedia.length > 0) {
+            this.mapEventsMedia(eventsfeaturedMedia);
           }
         })
       )
@@ -109,11 +134,11 @@ export class EventCategoryDetailComponent {
     return this.events;
   }
 
-  private mapMedia(media: any[]): void {
+  private mapEventsMedia(media: any[]): void {
     media.forEach((mediaItem) => {
-      const newsItem = this.events?.find((x) => x.featuredMediaId === mediaItem.id);
-      if (newsItem) {
-        newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      const eventItem = this.events?.find((x) => x.featuredMediaId === mediaItem.id);
+      if (eventItem) {
+        eventItem.featuredMedia = this.initFeaturedMedia(mediaItem);
       }
     });
   }

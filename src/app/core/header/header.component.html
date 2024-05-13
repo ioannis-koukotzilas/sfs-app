@@ -1,42 +1,18 @@
+
+
 <div class="site-header">
-  <div class="container">
-    <!-- <a class="site-brand" routerLink="/">
-     
-
-      <h1 class="title">Struggle for Skouries</h1>
-    </a> -->
-
-    <button class="toggle-sidebar-btn" #toggleSidebarBtn [class.active]="sidebarActive" (click)="toggleSidebar()">
-      <span class="icon">{{ sidebarActive ? "close" : "menu" }}</span>
+  <div class="wrapper">
+    <button class="toggle-sidebar-btn transparent light" #toggleSidebarBtn [class.active]="sidebarActive" (click)="toggleSidebar()">
+      <span class="symbol">{{ sidebarActive ? "close" : "menu" }}</span>
     </button>
 
-
-    <!-- move to home 
-    <ul class="menu">
-      <li>
-        <a routerLink="/about">{{ "Σχετικά με το SFS" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/editions">{{ "Δεκαήμερο Αγώνα" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/news">{{ "Ενημέρωση" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/events">{{ "Δράσεις - Εκδηλώσεις" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/">{{ "Βιβλιοθήκη" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/info">{{ "Πληροφορίες" | removeGreekAccents }}</a>
-      </li>
-      <li>
-        <a routerLink="/contact">{{ "Επικοινωνία" | removeGreekAccents }}</a>
-      </li>
-    </ul> -->
+    <a class="light" routerLink="/">
+      <h1 class="site-title">struggleforskouries.org</h1>
+    </a>
   </div>
 </div>
+
+
 
 <aside class="sidebar" #sidebar *ngIf="sidebarActive" [@sidebarAnimation]="sidebarActive ? 'expanded' : 'collapsed'">
   <div class="wrapper">
@@ -51,3 +27,4 @@
     </ul>
   </div>
 </aside>
+

@@ -8,8 +8,11 @@ import { EventListComponent } from './views/event/event-list/event-list.componen
 import { NewsListComponent } from './views/news/news-list/news-list.component';
 import { PageWrapperComponent } from './views/page/page-wrapper/page-wrapper.component';
 import { NewsCategoryDetailComponent } from './views/category/news-category-detail/news-category-detail.component';
+import { PageHomeComponent } from './views/page/page-home/page-home.component';
 
 const routes: Routes = [
+  { path: '', component: PageHomeComponent },
+
   { path: 'editions', redirectTo: 'editions/page/1', pathMatch: 'full' },
   { path: 'editions/page/:page', component: EditionListComponent },
   { path: 'edition/:slug', component: EditionDetailComponent },

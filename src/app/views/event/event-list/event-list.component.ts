@@ -22,7 +22,7 @@ export class EventListComponent {
   events: Event[] = [];
 
   currentPage: number = 1;
-  perPage: number = 1;
+  perPage: number = 6;
   totalPages: number = 0;
 
   constructor(
@@ -87,11 +87,7 @@ export class EventListComponent {
   }
 
   onPageChange(page: number): void {
-    if (page === 1) {
-      this._router.navigate(['/events']);
-    } else {
-      this._router.navigate(['/events/page', page]);
-    }
+    this._router.navigate(['/events/page', page]);
   }
 
   private initEvents(events: any[]): void {
@@ -99,6 +95,7 @@ export class EventListComponent {
       let event = new Event();
       event.slug = data.slug;
       event.title = data.title.rendered;
+      event.date = data.date;
       event.excerpt = data.excerpt.rendered;
       event.featuredMediaId = data.featured_media;
 
@@ -110,10 +107,11 @@ export class EventListComponent {
 
   private mapMedia(media: any[]): void {
     media.forEach((mediaItem) => {
-      const event = this.events.find((x) => x.featuredMediaId === mediaItem.id);
-      if (event) {
-        event.featuredMedia = this.initFeaturedMedia(mediaItem);
-      }
+      this.events
+        .filter((x) => x.featuredMediaId === mediaItem.id)
+        .forEach((newsItem) => {
+          newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+        });
     });
   }
 
@@ -127,6 +125,6 @@ export class EventListComponent {
   }
 
   private initTitle(): void {
-    this._titleService.setTitle('Editions' + ' - ' + this._appTitle);
+    this._titleService.setTitle('Δράσεις - Εκδηλώσεις' + ' - ' + this._appTitle);
   }
 }

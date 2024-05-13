@@ -21,7 +21,6 @@ export class NewsCategoryDetailComponent {
   loading = false;
 
   category!: Category;
-
   news?: News[];
 
   currentPage: number = 1;
@@ -55,7 +54,7 @@ export class NewsCategoryDetailComponent {
         const page = Number(params.get('page')) || 1;
 
         if (slug) {
-          return this._wpService.getCategory(slug).pipe(map((category) => ({ category, page })));
+          return this._wpService.getNewsCategory(slug).pipe(map((category) => ({ category, page })));
         } else {
           return of({ category: null, page });
         }
@@ -83,7 +82,7 @@ export class NewsCategoryDetailComponent {
           }
         }),
         switchMap(({ category, page }) => {
-          return this._wpService.getNewsByCategoryIds([this.category.id], page, this.perPage);
+          return this._wpService.getNewsByNewsCategoriesIds([this.category.id], page, this.perPage);
         }),
         switchMap(({ news, headers }) => {
           if (news && news.length > 0) {
@@ -92,9 +91,9 @@ export class NewsCategoryDetailComponent {
             this.totalPages = Number(headers.get('X-WP-TotalPages'));
             const mediaIds = news.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
-          } else {
-            return of([]);
-          }
+          } 
+          
+          return of([]);
         }),
         tap((newsFeaturedMedia) => {
           if (newsFeaturedMedia && newsFeaturedMedia.length > 0) {

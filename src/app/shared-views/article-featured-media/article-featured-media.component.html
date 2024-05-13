@@ -1,0 +1,9 @@
+<figure class="featured-media" *ngIf="media">
+  <picture>
+    <source [attr.data-srcset]="media.size.mediumLarge?.src" media="(max-width: 539px)" />
+    <source [attr.data-srcset]="media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
+    <source [attr.data-srcset]="media.size.xLarge?.src" media="(min-width: 720px)" />
+    <img appLazyLoad [attr.data-src]="media.size.xLarge?.src" [alt]="media.altText" />
+  </picture>
+  <figcaption *ngIf="showCaption && media.caption" [innerHTML]="media.caption"></figcaption>
+</figure>

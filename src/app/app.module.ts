@@ -31,10 +31,15 @@ import { PageAboutComponent } from './views/page/page-about/page-about.component
 import { NavigatorShareComponent } from './shared-views/navigator-share/navigator-share.component';
 import { NewsCategoryDetailComponent } from './views/category/news-category-detail/news-category-detail.component';
 import { EventCategoryDetailComponent } from './views/category/event-category-detail/event-category-detail.component';
+import { CoverImageComponent } from './shared-views/cover-image/cover-image.component';
+import { DynamicHostDirective } from './directives/dynamic-host.directive';
+import { LazyLoadDirective } from './directives/lazy-load.directive';
+import { ArticleFeaturedMediaComponent } from './shared-views/article-featured-media/article-featured-media.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DynamicHostDirective,
     HeaderComponent,
     FooterComponent,
     PageDefaultComponent,
@@ -63,7 +68,11 @@ import { EventCategoryDetailComponent } from './views/category/event-category-de
      NavigatorShareComponent,
      NewsCategoryDetailComponent,
      EventCategoryDetailComponent,
+     CoverImageComponent,
 
+     // directives
+     LazyLoadDirective,
+      ArticleFeaturedMediaComponent
      
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],

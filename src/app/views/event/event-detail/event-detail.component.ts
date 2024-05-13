@@ -8,6 +8,7 @@ import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
 import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
+import { Category } from '../../../models/entities/category';
 
 @Component({
   selector: 'app-event-detail',
@@ -22,6 +23,7 @@ export class EventDetailComponent {
 
   event!: Event;
   news!: News[];
+  shareData?: ShareData;
 
   constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
 
@@ -43,17 +45,28 @@ export class EventDetailComponent {
   }
 
   private getEvent(): void {
-    this.loading = true;
     const routeParamsSubscription = this.checkRouteParams()
       .pipe(
         tap((event) => {
           if (event) {
+            this.loading = true;
             this.initEvent(event);
           } else {
             throw new Error('No event found');
           }
         }),
         switchMap(() => {
+          if (this.event.categoryIds && this.event.categoryIds.length > 0) {
+            return this._wpService.getEventCategoriesByPostId(this.event.id);
+          }
+
+          return of(null);
+        }),
+        switchMap((categories) => {
+          if (categories) {
+            this.event.categories = this.initCategories(categories);
+          }
+
           if (this.event.featuredMediaId && this.event.featuredMediaId > 0) {
             return this._wpService.getMediaById(this.event.featuredMediaId);
           }
@@ -76,17 +89,36 @@ export class EventDetailComponent {
             this.event.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
-          return this._wpService.getNewsByEventId(this.event.id, 8);
+          // return this._wpService.getNewsByEventId(this.event.id, 8);
+          return this._wpService.getEventsByEventCategoriesIds(this.event.categoryIds, 1, 10);
         }),
-        tap((news) => {
-          if (news && news.length > 0) {
-            this.initNews(news);
+
+        switchMap(({ events, headers }) => {
+          if (events && events.length > 0) {
+            const filteredEvents = events.filter((article) => article.id !== this.event.id);
+            this.event.relatedEvents = this.initRelatedEvents(filteredEvents);
+            const mediaIds = this.event.relatedEvents.map((x) => x.featuredMediaId).filter((id) => id !== null);
+
+            if (mediaIds && mediaIds.length > 0) {
+              return this._wpService.getMediaByIds(mediaIds);
+            } else {
+              return of([]);
+            }
+          }
+
+          return of([]);
+        }),
+
+        tap((relatedEventsFeaturedMedia) => {
+          if (relatedEventsFeaturedMedia && relatedEventsFeaturedMedia.length > 0) {
+            this.mapRelatedEventsMedia(relatedEventsFeaturedMedia);
           }
         })
       )
       .subscribe({
         next: () => {
           this.initTitle();
+          this.initShareData();
           this.loading = false;
         },
         error: (error) => {
@@ -102,15 +134,35 @@ export class EventDetailComponent {
     this.event = new Event();
     this.event.id = event.id;
     this.event.title = event.title.rendered;
+    this.event.date = event.date;
+    this.event.excerpt = event.excerpt.rendered;
     this.event.content = event.content.rendered;
     this.event.featuredMediaId = event.featured_media;
+    this.event.categoryIds = event.event_category;
     this.event.galleryMediaIds = event.acf.gallery;
+  }
+
+  private initCategories(cats: any[]): Category[] {
+    const categories = cats.map((cat) => {
+      let category = new Category();
+      category.id = cat.id;
+      category.slug = cat.slug;
+      category.name = cat.name;
+      category.description = cat.description;
+      category.parent = cat.parent;
+
+      return category;
+    });
+
+    return categories;
   }
 
   private initFeaturedMedia(media: any): Media {
     let featuredMedia = new Media();
     featuredMedia.id = media.id;
     featuredMedia.link = media.link;
+    featuredMedia.altText = media.alt_text;
+    featuredMedia.caption = media.caption.rendered;
     featuredMedia.size = this._mediaService.mapMediaSize(media);
 
     return featuredMedia;
@@ -128,15 +180,26 @@ export class EventDetailComponent {
     return galleryMedia;
   }
 
-  private initNews(news: any[]): void {
-    this.news = news.map((data) => {
-      let news = new News();
-      news.slug = data.slug;
-      news.date = data.date;
-      news.title = data.title.rendered;
-      news.excerpt = data.excerpt.rendered;
-      news.content = data.content.rendered;
-      return news;
+  private initRelatedEvents(events: any[]): Event[] {
+    const relatedEvents = events.map((data) => {
+      let relatedEventItem = new Event();
+      relatedEventItem.slug = data.slug;
+      relatedEventItem.date = data.date;
+      relatedEventItem.title = data.title.rendered;
+      relatedEventItem.excerpt = data.excerpt.rendered;
+      relatedEventItem.featuredMediaId = data.featured_media;
+      return relatedEventItem;
+    });
+
+    return relatedEvents;
+  }
+
+  private mapRelatedEventsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      const newsItem = this.event.relatedEvents?.find((x) => x.featuredMediaId === mediaItem.id);
+      if (newsItem) {
+        newsItem.featuredMedia = this.initFeaturedMedia(mediaItem);
+      }
     });
   }
 
@@ -146,5 +209,12 @@ export class EventDetailComponent {
     } else {
       this._titleService.setTitle(this._appTitle);
     }
+  }
+
+  private initShareData(): void {
+    this.shareData = { title: '', text: '', url: '' };
+    this.shareData.title = this.event.title.replace(/<[^>]*>/g, '');
+    this.shareData.text = this.event.excerpt.replace(/<[^>]*>/g, '');
+    this.shareData.url = window.location.href;
   }
 }

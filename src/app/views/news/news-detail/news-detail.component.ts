@@ -62,7 +62,7 @@ export class NewsDetailComponent {
         }),
         switchMap(() => {
           if (this.news.categoryIds && this.news.categoryIds.length > 0) {
-            return this._wpService.getCategoriesByPostId(this.news.id);
+            return this._wpService.getNewsCategoriesByPostId(this.news.id);
           }
 
           return of(null);
@@ -94,7 +94,7 @@ export class NewsDetailComponent {
             this.news.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
-          return this._wpService.getNewsByCategoryIds(this.news.categoryIds, 1, 10);
+          return this._wpService.getNewsByNewsCategoriesIds(this.news.categoryIds, 1, 10);
         }),
         switchMap(({ news, headers }) => {
           if (news && news.length > 0) {
@@ -140,17 +140,8 @@ export class NewsDetailComponent {
     this.news.excerpt = news.excerpt.rendered;
     this.news.content = news.content.rendered;
     this.news.featuredMediaId = news.featured_media;
-    this.news.categoryIds = news.tax_category;
+    this.news.categoryIds = news.news_category;
     this.news.galleryMediaIds = news.acf.gallery;
-  }
-
-  private initFeaturedMedia(media: any): Media {
-    let featuredMedia = new Media();
-    featuredMedia.id = media.id;
-    featuredMedia.link = media.link;
-    featuredMedia.size = this._mediaService.mapMediaSize(media);
-
-    return featuredMedia;
   }
 
   private initCategories(cats: any[]): Category[] {
@@ -168,11 +159,24 @@ export class NewsDetailComponent {
     return categories;
   }
 
+  private initFeaturedMedia(media: any): Media {
+    let featuredMedia = new Media();
+    featuredMedia.id = media.id;
+    featuredMedia.link = media.link;
+    featuredMedia.altText = media.alt_text;
+    featuredMedia.caption = media.caption.rendered;
+    featuredMedia.size = this._mediaService.mapMediaSize(media);
+
+    return featuredMedia;
+  }
+
   private initGalleryMedia(mediaArray: any[]): Media[] {
     const galleryMedia = mediaArray.map((media) => {
       let galleryItem = new Media();
       galleryItem.id = media.id;
       galleryItem.link = media.link;
+      galleryItem.altText = media.alt_text;
+      galleryItem.caption = media.caption.rendered;
       galleryItem.size = this._mediaService.mapMediaSize(media);
 
       return galleryItem;

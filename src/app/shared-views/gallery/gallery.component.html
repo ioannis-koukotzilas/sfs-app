@@ -1,45 +1,49 @@
-<div class="gallery" *ngIf="galleryMedia && galleryMedia.length">
-  <ul class="gallery-items">
-    <li class="gallery-item" *ngFor="let media of galleryMedia; let i = index" (click)="openModal(i)">
-      <img [src]="media.size.thumbnail?.src" alt="Gallery item">
-    </li>
-  </ul>
-</div>
-
-<!-- <div class="modal" *ngIf="visible">
-  <div class="wrapper">
-  <swiper-container swiperDirective #swiper class="swiper" [config]="swiperConfig">
-    <swiper-slide class="swiper-slide" *ngFor="let media of galleryMedia">
-      <img [src]="media.size.thumbnail?.source" alt="Gallery image"/>
-    </swiper-slide>
-  </swiper-container>
-
-  <button (click)="closeModal()">Close</button>
-  <div class="navigation">
-  <button (click)="slidePrev()" aria-label="Previous slide">Slide Prev</button>
-  <button (click)="slideNext()" aria-label="Next slide">Slide Next</button>
-</div>
-</div>
-</div> -->
-
-
-<div class="modal" *ngIf="visible">
-  <div class="wrapper">
-    <div class="swiper" #swiper>
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" *ngFor="let media of galleryMedia">
-          <img [src]="media.size.large?.src" alt="Gallery image" />
-        </div>
+<div class="gallery" *ngIf="galleryMedia && galleryMedia.length > 0">
+  <div class="swiper" #gallerySwiper>
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let media of galleryMedia; let i = index" (click)="openGalleryModal(i)">
+        <figure>
+          <picture>
+            <source appLazyLoad [attr.data-srcset]="media.size.mediumLarge?.src" media="(max-width: 539px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.xLarge" media="(min-width: 720px) and (max-width: 1319px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.xxLarge?.src" media="(min-width: 1320px)" />
+            <img appLazyLoad [attr.data-src]="media.size.xxLarge?.src" [alt]="media.altText" />
+          </picture>
+        </figure>
       </div>
-      <div class="swiper-navigation">
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-
-      <!-- Optional pagination -->
-      <div class="swiper-pagination"></div>
-
-      <button (click)="closeModal()">Close</button>
     </div>
+
+    <div class="swiper-navigation">
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-modal" *ngIf="galleryModalVisible">
+  <div class="swiper" #galleryModalSwiper>
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let media of galleryMedia">
+        <figure>
+          <picture>
+            <source appLazyLoad [attr.data-srcset]="media.size.mediumLarge?.src" media="(max-width: 539px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.xLarge" media="(min-width: 720px) and (max-width: 1319px)" />
+            <source appLazyLoad [attr.data-srcset]="media.size.xxLarge?.src" media="(min-width: 1320px)" />
+            <img appLazyLoad [attr.data-src]="media.size.xxLarge?.src" [alt]="media.altText" />
+          </picture>
+          <figcaption *ngIf="media.caption" [innerHTML]="media.caption"></figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="swiper-navigation">
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+    <!-- <div class="swiper-pagination"></div> -->
+
+    <button class="btn-close-gallery-modal transparent light" (click)="closeGalleryModal()"><span class="symbol">close</span></button>
   </div>
 </div>

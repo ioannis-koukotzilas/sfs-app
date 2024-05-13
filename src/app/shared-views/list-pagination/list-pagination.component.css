@@ -1,10 +1,21 @@
-nav {
+.pagination {
   margin-top: 3rem;
 }
 
-.pagination {
+.pagination > .wrapper {
   display: flex;
-  gap: 0.75rem;
-  justify-content: center;
+  gap: 1.5rem;
+  justify-content: end;
+  align-items: center;
+}
+
+.pagination .page-counter {
+  font-size: var(--font-xs);
+  font-family: var(--font-mono);
+}
+
+.pagination .controls {
+  display: flex;
+  gap: 0.5rem;
   align-items: center;
 }

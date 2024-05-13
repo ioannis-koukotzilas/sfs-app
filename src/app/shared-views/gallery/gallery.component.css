@@ -1,86 +1,91 @@
-.modal {
+/*--------------------------------------------------------------
+# Gallery
+--------------------------------------------------------------*/
+
+:host {
+  display: block;
+  margin-bottom: 3rem;
+}
+
+.gallery img {
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gallery Modal
+--------------------------------------------- */
+
+.gallery-modal {
   position: fixed;
   z-index: 3;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(var(--color-primary-950), 0.75);
+  background-color: rgba(var(--primary-950), 0.95);
 }
 
-.modal > .wrapper {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal .swiper {
+.gallery-modal .swiper {
   width: 100%;
   height: 100%;
 }
 
-.modal .swiper-slide {
+.gallery-modal figure {
+  height: 100%;
+}
+
+.gallery-modal picture {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.modal .swiper-slide img {
+.gallery-modal .swiper-slide img {
   max-width: calc(100% - 20px);
-  max-height: calc(100% - 110px);
+  max-height: calc(100% - 18rem);
   object-fit: contain;
 }
 
-.modal .swiper-slide .caption {
+.gallery-modal .swiper-slide figcaption {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgb(var(--color-primary-1000));
-  color: rgb(var(--color-primary-50));
-}
-
-.modal .swiper-slide .caption > .wrapper {
-  padding: 20px;
-  text-align: center;
-  font-size: var(--font-sm);
-}
-
-.modal .navigation {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  min-height: 4.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: rgb(var(--primary-400));
+  background-color: rgba(var(--primary-950), 0.95);
 }
 
-.modal .navigation button {
-  position: relative;
-  z-index: 2;
+::ng-deep .gallery-modal .swiper-slide figcaption > * {
+  margin: 0;
+  padding: 1.5rem 20px;
 }
 
-.modal .close-modal {
+.gallery-modal .btn-close-gallery-modal {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 4;
-  margin: 20px;
-  cursor: pointer;
   font-size: var(--font-2xl);
-  color: rgb(var(--color-primary-50));
+  border: unset;
 }
 
-
-
-
-
-.modal .swiper-pagination {
+.gallery-modal .swiper-pagination {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 20px;
-  color: rgb(var(--color-primary-50));
+  padding: 0.5rem 1rem;
+  color: rgb(var(--primary-50));
+
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: rgb(var(--primary-50));
 }

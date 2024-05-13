@@ -18,13 +18,21 @@ export class WpService {
 
   constructor(private _http: HttpClient) {}
 
+  /**
+   * Pages
+   */
+
   getPageDefault(slug: string): Observable<PageDefault> {
     return this._http.get<PageDefault[]>(`${this._wpJsonBaseUrl}/pages?slug=${slug}`).pipe(map((pages) => pages[0] || null));
   }
 
-  getEdition(slug: string): Observable<Edition> {
-    return this._http.get<Edition[]>(`${this._wpJsonBaseUrl}/edition?slug=${slug}`).pipe(map((data) => data[0] || null));
+  getPage(slug: string): Observable<PageDefault> {
+    return this._http.get<PageDefault[]>(`${this._wpJsonBaseUrl}/pages?slug=${slug}`).pipe(map((pages) => pages[0] || null));
   }
+
+  /**
+   * Edition
+   */
 
   getEditions(page: number, perPage: number): Observable<{ data: Edition[]; headers: HttpHeaders }> {
     return this._http
@@ -38,6 +46,10 @@ export class WpService {
       .pipe(map(({ body, headers }) => ({ data: body as Edition[], headers })));
   }
 
+  getEdition(slug: string): Observable<Edition> {
+    return this._http.get<Edition[]>(`${this._wpJsonBaseUrl}/edition?slug=${slug}`).pipe(map((data) => data[0] || null));
+  }
+
   getEventsByEditionId(editionId: number, postsPerPage: number = 10): Observable<Event[]> {
     return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?edition_id=${editionId}&posts_per_page=${postsPerPage}`);
   }
@@ -46,14 +58,9 @@ export class WpService {
     return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?edition_id=${editionId}&posts_per_page=${postsPerPage}`);
   }
 
-  getEvent(slug: string): Observable<Event> {
-    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?slug=${slug}`).pipe(map((data) => data[0] || null));
-  }
-
-  // Αν δεν υπάρχει link object θα τα φέρει όλα
-  getNewsByEventId(eventId: number, postsPerPage: number = 10): Observable<News[]> {
-    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?event_id=${eventId}&posts_per_page=${postsPerPage}`);
-  }
+  /**
+   * Event
+   */
 
   getEvents(page: number, perPage: number): Observable<{ data: Event[]; headers: HttpHeaders }> {
     return this._http
@@ -67,14 +74,18 @@ export class WpService {
       .pipe(map(({ body, headers }) => ({ data: body as Event[], headers })));
   }
 
-  getNews(slug: string): Observable<News> {
-    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?slug=${slug}`).pipe(map((data) => data[0] || null));
+  getEvent(slug: string): Observable<Event> {
+    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?slug=${slug}`).pipe(map((data) => data[0] || null));
   }
 
   // Αν δεν υπάρχει link object θα τα φέρει όλα
-  getEventsByNewsId(newsId: number, postsPerPage: number = 10): Observable<Event[]> {
-    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?news_id=${newsId}&posts_per_page=${postsPerPage}`);
+  getNewsByEventId(eventId: number, postsPerPage: number = 10): Observable<News[]> {
+    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?event_id=${eventId}&posts_per_page=${postsPerPage}`);
   }
+
+  /**
+   * News
+   */
 
   getNewsList(page: number, perPage: number): Observable<{ data: News[]; headers: HttpHeaders }> {
     return this._http
@@ -88,6 +99,19 @@ export class WpService {
       .pipe(map(({ body, headers }) => ({ data: body as News[], headers })));
   }
 
+  getNews(slug: string): Observable<News> {
+    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?slug=${slug}`).pipe(map((data) => data[0] || null));
+  }
+
+  // Αν δεν υπάρχει link object θα τα φέρει όλα
+  getEventsByNewsId(newsId: number, postsPerPage: number = 10): Observable<Event[]> {
+    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?news_id=${newsId}&posts_per_page=${postsPerPage}`);
+  }
+
+  /**
+   * Media
+   */
+
   getMediaById(mediaId: number): Observable<Media> {
     return this._http.get<Media>(`${this._wpJsonBaseUrl}/media/${mediaId}`);
   }
@@ -97,30 +121,25 @@ export class WpService {
     return this._http.get<Media[]>(`${this._wpJsonBaseUrl}/media?include=${idsParam}`);
   }
 
-  // taxonomies
+  /**
+   * Taxonomies
+   */
 
-  getCategoriesByPostId(id: number): Observable<Category[]> {
-    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/tax_category?post=${id}`);
+  // News
+
+  getNewsCategoriesByPostId(id: number): Observable<Category[]> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/news_category?post=${id}`);
   }
 
-  getCategory(slug: string): Observable<Category> {
-    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/tax_category?slug=${slug}`).pipe(map((data) => data[0] || null));
+  getNewsCategory(slug: string): Observable<Category> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/news_category?slug=${slug}`).pipe(map((data) => data[0] || null));
   }
 
-  // getNewsByCategoryIds(ids: number[]): Observable<Media[]> {
-  //   const idsParam = ids.join(',');
-  //   return this._http.get<Media[]>(`${this._wpJsonBaseUrl}/media?include=${idsParam}`);
-  // }
-
-  // getNewsByCategoryId(id: number): Observable<News[]> {
-  //   return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news?tax_category=${id}`);
-  // }
-
-  getNewsByCategoryIds(categoryIds: number[], page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
+  getNewsByNewsCategoriesIds(categoryIds: number[], page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
     return this._http
       .get<News[]>(`${this._wpJsonBaseUrl}/news`, {
         params: {
-          tax_category: categoryIds.join(', '),
+          news_category: categoryIds.join(', '),
           page: page.toString(),
           per_page: perPage.toString(),
         },
@@ -129,10 +148,62 @@ export class WpService {
       .pipe(map(({ body, headers }) => ({ news: body as News[], headers })));
   }
 
+  // Events
 
-
-  getEventsByCategoryId(id: number): Observable<Event[]> {
-    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event?tax_category=${id}`);
+  getEventCategoriesByPostId(id: number): Observable<Category[]> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/event_category?post=${id}`);
   }
 
+  getEventCategory(slug: string): Observable<Category> {
+    return this._http.get<Category[]>(`${this._wpJsonBaseUrl}/event_category?slug=${slug}`).pipe(map((data) => data[0] || null));
+  }
+
+  getEventsByEventCategoriesIds(categoryIds: number[], page: number, perPage: number): Observable<{ events: Event[]; headers: HttpHeaders }> {
+    return this._http
+      .get<Event[]>(`${this._wpJsonBaseUrl}/event`, {
+        params: {
+          event_category: categoryIds.join(', '),
+          page: page.toString(),
+          per_page: perPage.toString(),
+        },
+        observe: 'response',
+      })
+      .pipe(map(({ body, headers }) => ({ events: body as Event[], headers })));
+  }
+
+  // Home
+
+  getFeaturedNews(): Observable<News[]> {
+    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/featured-news/`);
+  }
+
+  // getFilteredNewsByNewsCategoriesIds(
+  //   categoryIds: number[],
+  //   excludeIds: number[],
+  //   page: number,
+  //   perPage: number
+  // ): Observable<{ news: News[]; headers: HttpHeaders }> {
+  //   return this._http
+  //     .get<News[]>(`${this._wpJsonBaseUrl}/news`, {
+  //       params: {
+  //         news_category: categoryIds.join(','),
+  //         exclude: excludeIds.join(','),
+  //         page: page.toString(),
+  //         per_page: perPage.toString(),
+  //       },
+  //       observe: 'response',
+  //     })
+  //     .pipe(map(({ body, headers }) => ({ news: body as News[], headers })));
+  // }
+
+  getFilteredNewsByNewsCategoriesIds(categoryIds: number[], excludedPostsIds: number[], page: number, perPage: number): Observable<News[]> {
+    return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news`, {
+      params: {
+        news_category: categoryIds.join(','),
+        exclude: excludedPostsIds.join(','),
+        page: page.toString(),
+        per_page: perPage.toString(),
+      },
+    });
+  }
 }

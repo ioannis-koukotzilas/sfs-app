@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Edition } from '../../../models/entities/edition';
 import { ActivatedRoute } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
@@ -9,6 +9,10 @@ import { Event } from '../../../models/entities/event';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
+import { DynamicContentService } from '../../../services/dynamic-content.service';
+import { DynamicHostDirective } from '../../../directives/dynamic-host.directive';
+import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
+import { ViewContainerRefService } from '../../../services/view-container-ref.service';
 
 @Component({
   selector: 'app-edition-detail',
@@ -17,7 +21,7 @@ import { MediaService } from '../../../services/media.service';
 })
 export class EditionDetailComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
-  appTitle = environment.appTitle;
+  private _appTitle = environment.appTitle;
 
   loading = false;
 
@@ -26,14 +30,32 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
   news!: News[];
   shareData?: ShareData;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _titleService: Title,
+    private _viewContainerRefService: ViewContainerRefService,
+    private _dynamicContentService: DynamicContentService
+  ) {}
 
   ngOnInit(): void {
     this.getEdition();
+
+    // const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
+    // if (hostViewContainerRef) {
+    //   const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
+    //   compRef.instance.coverImageSrc = this.imageUrl;
+    // }
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+
+    const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
+    if (hostViewContainerRef) {
+      hostViewContainerRef.clear(); // This clears all components in the container
+    }
   }
 
   private checkRouteParams(): Observable<Edition | null> {
@@ -66,6 +88,12 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
         switchMap((featuredMedia) => {
           if (featuredMedia) {
             this.edition.featuredMedia = this.initFeaturedMedia(featuredMedia);
+
+            const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
+            if (hostViewContainerRef) {
+              const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
+              compRef.instance.featuredMedia = this.edition.featuredMedia;
+            }
           }
 
           if (this.edition.galleryMediaIds && this.edition.galleryMediaIds.length > 0) {
@@ -211,9 +239,9 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
 
   private initTitle(): void {
     if (this.edition.title) {
-      this._titleService.setTitle(this.edition.title + ' - ' + this.appTitle);
+      this._titleService.setTitle(this.edition.title + ' - ' + this._appTitle);
     } else {
-      this._titleService.setTitle(this.appTitle);
+      this._titleService.setTitle(this._appTitle);
     }
   }
 

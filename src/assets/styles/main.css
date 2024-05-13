@@ -2,10 +2,6 @@
 # Base
 --------------------------------------------------------------*/
 
-/* html, body {
-  scroll-behavior: smooth;
-} */
-
 /* Box sizing
 --------------------------------------------- */
 
@@ -19,23 +15,51 @@ html {
   box-sizing: border-box;
 }
 
+/* Scroll Behavior
+--------------------------------------------- */
+/* 
+html, body {
+  scroll-behavior: smooth;
+} */
+
+
+
 /* App
 --------------------------------------------- */
 
 app-root {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
 }
 
-.app-main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+
+
+app-cover-image {
+  grid-row: 2;
 }
 
-.app-main > *:not(router-outlet) {
-  flex-grow: 1;
+/* app-footer {
+  grid-column: span 2;
+} */
+
+@media (min-width: 1140px) {
+  app-root {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  
+  app-cover-image {
+    grid-row: 1;
+    grid-column: span 2;
+  }
+  
+  app-footer {
+    grid-column: span 2;
+  }
 }
 
 /* Typography
@@ -57,7 +81,7 @@ textarea {
   font-size: var(--font-base);
   font-weight: var(--font-normal);
   line-height: var(--leading-base);
-  color: rgb(var(--color-primary-950));
+  color: rgb(var(--primary-950));
   font-feature-settings: "pnum" 1, "kern" 1, "ss01" 1, "ss03" 1;
 }
 
@@ -89,7 +113,7 @@ p {
 --------------------------------------------- */
 
 body {
-  background: rgb(var(--color-secondary-500));
+  background-color: rgba(var(--yellow-50), 0.15);
 }
 
 ul,
@@ -109,7 +133,8 @@ img {
 }
 
 figure {
-  margin: 1rem 0;
+  display: block;
+  margin: 0;
 }
 
 picture {
@@ -121,18 +146,17 @@ picture {
 a {
   cursor: pointer;
   display: inline-block;
-  color: rgb(var(--color-primary-950));
+  color: rgb(var(--primary-950));
   text-decoration: none;
-  /* transition: background-color 0.2s, color 0.2s, opacity 0.2s; */
 }
 
 a:visited {
-  color: rgb(var(--color-primary-950));
+  color: rgb(var(--primary-950));
 }
 
 a:hover,
 a:focus {
-  color: rgb(var(--color-primary-500));
+  color: rgb(var(--primary-500));
 }
 
 a:focus,
@@ -144,45 +168,38 @@ a:active {
 /* a light */
 
 a.light {
-  color: rgb(var(--color-primary-50));
+  color: rgb(var(--primary-50));
 }
 
 a.light:visited {
-  color: rgb(var(--color-primary-50));
+  color: rgb(var(--primary-50));
 }
 
 a.light:hover,
 a.light:focus {
-  color: rgb(var(--color-primary-400));
+  color: rgb(var(--primary-400));
 }
 
 /* a accent */
 
 a.accent {
-  color: rgb(var(--color-accent-500));
+  color: rgb(var(--red-500));
 }
 
 a.accent:visited {
-  color: rgb(var(--color-accent-500));
+  color: rgb(var(--red-500));
 }
 
 a.accent:hover,
 a.accent:focus {
-  color: rgb(var(--color-accent-400));
+  color: rgb(var(--red-400));
 }
-
-
 
 .underline {
   cursor: pointer;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25rem;
-  text-decoration-color: rgb(var(--color-accent-150));
-}
-
-.underline:hover {
-  color: rgb(var(--color-primary-50));
 }
 
 /* Buttons
@@ -191,9 +208,9 @@ button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
-  border: 1px solid rgb(var(--color-accent-500));
-  background: rgb(var(--color-accent-500));
-  color: rgb(var(--color-primary-50));
+  border: 1px solid rgb(var(--red-500));
+  background: rgb(var(--red-500));
+  color: rgb(var(--primary-50));
   line-height: 1;
   padding: 0.5rem 1rem 0.5rem;
   cursor: pointer;
@@ -214,12 +231,12 @@ input[type="reset"]:focus,
 input[type="submit"]:hover,
 input[type="submit"]:active,
 input[type="submit"]:focus {
-  background: rgb(var(--color-accent-400));
-  border-color: rgb(var(--color-accent-400));
+  background: rgb(var(--red-400));
+  border-color: rgb(var(--red-400));
 }
 
 button:disabled {
-  background: rgb(var(--color-primary-950));
+  background: rgb(var(--primary-950));
   opacity: 0.1;
   cursor: unset;
   pointer-events: none;
@@ -227,14 +244,38 @@ button:disabled {
 
 button.transparent {
   background: transparent;
-  color: rgb(var(--color-accent-500));
+  color: rgb(var(--primary-950));
   border-color: currentColor;
 }
 
 button.transparent:hover,
 button.transparent:active,
 button.transparent:focus {
-  color: rgb(var(--color-accent-400));
+  color: rgb(var(--primary-500));
+}
+
+button.transparent.accent {
+  background: transparent;
+  color: rgb(var(--red-500));
+  border-color: currentColor;
+}
+
+button.transparent.accent:hover,
+button.transparent.accent:active,
+button.transparent.accent:focus {
+  color: rgb(var(--red-400));
+}
+
+button.transparent.light {
+  background: transparent;
+  color: rgb(var(--primary-50));
+  border-color: currentColor;
+}
+
+button.transparent.light:hover,
+button.transparent.light:active,
+button.transparent.light:focus {
+  color: rgb(var(--primary-400));
 }
 
 /* Forms
@@ -294,3 +335,29 @@ textarea {
 body.gallery-modal-active {
   overflow: hidden;
 }
+
+
+
+
+
+img[appLazyLoad] {
+  filter: blur(8px);
+  transition: filter 0.6s ease-out;
+}
+
+img[appLazyLoad][src] {
+  filter:none;
+  
+}
+
+img[appLazyLoad].loaded {
+  /* filter: none; */
+  transition: unset;
+}
+
+/* img[appLazyLoad][src].loaded {
+  transition: unset;
+  filter: unset;
+} */
+
+

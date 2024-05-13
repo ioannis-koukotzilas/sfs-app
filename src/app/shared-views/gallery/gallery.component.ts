@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Media } from '../../models/entities/media';
 import { Keyboard, Navigation, Pagination } from 'swiper/modules';
 import { Swiper } from 'swiper';
@@ -8,36 +8,66 @@ import { Swiper } from 'swiper';
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.css',
 })
-export class GalleryComponent {
+export class GalleryComponent implements AfterViewInit {
   @Input() galleryMedia?: Media[];
 
-  @ViewChild('swiper') swiperEl!: ElementRef;
+  @ViewChild('gallerySwiper') gallerySwiperEl!: ElementRef;
+  @ViewChild('galleryModalSwiper') galleryModalSwiperEl!: ElementRef;
 
-  swiper!: Swiper;
+  gallerySwiper!: Swiper;
+  galleryModalSwiper!: Swiper;
 
   index = 0;
 
-  visible = false;
+  galleryModalVisible = false;
 
   constructor(private cd: ChangeDetectorRef) {}
 
-  openModal(index: number): void {
-    this.visible = true;
+  ngAfterViewInit(): void {
+    this.initGallerySwiper();
+  }
+
+  private initGallerySwiper(): void {
+    this.gallerySwiper = new Swiper(this.gallerySwiperEl.nativeElement, {
+      modules: [Navigation, Keyboard],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      keyboard: {
+        enabled: true,
+        onlyInViewport: true,
+      },
+      slidesPerView: 1,
+      spaceBetween: 20,
+      breakpoints: {
+        480: {
+          slidesPerView: 2,
+        },
+        720: {
+          slidesPerView: 3,
+        },
+      },
+    });
+  }
+
+  openGalleryModal(index: number): void {
+    this.galleryModalVisible = true;
     this.cd.detectChanges();
-    this.initSwiper(index);
+    this.initGalleryModalSwiper(index);
     document.body.classList.add('gallery-modal-active');
     document.addEventListener('keydown', this.onKeyEscape);
   }
 
-  closeModal(): void {
-    this.swiper.destroy(true, true);
+  closeGalleryModal(): void {
+    this.galleryModalSwiper.destroy(true, true);
     document.body.classList.remove('gallery-modal-active');
     document.removeEventListener('keydown', this.onKeyEscape);
-    this.visible = false;
+    this.galleryModalVisible = false;
   }
 
-  private initSwiper(index: number): void {
-    this.swiper = new Swiper(this.swiperEl.nativeElement, {
+  private initGalleryModalSwiper(index: number): void {
+    this.galleryModalSwiper = new Swiper(this.galleryModalSwiperEl.nativeElement, {
       modules: [Navigation, Pagination, Keyboard],
       initialSlide: index,
       pagination: {
@@ -61,7 +91,7 @@ export class GalleryComponent {
 
   private onKeyEscape = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
-      this.closeModal();
+      this.closeGalleryModal();
     }
   };
 }

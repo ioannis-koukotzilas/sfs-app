@@ -1,6 +1,8 @@
-import { Component, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
+import { DynamicHostDirective } from './directives/dynamic-host.directive';
+import { ViewContainerRefService } from './services/view-container-ref.service';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +19,16 @@ export class AppComponent implements OnDestroy {
   private classMapping: { [key: string]: string } = {
     home: 'dark',
     about: 'dark',
-    editions: 'dark',
-    edition: 'dark',
   };
 
-  constructor(private router: Router, private renderer: Renderer2) {
+  @ViewChild(DynamicHostDirective, { static: true }) dynamicHost!: DynamicHostDirective;
+
+  constructor(private router: Router, private renderer: Renderer2, private _viewContainerRefService: ViewContainerRefService) {
     this.checkRouteParams();
-    // this.windowScrollOnNavigationEnd();
+  }
+
+  ngAfterViewInit() {
+    this._viewContainerRefService.setHostViewContainerRef(this.dynamicHost.viewContainerRef);
   }
 
   ngOnDestroy() {
@@ -36,19 +41,6 @@ export class AppComponent implements OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.updateBodyClass(event);
       });
-
-    this._subscriptions.add(routerParamsSubscription);
-  }
-
-  private windowScrollOnNavigationEnd(): void {
-    const routerParamsSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
 
     this._subscriptions.add(routerParamsSubscription);
   }

@@ -14,7 +14,7 @@
   font-size: var(--font-base);
 }
 
-.icon {
+.symbol {
   font-family: var(--font-icon);
   font-weight: normal;
   font-style: normal;
@@ -47,7 +47,7 @@
   font-size: var(--font-base);
 }
 
-.symbol {
+/* .symbol {
   font-family: var(--font-symbol);
   font-weight: normal;
   font-style: normal;
@@ -64,4 +64,4 @@
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga";
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
-}
+} */

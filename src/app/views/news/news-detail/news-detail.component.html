@@ -1,82 +1,51 @@
 <app-progress-bar [loading]="loading"></app-progress-bar>
 
-<ng-container *ngIf="news">
-  <!-- <div *ngIf="news.featuredMedia">
-    <img class="cover-featured-media" [src]="news.featuredMedia.size.xxLarge?.src" [alt]="news.title" />
-  </div> -->
+<div class="container" *ngIf="news">
+  <article class="article">
+    <header class="article-header">
+      <h1 class="article-title">{{ news.title }}</h1>
 
-  <div class="container">
-    <div class="grid">
-      <div class="col">
-        <div class="sidebar">
-          <a class="site-link" routerLink="/">
-            <h1 class="site-title">{{ appTitle }}</h1>
-          </a>
-          <!-- Add sidebar content after the title -->
-        </div>
-      </div>
+      <div *ngIf="news.excerpt" class="article-excerpt" [innerHTML]="news.excerpt"></div>
 
-      <div class="col">
-        <article class="article">
-          <header class="article-header">
-            <h1 class="article-title">{{ news.title }}</h1>
-
-            <div *ngIf="news.excerpt" class="article-excerpt" [innerHTML]="news.excerpt"></div>
-
-            <div class="article-categories" *ngIf="news.categories && news.categories.length > 0">
-              <ng-container *ngFor="let category of news.categories; let last = last">
-                <a class="accent" [routerLink]="['/news/category', category.slug]">{{ category.name }}</a>
-              </ng-container>
-            </div>
-
-            <time class="article-date" [dateTime]="news.date | isoDate">{{ news.date | dateTime }}</time>
-
-            <app-navigator-share [shareData]="shareData"></app-navigator-share>
-          </header>
-
-          <picture *ngIf="news.featuredMedia" class="article-media">
-            <img [src]="news.featuredMedia.size.xxLarge?.src" [alt]="news.title" />
-          </picture>
-
-          <div class="article-content" *ngIf="news.content" [innerHTML]="news.content"></div>
-
-          <ng-container *ngIf="news.galleryMedia">
-            <ul>
-              <li *ngFor="let media of news.galleryMedia">
-                <img [src]="media.size.thumbnail?.src" />
-              </li>
-            </ul>
-          </ng-container>
-        </article>
-
-        <ng-container *ngIf="news.relatedNews && news.relatedNews.length > 0">
-          <section class="related-articles">
-            <h2 class="section-title">Σχετικά άρθρα</h2>
-            <div class="wrapper">
-              <a class="group" *ngFor="let article of news.relatedNews" [routerLink]="['/news', article.slug]">
-                <article class="related-article">
-                  <div class="col">
-                    <picture *ngIf="article.featuredMedia" class="related-article-media">
-                      <img [src]="article.featuredMedia.size.mediumLarge?.src" [alt]="article.title" />
-                    </picture>
-                  </div>
-
-                  <div class="col">
-                    <header class="related-article-header">
-                      <h2 class="related-article-title">{{ article.title }}</h2>
-                      <time class="related-article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
-                    </header>
-
-                    <div class="related-article-excerpt">
-                      <div [innerHTML]="article.excerpt"></div>
-                    </div>
-                  </div>
-                </article>
-              </a>
-            </div>
-          </section>
+      <div class="article-categories" *ngIf="news.categories && news.categories.length > 0">
+        <ng-container *ngFor="let category of news.categories; let last = last">
+          <a class="accent" [routerLink]="['/news/category', category.slug]">{{ category.name }}</a>
         </ng-container>
       </div>
+
+      <time class="article-date" [dateTime]="news.date | isoDate">{{ news.date | dateTime }}</time>
+
+      <app-navigator-share [shareData]="shareData"></app-navigator-share>
+    </header>
+
+    <app-article-featured-media class="article-featured-media" [media]="news.featuredMedia" [showCaption]="true"></app-article-featured-media>
+
+    <div class="article-content" *ngIf="news.content" [innerHTML]="news.content"></div>
+  </article>
+
+  <app-gallery *ngIf="news.galleryMedia" [galleryMedia]="news.galleryMedia"></app-gallery>
+
+  <section class="related-articles" *ngIf="news.relatedNews && news.relatedNews.length > 0">
+    <h2 class="section-title">Σχετικά άρθρα</h2>
+    <div class="articles-wrapper">
+      <a class="grouped-link" *ngFor="let article of news.relatedNews" [routerLink]="['/news', article.slug]">
+        <article class="related-article">
+          <div class="col">
+            <app-article-featured-media class="related-article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
+          </div>
+
+          <div class="col">
+            <header class="related-article-header">
+              <h2 class="related-article-title">{{ article.title }}</h2>
+              <time class="related-article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+            </header>
+
+            <div class="related-article-excerpt">
+              <div [innerHTML]="article.excerpt"></div>
+            </div>
+          </div>
+        </article>
+      </a>
     </div>
-  </div>
-</ng-container>
+  </section>
+</div>

@@ -1,15 +1,14 @@
-<nav aria-label="Pagination">
-  <ul class="pagination">
-    <li>
-      <span>Σελίδα {{ currentPage }} από {{ totalPages }}</span>
-    </li>
+<nav class="pagination" aria-label="Pagination">
+  <div class="wrapper">
+    <div class="page-counter">Σελίδα {{ currentPage }} από {{ totalPages }}</div>
 
-    <li>
-      <button (click)="paginate(currentPage - 1)" type="button" [disabled]="currentPage <= 1">Προηγούμενη</button>
-    </li>
-
-    <li>
-      <button (click)="paginate(currentPage + 1)" type="button" [disabled]="currentPage >= totalPages">Επόμενη</button>
-    </li>
-  </ul>
+    <div class="controls">
+      <button class="transparent" (click)="paginate(currentPage - 1)" type="button" [disabled]="currentPage <= 1">
+        <span class="symbol">arrow_back</span>
+      </button>
+      <button class="transparent" (click)="paginate(currentPage + 1)" type="button" [disabled]="currentPage >= totalPages">
+        <span class="symbol">arrow_forward</span>
+      </button>
+    </div>
+  </div>
 </nav>

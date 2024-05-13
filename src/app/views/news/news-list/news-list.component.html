@@ -2,23 +2,22 @@
 
 <div class="container">
   <header class="page-header">
-    <h1 class="page-title">Νέα</h1>
+    <h1 class="page-title">Ενημέρωση</h1>
     <div class="page-description">
       <p>
-        Με τον όρο Lorem ipsum αναφέρονται τα κείμενα εκείνα τα οποία είναι ακατάληπτα, δεν μπορεί δηλαδή κάποιος να βγάλει κάποιο λογικό νόημα από
-        αυτά, και έχουν δημιουργηθεί με σκοπό να παρουσιάσουν στον αναγνώστη μόνο τα γραφιστικά χαρακτηριστικά.
+        Η ενότητα αυτή αποτελεί τον πυρήνα επικοινωνίας της κοινότητας του Struggle for Skouries. Εδώ, τα μέλη και οι ενδιαφερόμενοι μπορούν να βρουν
+        τις τελευταίες εξελίξεις, ανακοινώσεις και ενημερώσεις σχετικά με τα τρέχοντα ζητήματα και τις δράσεις της κοινότητας. Η ενότητα λειτουργεί ως
+        μέσο για τη διάχυση της πληροφορίας και την ενίσχυση της ενημέρωσης ανάμεσα στα μέλη.
       </p>
     </div>
   </header>
 
   <ng-container *ngIf="news && news.length > 0">
-    <div class="articles">
-      <a class="group" *ngFor="let article of news" [routerLink]="['/news', article.slug]">
+    <div class="articles-wrapper">
+      <a class="grouped-link" *ngFor="let article of news" [routerLink]="['/news', article.slug]">
         <article class="article">
           <div class="col">
-            <picture class="article-media" *ngIf="article.featuredMedia">
-              <img [src]="article.featuredMedia.size.mediumLarge?.src" [alt]="article.title" />
-            </picture>
+            <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
           </div>
 
           <div class="col">
@@ -35,6 +34,7 @@
       </a>
     </div>
 
-    <app-list-pagination *ngIf="totalPages > 1" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+    <app-list-pagination *ngIf="totalPages > 1" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-list-pagination>
   </ng-container>
 </div>

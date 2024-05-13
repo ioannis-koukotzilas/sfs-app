@@ -8,15 +8,69 @@ body.route-about {
   color: rgb(var(--cod-gray-50));
 } */
 
-body.route-editions,
+/* body.route-editions,
 body.route-edition {
   background-color: rgb(var(--cod-gray-950));
-}
+} */
 
 app-page-about .content h2 {
   /* font-family: var(--font-sans-condensed); */
   font-weight: var(--font-bold);
   font-size: var(--font-2xl);
   line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
+}
+
+/* Articles Group
+--------------------------------------------- */
+
+.articles-wrapper a.grouped-link:hover,
+.articles-wrapper a.grouped-link:focus,
+.articles-wrapper a.grouped-link:hover .article-excerpt,
+.articles-wrapper a.grouped-link:focus .article-excerpt,
+.articles-wrapper a.grouped-link:hover .article-date,
+.articles-wrapper a.grouped-link:focus .article-date,
+.articles-wrapper a.grouped-link:hover .related-article-excerpt,
+.articles-wrapper a.grouped-link:focus .related-article-excerpt,
+.articles-wrapper a.grouped-link:hover .related-article-date,
+.articles-wrapper a.grouped-link:focus .related-article-date {
+  color: rgb(var(--red-500));
+}
+
+.articles-wrapper a.grouped-link:hover .article-featured-media picture,
+.articles-wrapper a.grouped-link:focus .article-featured-media picture,
+.articles-wrapper a.grouped-link:hover .related-article-featured-media picture,
+.articles-wrapper a.grouped-link:focus .related-article-featured-media picture {
+  background: rgb(var(--red-500));
+}
+
+.articles-wrapper a.grouped-link:hover .article-featured-media picture img,
+.articles-wrapper a.grouped-link:focus .article-featured-media picture img,
+.articles-wrapper a.grouped-link:hover .related-article-featured-media picture img,
+.articles-wrapper a.grouped-link:focus .related-article-featured-media picture img {
+  opacity: 0.75;
+  filter: grayscale(1);
+}
+
+/* move to global */
+
+::ng-deep .content a {
+  text-decoration: underline;
+  color: rebeccapurple;
+}
+
+::ng-deep .content h2 {
+  font-weight: var(--font-bold);
+  font-size: var(--font-2xl);
+  line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
+}
+
+::ng-deep .content ul {
+  list-style: disc;
+  margin: 0 0 1.5rem 1.5rem;
+}
+
+::ng-deep .content li {
   margin-bottom: 1.5rem;
 }
