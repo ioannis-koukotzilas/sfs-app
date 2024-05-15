@@ -7,5 +7,5 @@ import { Media } from '../../models/entities/media';
   styleUrl: './cover-image.component.css'
 })
 export class CoverImageComponent {
-  @Input() featuredMedia?: Media;
+  @Input() media?: Media;
 }

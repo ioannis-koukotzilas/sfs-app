@@ -6,16 +6,44 @@
   border-right: 1px solid rgb(var(--primary-950));
 } */
 
-/* Wrapper
---------------------------------------------- */
-
 .site-header {
   background-color: rgb(var(--primary-950));
 
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 3;
 }
+
+@media (min-width: 1140px) {
+  .site-header {
+    max-width: 420px;
+  }
+}
+
+@media (min-width: 1320px) {
+  .site-header {
+    max-width: 480px;
+  }
+}
+
+@media (min-width: 1780px) {
+  .site-header {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 2048px) {
+  .site-header {
+    max-width: 720px;
+  }
+}
+
+/* Wrapper
+--------------------------------------------- */
+
+
 
 .site-header > .wrapper {
   padding: 0 20px;

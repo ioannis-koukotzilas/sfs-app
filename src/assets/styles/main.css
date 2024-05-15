@@ -48,10 +48,10 @@ app-cover-image {
   app-root {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-columns: 420px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) auto;
   }
-  
+
   app-cover-image {
     grid-row: 1;
     grid-column: span 2;
@@ -59,6 +59,24 @@ app-cover-image {
   
   app-footer {
     grid-column: span 2;
+  }
+}
+
+@media (min-width: 1320px) {
+  app-root {
+    grid-template-columns: 480px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1780px) {
+  app-root {
+    grid-template-columns: 600px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 2048px) {
+  app-root {
+    grid-template-columns: 720px minmax(0, 1fr);
   }
 }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subscription, of, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
 import { WpService } from '../../../services/wp.service';
@@ -10,6 +10,7 @@ import { Media } from '../../../models/entities/media';
 import { ViewContainerRefService } from '../../../services/view-container-ref.service';
 import { DynamicContentService } from '../../../services/dynamic-content.service';
 import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
+import { PageHome } from '../../../models/entities/pageHome';
 
 @Component({
   selector: 'app-page-home',
@@ -22,7 +23,7 @@ export class PageHomeComponent {
 
   loading = false;
 
-  page!: Page;
+  page!: PageHome;
 
   featuredNews: News[] = [];
   analysisNews: News[] = [];
@@ -54,7 +55,7 @@ export class PageHomeComponent {
     const sub = this._wpService
     .getPage(slug)
     .pipe(
-      switchMap((page) => {
+      concatMap((page) => {
         if (page) {
           this.initPage(page);
 
@@ -74,7 +75,7 @@ export class PageHomeComponent {
           const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
           if (hostViewContainerRef) {
             const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-            compRef.instance.featuredMedia = this.page.featuredMedia;
+            compRef.instance.media = this.page.featuredMedia;
           }
         }
       }),
@@ -108,7 +109,7 @@ export class PageHomeComponent {
             throw new Error('No featured news found');
           }
         }),
-        switchMap(() => {
+        concatMap(() => {
           if (this.featuredNews && this.featuredNews.length > 0) {
             featuredNewsIds = this.featuredNews.map((x) => x.id);
             const featuredNewsMediaIds = this.featuredNews.map((x) => x.featuredMediaId).filter((id) => id !== null);
@@ -120,14 +121,14 @@ export class PageHomeComponent {
           }
           return of([]);
         }),
-        switchMap((featuredNewsMedia) => {
+        concatMap((featuredNewsMedia) => {
           if (featuredNewsMedia && featuredNewsMedia.length > 0) {
             this.mapFeaturedNewsMedia(featuredNewsMedia);
           }
 
           return this._wpService.getFilteredNewsByNewsCategoriesIds([analysisCategoryId], featuredNewsIds, 1, 4);
         }),
-        switchMap((analysisNews) => {
+        concatMap((analysisNews) => {
           if (analysisNews && analysisNews.length > 0) {
             this.analysisNews = this.initNews(analysisNews);
             const analysisNewsMediaIds = this.analysisNews.map((x) => x.featuredMediaId).filter((id) => id !== null);
@@ -162,7 +163,7 @@ export class PageHomeComponent {
   }
 
   private initPage(page: any): void {
-    this.page = new Page();
+    this.page = new PageHome();
     this.page.title = page.title.rendered;
     this.page.content = page.content.rendered;
     this.page.featuredMediaId = page.featured_media;

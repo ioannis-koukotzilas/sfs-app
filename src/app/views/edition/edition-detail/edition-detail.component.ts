@@ -92,7 +92,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
             const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
             if (hostViewContainerRef) {
               const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-              compRef.instance.featuredMedia = this.edition.featuredMedia;
+              compRef.instance.media = this.edition.featuredMedia;
             }
           }
 
