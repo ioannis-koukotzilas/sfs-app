@@ -1,12 +1,38 @@
-
-
-
-<figure class="featured-media" *ngIf="media">
+<figure class="cover-media" *ngIf="media">
   <picture>
     <source [attr.data-srcset]="media.size.mediumLarge?.src" media="(max-width: 539px)" />
     <source [attr.data-srcset]="media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
     <source [attr.data-srcset]="media.size.xLarge?.src" media="(min-width: 720px)" />
     <img appLazyLoad [attr.data-src]="media.size.xLarge?.src" [alt]="media.altText" />
   </picture>
-  <figcaption *ngIf="media.caption" [innerHTML]="media.caption"></figcaption>
+
+  @if (showCoverTitle && coverTitle) {
+    @if (coverLinkPostType && coverLinkSlug) {
+      @if (coverLinkPostType === "edition") {
+      <figcaption>
+        <div class="wrapper">
+          <a  [routerLink]="['/edition', coverLinkSlug]"><h2 class="cover-title">{{ coverTitle }}</h2></a>
+        </div>
+      </figcaption>
+      } @else if (coverLinkPostType === "event") {
+      <figcaption>
+        <div class="wrapper">
+          <a class="light" [routerLink]="['/event', coverLinkSlug]"><h2 class="cover-title">{{ coverTitle }}</h2></a>
+        </div>
+      </figcaption>
+      } @else if (coverLinkPostType === "news") {
+      <figcaption>
+        <a [routerLink]="['/news', coverLinkSlug]">{{ coverTitle }}</a>
+      </figcaption>
+      } @else if (coverLinkPostType === "page") {
+      <figcaption>
+        <a [routerLink]="['/page', coverLinkSlug]">{{ coverTitle }}</a>
+      </figcaption>
+      } @else {
+      <figcaption>{{ coverTitle }}</figcaption>
+      }
+    } @else {
+    <figcaption>{{ coverTitle }}</figcaption>
+    }
+  }
 </figure>

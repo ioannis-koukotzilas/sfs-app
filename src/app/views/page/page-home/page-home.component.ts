@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ComponentRef } from '@angular/core';
 import { Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
@@ -53,45 +53,43 @@ export class PageHomeComponent {
     this.loading = true;
     const slug = 'home';
     const sub = this._wpService
-    .getPage(slug)
-    .pipe(
-      concatMap((page) => {
-        if (page) {
-          this.initPage(page);
+      .getPage(slug)
+      .pipe(
+        concatMap((page) => {
+          if (page) {
+            this.initPage(page);
 
-          if (this.page.featuredMediaId && this.page.featuredMediaId > 0) {
-            return this._wpService.getMediaById(this.page.featuredMediaId);
-          } else {
-            return of(null);
+            if (this.page.featuredMediaId && this.page.featuredMediaId > 0) {
+              return this._wpService.getMediaById(this.page.featuredMediaId);
+            } else {
+              return of(null);
+            }
           }
-        } 
 
-        return of(null);
-      }),
-      tap((featuredMedia) => {
-        if (featuredMedia) {
-          this.page.featuredMedia = this.initFeaturedMedia(featuredMedia);
+          return of(null);
+        }),
+        tap((featuredMedia) => {
+          if (featuredMedia) {
+            this.page.featuredMedia = this.initFeaturedMedia(featuredMedia);
 
-          const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-          if (hostViewContainerRef) {
-            const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-            compRef.instance.media = this.page.featuredMedia;
+            const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
+            if (hostViewContainerRef) {
+              const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
+              this.initCover(compRef);
+            }
           }
-        }
-      }),
-    )
-    
-    
-    
-    .subscribe({
-      next: () => {
-        this.getFeaturedNews();
-      },
-      error: (error) => {
-        console.error('Error:', error);
-        this.loading = false;
-      },
-    });
+        })
+      )
+
+      .subscribe({
+        next: () => {
+          this.getFeaturedNews();
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.loading = false;
+        },
+      });
 
     this._subscriptions.add(sub);
   }
@@ -167,6 +165,17 @@ export class PageHomeComponent {
     this.page.title = page.title.rendered;
     this.page.content = page.content.rendered;
     this.page.featuredMediaId = page.featured_media;
+    this.page.coverTitle = page.acf.cover_title;
+    this.page.coverLinkSlug = page.cover_link_info.slug;
+    this.page.coverLinkPostType = page.cover_link_info.post_type;
+  }
+
+  private initCover(compRef: ComponentRef<CoverImageComponent>): void {
+    compRef.instance.media = this.page.featuredMedia;
+    compRef.instance.showCoverTitle = true;
+    compRef.instance.coverTitle = this.page.coverTitle;
+    compRef.instance.coverLinkSlug = this.page.coverLinkSlug;
+    compRef.instance.coverLinkPostType = this.page.coverLinkPostType;
   }
 
   private initNews(data: any[]): News[] {

@@ -1,9 +1,9 @@
 import { Page } from './page';
 
 export class PageHome extends Page {
-  author!: string;
-  publishDate!: Date;
-  tags!: string[];
+  coverTitle!: string;
+  coverLinkSlug!: string;
+  coverLinkPostType!: string;
 
   constructor() {
     super();
