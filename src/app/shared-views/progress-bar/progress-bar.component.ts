@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './progress-bar.component.css',
 })
 export class ProgressBarComponent {
-  @Input() loading: boolean = false;
+  @Input() loading?: boolean;
 }

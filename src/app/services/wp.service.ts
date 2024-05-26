@@ -87,7 +87,7 @@ export class WpService {
    * News
    */
 
-  getNewsList(page: number, perPage: number): Observable<{ data: News[]; headers: HttpHeaders }> {
+  getNewsList(page: number, perPage: number): Observable<{ news: News[]; headers: HttpHeaders }> {
     return this._http
       .get<News[]>(`${this._wpJsonBaseUrl}/news`, {
         params: {
@@ -96,7 +96,7 @@ export class WpService {
         },
         observe: 'response',
       })
-      .pipe(map(({ body, headers }) => ({ data: body as News[], headers })));
+      .pipe(map(({ body, headers }) => ({ news: body as News[], headers })));
   }
 
   getNews(slug: string): Observable<News> {
@@ -200,6 +200,16 @@ export class WpService {
     return this._http.get<News[]>(`${this._wpJsonBaseUrl}/news`, {
       params: {
         news_category: categoryIds.join(','),
+        exclude: excludedPostsIds.join(','),
+        page: page.toString(),
+        per_page: perPage.toString(),
+      },
+    });
+  }
+
+  getFilteredEvents(excludedPostsIds: number[], page: number, perPage: number): Observable<Event[]> {
+    return this._http.get<Event[]>(`${this._wpJsonBaseUrl}/event`, {
+      params: {
         exclude: excludedPostsIds.join(','),
         page: page.toString(),
         per_page: perPage.toString(),

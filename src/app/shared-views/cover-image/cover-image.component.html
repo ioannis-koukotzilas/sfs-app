@@ -1,38 +1,38 @@
-<figure class="cover-media" *ngIf="media">
+<figure class="cover-media" *ngIf="coverImage && coverImage.media">
   <picture>
-    <source [attr.data-srcset]="media.size.mediumLarge?.src" media="(max-width: 539px)" />
-    <source [attr.data-srcset]="media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
-    <source [attr.data-srcset]="media.size.xLarge?.src" media="(min-width: 720px)" />
-    <img appLazyLoad [attr.data-src]="media.size.xLarge?.src" [alt]="media.altText" />
+    <source [attr.data-srcset]="coverImage.media.size.mediumLarge?.src" media="(max-width: 539px)" />
+    <source [attr.data-srcset]="coverImage.media.size.large?.src" media="(min-width: 540px) and (max-width: 719px)" />
+    <source [attr.data-srcset]="coverImage.media.size.xLarge?.src" media="(min-width: 720px)" />
+    <img appLazyLoad [attr.data-src]="coverImage.media.size.xLarge?.src" [alt]="coverImage.media.altText" />
   </picture>
 
-  @if (showCoverTitle && coverTitle) {
-    @if (coverLinkPostType && coverLinkSlug) {
-      @if (coverLinkPostType === "edition") {
+  @if (coverImage.showTitle && coverImage.title) {
+    @if (coverImage.linkPostType && coverImage.linkSlug) {
+      @if (coverImage.linkPostType === "edition") {
       <figcaption>
         <div class="wrapper">
-          <a  [routerLink]="['/edition', coverLinkSlug]"><h2 class="cover-title">{{ coverTitle }}</h2></a>
+          <a  [routerLink]="['/edition', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
         </div>
       </figcaption>
-      } @else if (coverLinkPostType === "event") {
+      } @else if (coverImage.linkPostType === "event") {
       <figcaption>
         <div class="wrapper">
-          <a class="light" [routerLink]="['/event', coverLinkSlug]"><h2 class="cover-title">{{ coverTitle }}</h2></a>
+          <a class="light" [routerLink]="['/event', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
         </div>
       </figcaption>
-      } @else if (coverLinkPostType === "news") {
+      } @else if (coverImage.linkPostType === "news") {
       <figcaption>
-        <a [routerLink]="['/news', coverLinkSlug]">{{ coverTitle }}</a>
+        <a [routerLink]="['/news', coverImage.linkSlug]">{{ coverImage.title }}</a>
       </figcaption>
-      } @else if (coverLinkPostType === "page") {
+      } @else if (coverImage.linkPostType === "page") {
       <figcaption>
-        <a [routerLink]="['/page', coverLinkSlug]">{{ coverTitle }}</a>
+        <a [routerLink]="['/page', coverImage.linkSlug]">{{ coverImage.title }}</a>
       </figcaption>
       } @else {
-      <figcaption>{{ coverTitle }}</figcaption>
+      <figcaption>{{ coverImage.title }}</figcaption>
       }
     } @else {
-    <figcaption>{{ coverTitle }}</figcaption>
+    <figcaption>{{ coverImage.title }}</figcaption>
     }
   }
 </figure>

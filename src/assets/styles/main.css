@@ -15,15 +15,6 @@ html {
   box-sizing: border-box;
 }
 
-/* Scroll Behavior
---------------------------------------------- */
-/* 
-html, body {
-  scroll-behavior: smooth;
-} */
-
-
-
 /* App
 --------------------------------------------- */
 
@@ -31,53 +22,7 @@ app-root {
   min-height: 100vh;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-}
-
-
-
-app-cover-image {
-  grid-row: 2;
-}
-
-/* app-footer {
-  grid-column: span 2;
-} */
-
-@media (min-width: 1140px) {
-  app-root {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 420px minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-  }
-
-  app-cover-image {
-    grid-row: 1;
-    grid-column: span 2;
-  }
-  
-  app-footer {
-    grid-column: span 2;
-  }
-}
-
-@media (min-width: 1320px) {
-  app-root {
-    grid-template-columns: 480px minmax(0, 1fr);
-  }
-}
-
-@media (min-width: 1780px) {
-  app-root {
-    grid-template-columns: 600px minmax(0, 1fr);
-  }
-}
-
-@media (min-width: 2048px) {
-  app-root {
-    grid-template-columns: 720px minmax(0, 1fr);
-  }
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
 /* Typography
@@ -174,7 +119,7 @@ a:visited {
 
 a:hover,
 a:focus {
-  color: rgb(var(--primary-500));
+  color: rgb(var(--primary-950));
 }
 
 a:focus,
@@ -184,7 +129,7 @@ a:active {
 }
 
 /* a light */
-
+.light,
 a.light {
   color: rgb(var(--primary-50));
 }
@@ -269,7 +214,7 @@ button.transparent {
 button.transparent:hover,
 button.transparent:active,
 button.transparent:focus {
-  color: rgb(var(--primary-500));
+  color: rgb(var(--primary-950));
 }
 
 button.transparent.accent {

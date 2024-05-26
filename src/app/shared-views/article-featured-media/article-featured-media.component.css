@@ -10,7 +10,7 @@
   margin: 0.75rem 0 0 auto;
   font-family: var(--font-mono);
   font-size: var(--font-xs);
-  color: rgb(var(--primary-500));
+  color: rgb(var(--primary-400));
   display: flex;
   justify-content: end;
 }

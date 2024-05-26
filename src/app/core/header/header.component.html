@@ -1,30 +1,17 @@
+<app-progress-bar [loading]="loading"></app-progress-bar>
 
+<div class="wrapper">
+  <button class="toggle-sidebar-btn transparent" #toggleSidebarBtn [class.active]="sidebarActive" (click)="toggleSidebar()">
+    <span class="symbol">{{ sidebarActive ? "close" : "menu" }}</span>
+  </button>
 
-<div class="site-header">
-  <div class="wrapper">
-    <button class="toggle-sidebar-btn transparent light" #toggleSidebarBtn [class.active]="sidebarActive" (click)="toggleSidebar()">
-      <span class="symbol">{{ sidebarActive ? "close" : "menu" }}</span>
-    </button>
-
-    <a class="light" routerLink="/">
-      <h1 class="site-title">struggleforskouries.org</h1>
-    </a>
-  </div>
+  <a routerLink="/">
+    <h1 class="site-title">struggleforskouries.org</h1>
+  </a>
 </div>
-
-
 
 <aside class="sidebar" #sidebar *ngIf="sidebarActive" [@sidebarAnimation]="sidebarActive ? 'expanded' : 'collapsed'">
   <div class="wrapper">
-    <ul class="primary-menu">
-      <li><a (click)="navigateAfterCloseSidebar(['/news'])">Νέα</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/events'])">Εκδηλώσεις</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/editions'])">Δεκαήμερο Αγώνα</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/'])">Βιβλιοθήκη</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/about'])">Ταυτότητα</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/info'])">Πληροφορίες</a></li>
-      <li><a (click)="navigateAfterCloseSidebar(['/contact'])">Επικοινωνία</a></li>
-    </ul>
+    <app-main-menu [navigateAfterCloseSidebar]="navigateAfterCloseSidebar.bind(this)" [parent]="'header-sidebar'"></app-main-menu>
   </div>
 </aside>
-

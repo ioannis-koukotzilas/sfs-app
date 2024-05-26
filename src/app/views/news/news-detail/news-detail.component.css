@@ -4,7 +4,7 @@
 
 :host > .container {
   max-width: var(--max-w-lg);
-  margin: 4.5rem 0;
+  margin: 4.5rem auto;
   padding: 0 20px;
 }
 
@@ -16,8 +16,6 @@
 }
 
 .article-header {
-  padding-top: 1.5rem;
-  border-top: 1px solid;
   margin-bottom: 3rem;
 }
 
@@ -25,18 +23,15 @@
   font-family: var(--font-serif);
   font-weight: var(--font-bold);
   font-size: var(--font-4xl);
-  line-height: var(--leading-none);
+  line-height: var(--leading-tight);
   margin-bottom: 1.5rem;
 }
 
 .article-excerpt {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono-secondary);
 }
 
 .article-categories {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.75rem;
   margin-bottom: 0.25rem;
   font-family: var(--font-mono);
   font-size: var(--font-sm);

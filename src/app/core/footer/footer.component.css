@@ -1,5 +1,5 @@
 :host {
-  background-color: rgb(var(--yellow-500));
+  background-color: rgb(var(--primary-100));
 }
 
 :host > .container {
@@ -28,7 +28,7 @@
 }
 
 .cc-icons svg path {
-  fill: rgb(var(--color-primary-500));
+  fill: rgb(var(--primary-500));
 }
 
 .cc-text {

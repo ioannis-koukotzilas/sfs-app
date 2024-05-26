@@ -1,6 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-header',
@@ -38,13 +40,29 @@ import { Router } from '@angular/router';
     ]),
   ],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private _subscriptions: Subscription = new Subscription();
+
+  loading = false;
+
   public sidebarActive: boolean = false;
 
   @ViewChild('toggleSidebarBtn') toggleSidebarBtn: ElementRef = {} as ElementRef;
   @ViewChild('sidebar') sidebar: ElementRef = {} as ElementRef;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private _loadingService: LoadingService) {}
+
+  ngOnInit() {
+    const sub = this._loadingService.loading$.subscribe((loading) => {
+      this.loading = loading;
+    });
+
+    this._subscriptions.add(sub);
+  }
+
+  ngOnDestroy() {
+    this._subscriptions.unsubscribe();
+  }
 
   toggleSidebar(): void {
     this.sidebarActive = !this.sidebarActive;

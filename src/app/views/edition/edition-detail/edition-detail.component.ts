@@ -9,10 +9,7 @@ import { Event } from '../../../models/entities/event';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
-import { DynamicContentService } from '../../../services/dynamic-content.service';
-import { DynamicHostDirective } from '../../../directives/dynamic-host.directive';
 import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
-import { ViewContainerRefService } from '../../../services/view-container-ref.service';
 
 @Component({
   selector: 'app-edition-detail',
@@ -35,27 +32,14 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     private _wpService: WpService,
     private _mediaService: MediaService,
     private _titleService: Title,
-    private _viewContainerRefService: ViewContainerRefService,
-    private _dynamicContentService: DynamicContentService
   ) {}
 
   ngOnInit(): void {
     this.getEdition();
-
-    // const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-    // if (hostViewContainerRef) {
-    //   const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-    //   compRef.instance.coverImageSrc = this.imageUrl;
-    // }
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
-
-    const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-    if (hostViewContainerRef) {
-      hostViewContainerRef.clear(); // This clears all components in the container
-    }
   }
 
   private checkRouteParams(): Observable<Edition | null> {
@@ -89,11 +73,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
           if (featuredMedia) {
             this.edition.featuredMedia = this.initFeaturedMedia(featuredMedia);
 
-            const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-            if (hostViewContainerRef) {
-              const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-              compRef.instance.media = this.edition.featuredMedia;
-            }
+            // cover
           }
 
           if (this.edition.galleryMediaIds && this.edition.galleryMediaIds.length > 0) {

@@ -2,55 +2,26 @@
 # App Header
 --------------------------------------------------------------*/
 
-/* :host {
-  border-right: 1px solid rgb(var(--primary-950));
-} */
-
-.site-header {
+:host {
   background-color: rgb(var(--primary-950));
-
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100%;
   z-index: 3;
-}
-
-@media (min-width: 1140px) {
-  .site-header {
-    max-width: 420px;
-  }
-}
-
-@media (min-width: 1320px) {
-  .site-header {
-    max-width: 480px;
-  }
-}
-
-@media (min-width: 1780px) {
-  .site-header {
-    max-width: 600px;
-  }
-}
-
-@media (min-width: 2048px) {
-  .site-header {
-    max-width: 720px;
-  }
 }
 
 /* Wrapper
 --------------------------------------------- */
 
-
-
-.site-header > .wrapper {
+:host > .wrapper {
   padding: 0 20px;
-  height: 4.5rem;
+  height: 3.75rem;
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+a {
+  color: rgb(var(--primary-50));
 }
 
 /* Toggle Button
@@ -69,8 +40,8 @@
 --------------------------------------------- */
 
 .site-title {
-  font-family: var(--font-serif);
-  font-weight: var(--font-bold);
+  font-family: var(--font-mono);
+  /* font-weight: var(--font-bold); */
   font-size: var(--font-2xl);
 }
 
@@ -95,12 +66,4 @@
   top: 4.5rem;
 }
 
-.sidebar ul.primary-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-family: var(--font-sans);
-  font-size: var(--font-lg);
-  font-weight: var(--font-bold);
-  line-height: var(--leading-snug);
-}
+

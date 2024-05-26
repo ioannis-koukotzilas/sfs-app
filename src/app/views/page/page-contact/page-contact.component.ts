@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { FormControl, FormGroup } from '@angular/forms';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-page-contact',
@@ -16,11 +17,9 @@ export class PageContactComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   page!: PageDefault;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _titleService: Title) {}
+  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _loadingService: LoadingService, private _titleService: Title) {}
 
   ngOnInit(): void {
     this.getPage();
@@ -38,19 +37,18 @@ export class PageContactComponent {
   }
 
   private getPage(): void {
-    this.loading = true;
     const routeParamsSubscription = this.checkRouteParams().subscribe({
       next: (data) => {
         if (data) {
           this.initPageData(data);
           this.initTitle();
           this.initReactiveModel();
-          this.loading = false;
+          this._loadingService.set(false);
         }
       },
       error: (error) => {
         console.error('Error:', error);
-        this.loading = false;
+        this._loadingService.set(false);
       },
     });
 

@@ -74,3 +74,15 @@ app-page-about .content h2 {
 ::ng-deep .content li {
   margin-bottom: 1.5rem;
 }
+
+
+/* body.cover-image app-header {
+  position: absolute;
+  top: 0;
+  z-index: 3;
+}
+
+body.cover-image app-header a,
+body.cover-image app-header button.transparent {
+  color: rgb(var(--primary-50));
+} */

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
 import { ActivatedRoute } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
-import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
 import { Category } from '../../../models/entities/category';
 import { ViewportScroller } from '@angular/common';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-news-detail',
@@ -18,8 +18,9 @@ import { ViewportScroller } from '@angular/common';
 })
 export class NewsDetailComponent {
   private _subscriptions: Subscription = new Subscription();
+
   appTitle = environment.appTitle;
-  loading = false;
+
   news!: News;
   shareData?: ShareData;
 
@@ -27,8 +28,9 @@ export class NewsDetailComponent {
     private _route: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
+    private _loadingService: LoadingService,
     private _titleService: Title,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
   ) {}
 
   ngOnInit(): void {
@@ -39,35 +41,25 @@ export class NewsDetailComponent {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): Observable<News | null> {
-    return this._route.paramMap.pipe(
-      switchMap((params) => {
-        const slug = params.get('slug');
-        return slug ? this._wpService.getNews(slug) : of(null);
-      })
-    );
-  }
-
   private getNews(): void {
-    const routeParamsSubscription = this.checkRouteParams()
+    const sub = this._route.data
       .pipe(
-        tap((news) => {
-          if (news) {
-            this.loading = true;
-            this.initNews(news);
+        tap(({ data }) => {
+          if (data) {
             this.viewportScroller.scrollToPosition([0, 0]);
+            this.initNews(data);
           } else {
             throw new Error('No news found');
           }
         }),
-        switchMap(() => {
+        concatMap(() => {
           if (this.news.categoryIds && this.news.categoryIds.length > 0) {
             return this._wpService.getNewsCategoriesByPostId(this.news.id);
           }
 
           return of(null);
         }),
-        switchMap((categories) => {
+        concatMap((categories) => {
           if (categories) {
             this.news.categories = this.initCategories(categories);
           }
@@ -78,7 +70,7 @@ export class NewsDetailComponent {
 
           return of(null);
         }),
-        switchMap((featuredMedia) => {
+        concatMap((featuredMedia) => {
           if (featuredMedia) {
             this.news.featuredMedia = this.initFeaturedMedia(featuredMedia);
           }
@@ -89,14 +81,14 @@ export class NewsDetailComponent {
 
           return of(null);
         }),
-        switchMap((galleryMedia) => {
+        concatMap((galleryMedia) => {
           if (galleryMedia) {
             this.news.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
           return this._wpService.getNewsByNewsCategoriesIds(this.news.categoryIds, 1, 10);
         }),
-        switchMap(({ news, headers }) => {
+        concatMap(({ news, headers }) => {
           if (news && news.length > 0) {
             const filteredNews = news.filter((article) => article.id !== this.news.id);
             this.news.relatedNews = this.initRelatedNews(filteredNews);
@@ -121,15 +113,15 @@ export class NewsDetailComponent {
         next: () => {
           this.initTitle();
           this.initShareData();
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
-    this._subscriptions.add(routeParamsSubscription);
+    this._subscriptions.add(sub);
   }
 
   private initNews(news: any): void {

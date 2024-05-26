@@ -1,79 +1,146 @@
+<app-cover-image [coverImage]="coverImage"></app-cover-image>
+
+<nav *ngIf="coverImage" class="main-navigation">
+  <div class="wrapper">
+    <app-main-menu [parent]="'page-home'"></app-main-menu>
+    <div class="side-actions">
+      <button>Button</button>
+    </div>
+  </div>
+</nav>
+
 <div class="container">
   <section class="featured-news" *ngIf="featuredNews && featuredNews.length > 0">
-    <h2 class="section-title">Top Stories</h2>
-    <div class="articles-wrapper">
-      <a class="grouped-link" *ngFor="let article of featuredNews" [routerLink]="['/news', article.slug]">
-        <article class="article">
-          <div class="col">
-            <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
-          </div>
-
-          <div class="col">
-            <header class="article-header">
-              <h2 class="article-title">{{ article.title }}</h2>
-              <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
-            </header>
-
-            <div class="article-excerpt">
-              <div [innerHTML]="article.excerpt"></div>
+    <div class="wrapper">
+      <h2 class="section-title light">Top Stories</h2>
+      <div class="articles-wrapper">
+        <a class="grouped-link light" *ngFor="let article of featuredNews" [routerLink]="['/news', article.slug]">
+          <article class="article">
+            <div class="col">
+              <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
             </div>
-          </div>
-        </article>
-      </a>
+
+            <div class="col">
+              <header class="article-header">
+                <h2 class="article-title">{{ article.title }}</h2>
+                <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+              </header>
+
+              <div class="article-excerpt">
+                <div [innerHTML]="article.excerpt"></div>
+              </div>
+            </div>
+          </article>
+        </a>
+      </div>
     </div>
   </section>
 
   <section class="category-news" *ngIf="analysisNews && analysisNews.length > 0">
-    <h2 class="section-title">Ανάλυση</h2>
-    <!-- <div class="articles-wrapper">
-      <a class="grouped-link" *ngFor="let article of analysisNews" [routerLink]="['/news', article.slug]">
-        <article class="article">
-          <div class="col">
-            <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
-          </div>
-
-          <div class="col">
-            <header class="article-header">
-              <h2 class="article-title">{{ article.title }}</h2>
-              <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
-            </header>
-          </div>
-        </article>
-      </a>
-    </div> -->
-
-
-    <div class="articles-wrapper">
-      <a *ngIf="analysisNews.length > 0" class="grouped-link first-article" [routerLink]="['/news', analysisNews[0].slug]">
+    <div class="wrapper">
+      <h2 class="section-title">Ανάλυση</h2>
+      <div class="articles-wrapper">
+        <a *ngIf="analysisNews.length > 0" class="grouped-link first-article" [routerLink]="['/news', analysisNews[0].slug]">
           <article class="article">
-              <div class="col">
-                  <app-article-featured-media class="article-featured-media" [media]="analysisNews[0].featuredMedia"></app-article-featured-media>
-              </div>
-              <div class="col">
-                  <header class="article-header">
-                      <h2 class="article-title">{{ analysisNews[0].title }}</h2>
-                      <time class="article-date" [dateTime]="analysisNews[0].date | isoDate">{{ analysisNews[0].date | date }}</time>
-                  </header>
-              </div>
+            <div class="col">
+              <app-article-featured-media class="article-featured-media" [media]="analysisNews[0].featuredMedia"></app-article-featured-media>
+            </div>
+            <div class="col">
+              <header class="article-header">
+                <h2 class="article-title">{{ analysisNews[0].title }}</h2>
+                <time class="article-date" [dateTime]="analysisNews[0].date | isoDate">{{ analysisNews[0].date | date }}</time>
+              </header>
+            </div>
           </article>
-      </a>
-      <div class="remaining-articles">
+        </a>
+        <div class="remaining-articles">
           <a *ngFor="let article of analysisNews.slice(1)" class="grouped-link" [routerLink]="['/news', article.slug]">
-              <article class="article">
-                  <div class="col">
-                      <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
-                  </div>
-                  <div class="col">
-                      <header class="article-header">
-                          <h2 class="article-title">{{ article.title }}</h2>
-                          <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
-                      </header>
-                  </div>
-              </article>
+            <article class="article">
+              <div class="col">
+                <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
+              </div>
+              <div class="col">
+                <header class="article-header">
+                  <h2 class="article-title">{{ article.title }}</h2>
+                  <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+                </header>
+              </div>
+            </article>
           </a>
+        </div>
       </div>
-  </div>
-  
+    </div>
+  </section>
 
+  <section class="category-news" *ngIf="observatoryNews && observatoryNews.length > 0">
+    <div class="wrapper">
+      <h2 class="section-title">Παρατηρητήριο</h2>
+      <div class="articles-wrapper">
+        <a *ngIf="observatoryNews.length > 0" class="grouped-link first-article" [routerLink]="['/news', observatoryNews[0].slug]">
+          <article class="article">
+            <div class="col">
+              <app-article-featured-media class="article-featured-media" [media]="observatoryNews[0].featuredMedia"></app-article-featured-media>
+            </div>
+            <div class="col">
+              <header class="article-header">
+                <h2 class="article-title">{{ observatoryNews[0].title }}</h2>
+                <time class="article-date" [dateTime]="observatoryNews[0].date | isoDate">{{ observatoryNews[0].date | date }}</time>
+              </header>
+            </div>
+          </article>
+        </a>
+        <div class="remaining-articles">
+          <a *ngFor="let article of observatoryNews.slice(1)" class="grouped-link" [routerLink]="['/news', article.slug]">
+            <article class="article">
+              <div class="col">
+                <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
+              </div>
+              <div class="col">
+                <header class="article-header">
+                  <h2 class="article-title">{{ article.title }}</h2>
+                  <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+                </header>
+              </div>
+            </article>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="category-news" *ngIf="featuredEvents && featuredEvents.length > 0">
+    <div class="wrapper">
+      <h2 class="section-title">Events</h2>
+      <div class="articles-wrapper">
+        <a *ngIf="featuredEvents.length > 0" class="grouped-link first-article" [routerLink]="['/event', featuredEvents[0].slug]">
+          <article class="article">
+            <div class="col">
+              <app-article-featured-media class="article-featured-media" [media]="featuredEvents[0].featuredMedia"></app-article-featured-media>
+            </div>
+            <div class="col">
+              <header class="article-header">
+                <h2 class="article-title">{{ featuredEvents[0].title }}</h2>
+                <time class="article-date" [dateTime]="featuredEvents[0].date | isoDate">{{ featuredEvents[0].date | date }}</time>
+              </header>
+            </div>
+          </article>
+        </a>
+        <div class="remaining-articles">
+          <a *ngFor="let article of featuredEvents.slice(1)" class="grouped-link" [routerLink]="['/event', article.slug]">
+            <article class="article">
+              <div class="col">
+                <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
+              </div>
+              <div class="col">
+                <header class="article-header">
+                  <h2 class="article-title">{{ article.title }}</h2>
+                  <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+                </header>
+              </div>
+            </article>
+          </a>
+        </div>
+      </div>
+    </div>
   </section>
 </div>

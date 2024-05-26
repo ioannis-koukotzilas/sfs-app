@@ -1,16 +1,16 @@
-import { Component, ComponentRef } from '@angular/core';
-import { Subscription, concatMap, of, switchMap, tap } from 'rxjs';
+import { Component } from '@angular/core';
+import { Subscription, concatMap, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
+import { Event } from '../../../models/entities/event';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
-import { Page } from '../../../models/entities/page';
 import { Media } from '../../../models/entities/media';
-import { ViewContainerRefService } from '../../../services/view-container-ref.service';
-import { DynamicContentService } from '../../../services/dynamic-content.service';
-import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
 import { PageHome } from '../../../models/entities/pageHome';
+import { CoverImage } from '../../../models/entities/cover';
+import { ActivatedRoute } from '@angular/router';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-page-home',
@@ -21,20 +21,18 @@ export class PageHomeComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
+  //loading = false;
 
   page!: PageHome;
 
   featuredNews: News[] = [];
   analysisNews: News[] = [];
+  observatoryNews: News[] = [];
+  featuredEvents: Event[] = [];
 
-  constructor(
-    private _wpService: WpService,
-    private _mediaService: MediaService,
-    private _titleService: Title,
-    private _viewContainerRefService: ViewContainerRefService,
-    private _dynamicContentService: DynamicContentService
-  ) {}
+  coverImage?: CoverImage;
+
+  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _loadingService: LoadingService, private _titleService: Title) {}
 
   ngOnInit(): void {
     this.getPage();
@@ -42,20 +40,12 @@ export class PageHomeComponent {
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
-
-    const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-    if (hostViewContainerRef) {
-      hostViewContainerRef.clear();
-    }
   }
 
   private getPage(): void {
-    this.loading = true;
-    const slug = 'home';
-    const sub = this._wpService
-      .getPage(slug)
+    const sub = this._route.data
       .pipe(
-        concatMap((page) => {
+        concatMap(({ page }) => {
           if (page) {
             this.initPage(page);
 
@@ -71,23 +61,17 @@ export class PageHomeComponent {
         tap((featuredMedia) => {
           if (featuredMedia) {
             this.page.featuredMedia = this.initFeaturedMedia(featuredMedia);
-
-            const hostViewContainerRef = this._viewContainerRefService.getHostViewContainerRef();
-            if (hostViewContainerRef) {
-              const compRef = this._dynamicContentService.loadComponent(hostViewContainerRef, CoverImageComponent);
-              this.initCover(compRef);
-            }
+            this.initCoverImage();
           }
         })
       )
-
       .subscribe({
         next: () => {
           this.getFeaturedNews();
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
@@ -96,6 +80,7 @@ export class PageHomeComponent {
 
   private getFeaturedNews(): void {
     const analysisCategoryId = 6;
+    const observatoryCategoryId = 9;
     let featuredNewsIds: number[];
     const sub = this._wpService
       .getFeaturedNews()
@@ -138,22 +123,57 @@ export class PageHomeComponent {
           }
           return of([]);
         }),
-        tap((analysisNewsMedia) => {
+        concatMap((analysisNewsMedia) => {
           if (analysisNewsMedia && analysisNewsMedia.length > 0) {
             this.mapAnalysisNewsMedia(analysisNewsMedia);
           }
 
-          // return this._wpService.getFilteredNewsByNewsCategoriesIds([analysisCategoryId], featuredNewsIds, 1, 10);
+          return this._wpService.getFilteredNewsByNewsCategoriesIds([observatoryCategoryId], featuredNewsIds, 1, 4);
+        }),
+        concatMap((observatoryNews) => {
+          if (observatoryNews && observatoryNews.length > 0) {
+            this.observatoryNews = this.initNews(observatoryNews);
+            const observatoryNewsMediaIds = this.observatoryNews.map((x) => x.featuredMediaId).filter((id) => id !== null);
+            if (observatoryNewsMediaIds && observatoryNewsMediaIds.length > 0) {
+              return this._wpService.getMediaByIds(observatoryNewsMediaIds);
+            } else {
+              return of([]);
+            }
+          }
+          return of([]);
+        }),
+        concatMap((observatoryNewsMedia) => {
+          if (observatoryNewsMedia && observatoryNewsMedia.length > 0) {
+            this.mapObservatoryNewsMedia(observatoryNewsMedia);
+          }
+
+          return this._wpService.getFilteredEvents(featuredNewsIds, 1, 4);
+        }),
+        concatMap((featuredEvents) => {
+          if (featuredEvents && featuredEvents.length > 0) {
+            this.featuredEvents = this.initEvents(featuredEvents);
+            const featuredEventsMediaIds = this.featuredEvents.map((x) => x.featuredMediaId).filter((id) => id !== null);
+            if (featuredEventsMediaIds && featuredEventsMediaIds.length > 0) {
+              return this._wpService.getMediaByIds(featuredEventsMediaIds);
+            } else {
+              return of([]);
+            }
+          }
+          return of([]);
+        }),
+        tap((featuredEventsMedia) => {
+          if (featuredEventsMedia && featuredEventsMedia.length > 0) {
+            this.mapFeaturedEventsMedia(featuredEventsMedia);
+          }
         })
       )
-
       .subscribe({
         next: () => {
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
@@ -170,12 +190,13 @@ export class PageHomeComponent {
     this.page.coverLinkPostType = page.cover_link_info.post_type;
   }
 
-  private initCover(compRef: ComponentRef<CoverImageComponent>): void {
-    compRef.instance.media = this.page.featuredMedia;
-    compRef.instance.showCoverTitle = true;
-    compRef.instance.coverTitle = this.page.coverTitle;
-    compRef.instance.coverLinkSlug = this.page.coverLinkSlug;
-    compRef.instance.coverLinkPostType = this.page.coverLinkPostType;
+  private initCoverImage(): void {
+    this.coverImage = new CoverImage();
+    this.coverImage.media = this.page.featuredMedia;
+    this.coverImage.showTitle = true;
+    this.coverImage.title = this.page.coverTitle;
+    this.coverImage.linkSlug = this.page.coverLinkSlug;
+    this.coverImage.linkPostType = this.page.coverLinkPostType;
   }
 
   private initNews(data: any[]): News[] {
@@ -193,6 +214,21 @@ export class PageHomeComponent {
     return news;
   }
 
+  private initEvents(data: any[]): Event[] {
+    const events = data.map((item) => {
+      let event = new Event();
+      event.id = item.id;
+      event.slug = item.slug;
+      event.date = item.date;
+      event.title = item.title.rendered;
+      event.excerpt = item.excerpt.rendered;
+      event.featuredMediaId = item.featured_media;
+      return event;
+    });
+
+    return events;
+  }
+
   private mapFeaturedNewsMedia(media: any[]): void {
     media.forEach((mediaItem) => {
       this.featuredNews
@@ -206,6 +242,26 @@ export class PageHomeComponent {
   private mapAnalysisNewsMedia(media: any[]): void {
     media.forEach((mediaItem) => {
       this.analysisNews
+        .filter((x) => x.featuredMediaId === mediaItem.id)
+        .forEach((item) => {
+          item.featuredMedia = this.initFeaturedMedia(mediaItem);
+        });
+    });
+  }
+
+  private mapObservatoryNewsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      this.observatoryNews
+        .filter((x) => x.featuredMediaId === mediaItem.id)
+        .forEach((item) => {
+          item.featuredMedia = this.initFeaturedMedia(mediaItem);
+        });
+    });
+  }
+
+  private mapFeaturedEventsMedia(media: any[]): void {
+    media.forEach((mediaItem) => {
+      this.featuredEvents
         .filter((x) => x.featuredMediaId === mediaItem.id)
         .forEach((item) => {
           item.featuredMedia = this.initFeaturedMedia(mediaItem);
