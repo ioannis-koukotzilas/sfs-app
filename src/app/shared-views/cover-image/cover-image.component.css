@@ -43,5 +43,5 @@
   font-family: var(--font-serif);
   font-weight: var(--font-bold);
   font-size: var(--font-3xl);
-  line-height: var(--leading-none);
+  line-height: var(--leading-tight);
 }

@@ -8,13 +8,16 @@
   line-height: var(--leading-snug);
 }
 
+.primary-menu.header-sidebar a {
+  color: rgb(var(--primary-50));
+}
+
 .primary-menu.page-home {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   gap: 1.5rem;
   font-family: var(--font-sans);
-  font-size: var(--font-lg);
   font-weight: var(--font-bold);
   line-height: var(--leading-snug);
 }

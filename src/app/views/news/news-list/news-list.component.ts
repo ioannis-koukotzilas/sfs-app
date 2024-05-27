@@ -8,6 +8,7 @@ import { News } from '../../../models/entities/news';
 import { Media } from '../../../models/entities/media';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../../services/loading.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-news-list',
@@ -29,6 +30,7 @@ export class NewsListComponent {
     private _wpService: WpService,
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
+    private _viewportScroller: ViewportScroller,
     private _titleService: Title
   ) {}
 
@@ -46,6 +48,7 @@ export class NewsListComponent {
         concatMap(({ data }) => {
           if (data.news && data.news.length > 0) {
             this.news = [];
+            this._viewportScroller.scrollToPosition([0, 0]);
             this.currentPage = data.currentPage;
             this.totalPages = Number(data.headers.get('X-WP-TotalPages'));
             this.initNews(data.news);

@@ -61,11 +61,11 @@ h6 {
 }
 
 h1 {
-  line-height: 1.2;
+  line-height: var(--leading-tight);
 }
 
-h3 {
-  line-height: 1.2;
+h2 {
+  line-height: var(--leading-snug);
 }
 
 p {
@@ -111,9 +111,10 @@ a {
   display: inline-block;
   color: rgb(var(--primary-950));
   text-decoration: none;
+  outline: 0;
 }
 
-a:visited {
+/* a:visited {
   color: rgb(var(--primary-950));
 }
 
@@ -126,7 +127,7 @@ a:focus,
 a:hover,
 a:active {
   outline: 0;
-}
+} */
 
 /* a light */
 .light,
@@ -134,14 +135,14 @@ a.light {
   color: rgb(var(--primary-50));
 }
 
-a.light:visited {
+/* a.light:visited {
   color: rgb(var(--primary-50));
 }
 
 a.light:hover,
 a.light:focus {
   color: rgb(var(--primary-400));
-}
+} */
 
 /* a accent */
 
@@ -167,22 +168,24 @@ a.accent:focus {
 
 /* Buttons
 --------------------------------------------- */
+a.button,
 button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
+  background-color: rgb(var(--red-500));
   border: 1px solid rgb(var(--red-500));
-  background: rgb(var(--red-500));
   color: rgb(var(--primary-50));
-  line-height: 1;
-  padding: 0.5rem 1rem 0.5rem;
+  line-height: var(--leading-none);
+  font-weight: var(--font-bold);
+  padding: 0.5rem 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-button:hover,
+/* button:hover,
 button:active,
 button:focus,
 input[type="button"]:hover,
@@ -196,7 +199,7 @@ input[type="submit"]:active,
 input[type="submit"]:focus {
   background: rgb(var(--red-400));
   border-color: rgb(var(--red-400));
-}
+} */
 
 button:disabled {
   background: rgb(var(--primary-950));
@@ -233,12 +236,6 @@ button.transparent.light {
   background: transparent;
   color: rgb(var(--primary-50));
   border-color: currentColor;
-}
-
-button.transparent.light:hover,
-button.transparent.light:active,
-button.transparent.light:focus {
-  color: rgb(var(--primary-400));
 }
 
 /* Forms
@@ -323,4 +320,14 @@ img[appLazyLoad].loaded {
   filter: unset;
 } */
 
+.cover-image app-header {
+  background-color: rgb(var(--primary-950));
+}
 
+.cover-image app-header a {
+  color: rgb(var(--primary-50));
+}
+
+.cover-image app-header .toggle-sidebar-btn {
+  color: rgb(var(--primary-50));
+}

@@ -30,7 +30,7 @@ export class NewsDetailComponent {
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
     private _titleService: Title,
-    private viewportScroller: ViewportScroller,
+    private _viewportScroller: ViewportScroller,
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class NewsDetailComponent {
       .pipe(
         tap(({ data }) => {
           if (data) {
-            this.viewportScroller.scrollToPosition([0, 0]);
+            this._viewportScroller.scrollToPosition([0, 0]);
             this.initNews(data);
           } else {
             throw new Error('No news found');

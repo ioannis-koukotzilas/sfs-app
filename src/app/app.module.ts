@@ -36,6 +36,7 @@ import { LazyLoadDirective } from './directives/lazy-load.directive';
 import { ArticleFeaturedMediaComponent } from './shared-views/article-featured-media/article-featured-media.component';
 import { MainMenuComponent } from './shared-views/main-menu/main-menu.component';
 import { SecondaryMenuComponent } from './shared-views/secondary-menu/secondary-menu.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -75,9 +76,12 @@ import { SecondaryMenuComponent } from './shared-views/secondary-menu/secondary-
       ArticleFeaturedMediaComponent,
       MainMenuComponent,
       SecondaryMenuComponent
+
+      // ang
+      
      
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, LayoutModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

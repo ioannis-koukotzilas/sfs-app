@@ -11,6 +11,9 @@ import { PageHome } from '../../../models/entities/pageHome';
 import { CoverImage } from '../../../models/entities/cover';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '../../../services/loading.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
+
 
 @Component({
   selector: 'app-page-home',
@@ -32,10 +35,32 @@ export class PageHomeComponent {
 
   coverImage?: CoverImage;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _loadingService: LoadingService, private _titleService: Title) {}
+  showMainNavigation = false;
+
+  constructor(
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _loadingService: LoadingService,
+    private _breakpointObserver: BreakpointObserver,
+    private _titleService: Title
+  ) {}
 
   ngOnInit(): void {
     this.getPage();
+    this.initBreakpointObserver();
+  }
+
+  public initBreakpointObserver() {
+    const sub = this._breakpointObserver.observe(['(min-width: 2000px)']).subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this.showMainNavigation = true;
+      } else {
+        this.showMainNavigation = false;
+      }
+    });
+
+    this._subscriptions.add(sub);
   }
 
   ngOnDestroy(): void {
