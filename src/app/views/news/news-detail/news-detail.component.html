@@ -3,7 +3,7 @@
     <header class="article-header">
       <h1 class="article-title">{{ news.title }}</h1>
 
-      <div *ngIf="news.excerpt" class="article-excerpt" [innerHTML]="news.excerpt"></div>
+      <div class="article-excerpt" *ngIf="news.excerpt" [innerHTML]="news.excerpt"></div>
 
       <div class="article-categories" *ngIf="news.categories && news.categories.length > 0">
         <ng-container *ngFor="let category of news.categories; let last = last">

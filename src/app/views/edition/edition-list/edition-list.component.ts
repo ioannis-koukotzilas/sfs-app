@@ -2,11 +2,13 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { WpService } from '../../../services/wp.service';
 import { Edition } from '../../../models/entities/edition';
-import { Subscription, of, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingService } from '../../../services/loading.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-edition-list',
@@ -17,50 +19,40 @@ export class EditionListComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   editions: Edition[] = [];
 
   currentPage: number = 1;
-  perPage: number = 2;
   totalPages: number = 0;
 
   constructor(
+    private _route: ActivatedRoute,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
+    private _loadingService: LoadingService,
+    private _viewportScroller: ViewportScroller,
     private _titleService: Title
   ) {}
 
   ngOnInit(): void {
-    this.checkRouteParams();
+    this.getEditions();
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): void {
-    const routeParamsSubscription = this._activatedRoute.params.subscribe((params) => {
-      this.currentPage = params['page'] ? +params['page'] : 1;
-      this.getEditions(this.currentPage, this.perPage);
-    });
-
-    this._subscriptions.add(routeParamsSubscription);
-  }
-
-  private getEditions(page: number, perPage: number): void {
-    this.loading = true;
-    const getEditionsSubscription = this._wpService
-      .getEditions(page, perPage)
+  private getEditions(): void {
+    const sub = this._route.data
       .pipe(
-        switchMap(({ data, headers }) => {
-          if (data && data.length > 0) {
+        concatMap(({ data }) => {
+          if (data.editions && data.editions.length > 0) {
             this.editions = [];
-            this.initEditions(data);
-            this.totalPages = Number(headers.get('X-WP-TotalPages'));
-            const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
+            this._viewportScroller.scrollToPosition([0, 0]);
+            this.currentPage = data.currentPage;
+            this.totalPages = Number(data.headers.get('X-WP-TotalPages'));
+            this.initEditions(data.editions);
+            const mediaIds = this.editions.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           } else {
             return of([]);
@@ -75,19 +67,15 @@ export class EditionListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.initTitle();
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
-    this._subscriptions.add(getEditionsSubscription);
-  }
-
-  onPageChange(page: number): void {
-    this._router.navigate(['/editions/page', page]);
+    this._subscriptions.add(sub);
   }
 
   private initEditions(editions: any[]): void {
@@ -106,10 +94,11 @@ export class EditionListComponent implements OnInit, OnDestroy {
 
   private mapMedia(media: any[]): void {
     media.forEach((mediaItem) => {
-      const edition = this.editions.find((x) => x.featuredMediaId === mediaItem.id);
-      if (edition) {
-        edition.featuredMedia = this.initFeaturedMedia(mediaItem);
-      }
+      this.editions
+        .filter((x) => x.featuredMediaId === mediaItem.id)
+        .forEach((edition) => {
+          edition.featuredMedia = this.initFeaturedMedia(mediaItem);
+        });
     });
   }
 
@@ -123,6 +112,10 @@ export class EditionListComponent implements OnInit, OnDestroy {
   }
 
   private initTitle(): void {
-    this._titleService.setTitle('Editions' + ' - ' + this._appTitle);
+    this._titleService.setTitle('Δεκαήμερο Αγώνα' + ' - ' + this._appTitle);
+  }
+
+  onPageChange(page: number): void {
+    this._router.navigate(['/editions/page', page]);
   }
 }

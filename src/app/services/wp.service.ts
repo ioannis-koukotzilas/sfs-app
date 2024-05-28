@@ -34,7 +34,7 @@ export class WpService {
    * Edition
    */
 
-  getEditions(page: number, perPage: number): Observable<{ data: Edition[]; headers: HttpHeaders }> {
+  getEditions(page: number, perPage: number): Observable<{ editions: Edition[]; headers: HttpHeaders }> {
     return this._http
       .get<Edition[]>(`${this._wpJsonBaseUrl}/edition`, {
         params: {
@@ -43,7 +43,7 @@ export class WpService {
         },
         observe: 'response',
       })
-      .pipe(map(({ body, headers }) => ({ data: body as Edition[], headers })));
+      .pipe(map(({ body, headers }) => ({ editions: body as Edition[], headers })));
   }
 
   getEdition(slug: string): Observable<Edition> {
@@ -62,7 +62,7 @@ export class WpService {
    * Event
    */
 
-  getEvents(page: number, perPage: number): Observable<{ data: Event[]; headers: HttpHeaders }> {
+  getEvents(page: number, perPage: number): Observable<{ events: Event[]; headers: HttpHeaders }> {
     return this._http
       .get<Event[]>(`${this._wpJsonBaseUrl}/event`, {
         params: {
@@ -71,7 +71,7 @@ export class WpService {
         },
         observe: 'response',
       })
-      .pipe(map(({ body, headers }) => ({ data: body as Event[], headers })));
+      .pipe(map(({ body, headers }) => ({ events: body as Event[], headers })));
   }
 
   getEvent(slug: string): Observable<Event> {

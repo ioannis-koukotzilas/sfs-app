@@ -3,13 +3,16 @@ import { Edition } from '../../../models/entities/edition';
 import { ActivatedRoute } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { Title } from '@angular/platform-browser';
-import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { News } from '../../../models/entities/news';
 import { Event } from '../../../models/entities/event';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
 import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
+import { LoadingService } from '../../../services/loading.service';
+import { ViewportScroller } from '@angular/common';
+import { CoverImage } from '../../../models/entities/cover';
 
 @Component({
   selector: 'app-edition-detail',
@@ -20,18 +23,20 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   edition!: Edition;
   events!: Event[];
   news!: News[];
   shareData?: ShareData;
 
+  coverImage?: CoverImage;
+
   constructor(
     private _route: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
+    private _loadingService: LoadingService,
     private _titleService: Title,
+    private _viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit(): void {
@@ -42,38 +47,28 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): Observable<Edition | null> {
-    return this._route.paramMap.pipe(
-      switchMap((params) => {
-        const slug = params.get('slug');
-        return slug ? this._wpService.getEdition(slug) : of(null);
-      })
-    );
-  }
-
   private getEdition(): void {
-    this.loading = true;
-    const routeParamsSubscription = this.checkRouteParams()
+    const sub = this._route.data
       .pipe(
-        tap((edition) => {
-          if (edition) {
-            this.initEdition(edition);
+        tap(({ data }) => {
+          if (data) {
+            this._viewportScroller.scrollToPosition([0, 0]);
+            this.initEdition(data);
           } else {
             throw new Error('No edition found');
           }
         }),
-        switchMap(() => {
+        concatMap(() => {
           if (this.edition.featuredMediaId && this.edition.featuredMediaId > 0) {
             return this._wpService.getMediaById(this.edition.featuredMediaId);
           }
 
           return of(null);
         }),
-        switchMap((featuredMedia) => {
+        concatMap((featuredMedia) => {
           if (featuredMedia) {
             this.edition.featuredMedia = this.initFeaturedMedia(featuredMedia);
-
-            // cover
+            this.initCoverImage();
           }
 
           if (this.edition.galleryMediaIds && this.edition.galleryMediaIds.length > 0) {
@@ -82,14 +77,14 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
 
           return of(null);
         }),
-        switchMap((galleryMedia) => {
+        concatMap((galleryMedia) => {
           if (galleryMedia) {
             this.edition.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
           return this._wpService.getEventsByEditionId(this.edition.id, 8);
         }),
-        switchMap((events) => {
+        concatMap((events) => {
           if (events && events.length > 0) {
             this.initEvents(events);
             const mediaIds = this.events.map((x) => x.featuredMediaId).filter((id) => id !== null);
@@ -103,14 +98,14 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
 
           return of([]);
         }),
-        switchMap((eventsFeaturedMedia) => {
+        concatMap((eventsFeaturedMedia) => {
           if (eventsFeaturedMedia && eventsFeaturedMedia.length > 0) {
             this.mapEventsMedia(eventsFeaturedMedia);
           }
 
           return this._wpService.getNewsByEditionId(this.edition.id, 8);
         }),
-        switchMap((news) => {
+        concatMap((news) => {
           if (news && news.length > 0) {
             this.initNews(news);
             const mediaIds = this.news.map((x) => x.featuredMediaId).filter((id) => id !== null);
@@ -134,15 +129,15 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
         next: () => {
           this.initTitle();
           this.initShareData();
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
-    this._subscriptions.add(routeParamsSubscription);
+    this._subscriptions.add(sub);
   }
 
   private initEdition(edition: any): void {
@@ -153,6 +148,18 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this.edition.excerpt = edition.excerpt.rendered;
     this.edition.featuredMediaId = edition.featured_media;
     this.edition.galleryMediaIds = edition.acf.gallery;
+    this.edition.coverTitle = edition.acf.cover_title;
+    this.edition.coverLinkSlug = edition.cover_link_info?.slug;
+    this.edition.coverLinkPostType = edition.cover_link_info?.post_type;
+  }
+
+  private initCoverImage(): void {
+    this.coverImage = new CoverImage();
+    this.coverImage.media = this.edition.featuredMedia;
+    this.coverImage.showTitle = true;
+    this.coverImage.title = this.edition.coverTitle;
+    this.coverImage.linkSlug = this.edition.coverLinkSlug;
+    this.coverImage.linkPostType = this.edition.coverLinkPostType;
   }
 
   private initFeaturedMedia(media: any): Media {

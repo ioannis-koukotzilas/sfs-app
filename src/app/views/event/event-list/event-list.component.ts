@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subscription, of, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
@@ -7,6 +7,8 @@ import { Title } from '@angular/platform-browser';
 import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-event-list',
@@ -17,50 +19,40 @@ export class EventListComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   events: Event[] = [];
 
   currentPage: number = 1;
-  perPage: number = 6;
   totalPages: number = 0;
 
   constructor(
+    private _route: ActivatedRoute,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
+    private _loadingService: LoadingService,
+    private _viewportScroller: ViewportScroller,
     private _titleService: Title
   ) {}
 
   ngOnInit(): void {
-    this.checkRouteParams();
+    this.getEvents();
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): void {
-    const routeParamsSubscription = this._activatedRoute.params.subscribe((params) => {
-      this.currentPage = params['page'] ? +params['page'] : 1;
-      this.getEvents(this.currentPage, this.perPage);
-    });
-
-    this._subscriptions.add(routeParamsSubscription);
-  }
-
-  private getEvents(page: number, perPage: number): void {
-    this.loading = true;
-    const eventsSubscription = this._wpService
-      .getEvents(page, perPage)
+  private getEvents(): void {
+    const sub = this._route.data
       .pipe(
-        switchMap(({ data, headers }) => {
-          if (data && data.length > 0) {
+        concatMap(({ data }) => {
+          if (data.events && data.events.length > 0) {
             this.events = [];
-            this.initEvents(data);
-            this.totalPages = Number(headers.get('X-WP-TotalPages'));
-            const mediaIds = data.map((x) => x.featuredMediaId).filter((id) => id !== null);
+            this._viewportScroller.scrollToPosition([0, 0]);
+            this.currentPage = data.currentPage;
+            this.totalPages = Number(data.headers.get('X-WP-TotalPages'));
+            this.initEvents(data.events);
+            const mediaIds = this.events.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           } else {
             return of([]);
@@ -75,19 +67,15 @@ export class EventListComponent {
       .subscribe({
         next: () => {
           this.initTitle();
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
-    this._subscriptions.add(eventsSubscription);
-  }
-
-  onPageChange(page: number): void {
-    this._router.navigate(['/events/page', page]);
+    this._subscriptions.add(sub);
   }
 
   private initEvents(events: any[]): void {
@@ -126,5 +114,9 @@ export class EventListComponent {
 
   private initTitle(): void {
     this._titleService.setTitle('Δράσεις - Εκδηλώσεις' + ' - ' + this._appTitle);
+  }
+
+  onPageChange(page: number): void {
+    this._router.navigate(['/events/page', page]);
   }
 }

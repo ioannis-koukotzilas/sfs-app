@@ -1,4 +1,4 @@
-<app-progress-bar [loading]="loading"></app-progress-bar>
+<app-cover-image [coverImage]="coverImage"></app-cover-image>
 
 <div class="container" *ngIf="edition">
   <article class="article">
@@ -16,7 +16,7 @@
   <app-gallery *ngIf="edition.galleryMedia" [galleryMedia]="edition.galleryMedia"></app-gallery>
 
   <section class="related-articles related-events" *ngIf="events && events.length > 0">
-    <h2 class="section-title">Σχετικά events</h2>
+    <h2 class="section-title">Σχετικές Δράσεις - Εκδηλώσεις</h2>
     <div class="articles-wrapper">
       <a class="grouped-link" *ngFor="let article of events" [routerLink]="['/event', article.slug]">
         <article class="related-article">

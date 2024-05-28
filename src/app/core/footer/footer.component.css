@@ -1,5 +1,5 @@
 :host {
-  background-color: rgb(var(--primary-100));
+  background-color: rgb(var(--primary-50));
 }
 
 :host > .container {

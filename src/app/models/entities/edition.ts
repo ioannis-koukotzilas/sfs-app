@@ -10,4 +10,8 @@ export class Edition {
   featuredMedia?: Media;
   galleryMediaIds!: number[];
   galleryMedia?: Media[];
+
+  coverTitle!: string;
+  coverLinkSlug!: string;
+  coverLinkPostType!: string;
 }

@@ -1,27 +1,14 @@
-<app-progress-bar [loading]="loading"></app-progress-bar>
-
 <div class="container">
   <header class="page-header">
     <h1 class="page-title">Δεκαήμερο Αγώνα</h1>
-    <div class="page-description">
-      <p>
-        Με τον όρο Lorem ipsum αναφέρονται τα κείμενα εκείνα τα οποία είναι ακατάληπτα, δεν μπορεί δηλαδή κάποιος να βγάλει κάποιο λογικό νόημα από
-        αυτά, και έχουν δημιουργηθεί με σκοπό να παρουσιάσουν στον αναγνώστη μόνο τα γραφιστικά χαρακτηριστικά.
-      </p>
-    </div>
   </header>
 
   <ng-container *ngIf="editions && editions.length > 0">
-    <div class="articles">
-      <article class="article" *ngFor="let article of editions">
-        <a class="grid" [routerLink]="['/edition', article.slug]">
+    <div class="articles-wrapper">
+      <a class="grouped-link" *ngFor="let article of editions" [routerLink]="['/edition', article.slug]">
+        <article class="article">
           <div class="col">
-            <img
-              class="article-featured-media"
-              *ngIf="article.featuredMedia"
-              [src]="article.featuredMedia.size.mediumLarge?.src"
-              [alt]="article.title"
-            />
+            <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
           </div>
 
           <div class="col">
@@ -33,10 +20,11 @@
               <div [innerHTML]="article.excerpt"></div>
             </div>
           </div>
-        </a>
-      </article>
+        </article>
+      </a>
     </div>
 
-    <app-list-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)"> </app-list-pagination>
+    <app-list-pagination *ngIf="totalPages > 1" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-list-pagination>
   </ng-container>
 </div>

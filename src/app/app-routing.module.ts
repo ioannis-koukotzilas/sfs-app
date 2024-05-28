@@ -12,21 +12,25 @@ import { PageHomeComponent } from './views/page/page-home/page-home.component';
 import { pageHomeResolver } from './views/page/page-home/page-home.resolver';
 import { newsListResolver } from './views/news/news-list/news-list.resolver';
 import { newsDetailResolver } from './views/news/news-detail/news-detail.resolver';
+import { eventListResolver } from './views/event/event-list/event-list.resolver';
+import { editionListResolver } from './views/edition/edition-list/edition-list.resolver';
+import { eventDetailResolver } from './views/event/event-detail/event-detail.resolver';
+import { editionDetailResolver } from './views/edition/edition-detail/edition-detail.resolver';
 
 const routes: Routes = [
   { path: '', component: PageHomeComponent, resolve: { page: pageHomeResolver } },
 
   { path: 'editions', redirectTo: 'editions/page/1', pathMatch: 'full' },
-  { path: 'editions/page/:page', component: EditionListComponent },
-  { path: 'edition/:slug', component: EditionDetailComponent },
+  { path: 'editions/page/:page', component: EditionListComponent, resolve: { data: editionListResolver } },
+  { path: 'edition/:slug', component: EditionDetailComponent, resolve: { data: editionDetailResolver } },
 
   { path: 'news', redirectTo: 'news/page/1', pathMatch: 'full' },
   { path: 'news/page/:page', component: NewsListComponent, resolve: { data: newsListResolver } },
   { path: 'news/:slug', component: NewsDetailComponent, resolve: { data: newsDetailResolver } },
 
   { path: 'events', redirectTo: 'events/page/1', pathMatch: 'full' },
-  { path: 'events/page/:page', component: EventListComponent },
-  { path: 'event/:slug', component: EventDetailComponent },
+  { path: 'events/page/:page', component: EventListComponent, resolve: { data: eventListResolver } },
+  { path: 'event/:slug', component: EventDetailComponent, resolve: { data: eventDetailResolver } },
 
   { path: 'news/category/:slug', redirectTo: 'news/category/:slug/page/1', pathMatch: 'full' },
   { path: 'news/category/:slug/page/:page', component: NewsCategoryDetailComponent },

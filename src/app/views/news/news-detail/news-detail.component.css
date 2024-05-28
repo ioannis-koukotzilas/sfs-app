@@ -64,7 +64,7 @@
 }
 
 .related-articles .section-title {
-  font-weight: var(--font-black);
+  font-weight: var(--font-bold);
   font-size: var(--font-2xl);
   line-height: var(--leading-tight);
   padding-top: 0.75rem;
@@ -110,13 +110,13 @@
 }
 
 .related-article-excerpt {
-  font-family: var(--font-serif);
+  font-family: var(--font-mono-secondary);
   font-size: var(--font-xs);
-  color: rgb(var(--primary-500));
+  color: rgb(var(--primary-400));
 }
 
 .related-article-date {
   font-family: var(--font-mono);
   font-size: var(--font-xs);
-  color: rgb(var(--primary-500));
+  color: rgb(var(--primary-400));
 }

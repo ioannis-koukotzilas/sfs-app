@@ -11,7 +11,7 @@
       @if (coverImage.linkPostType === "edition") {
       <figcaption>
         <div class="wrapper">
-          <a  [routerLink]="['/edition', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
+          <a class="light" [routerLink]="['/edition', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
         </div>
       </figcaption>
       } @else if (coverImage.linkPostType === "event") {
@@ -22,17 +22,21 @@
       </figcaption>
       } @else if (coverImage.linkPostType === "news") {
       <figcaption>
-        <a [routerLink]="['/news', coverImage.linkSlug]">{{ coverImage.title }}</a>
+        <a class="light" [routerLink]="['/news', coverImage.linkSlug]">{{ coverImage.title }}</a>
       </figcaption>
       } @else if (coverImage.linkPostType === "page") {
       <figcaption>
-        <a [routerLink]="['/page', coverImage.linkSlug]">{{ coverImage.title }}</a>
+        <a class="light" [routerLink]="['/page', coverImage.linkSlug]">{{ coverImage.title }}</a>
       </figcaption>
       } @else {
       <figcaption>{{ coverImage.title }}</figcaption>
       }
     } @else {
-    <figcaption>{{ coverImage.title }}</figcaption>
+      <figcaption>
+        <div class="wrapper">
+          <h2 class="cover-title light">{{ coverImage.title }}</h2>
+        </div>
+      </figcaption>
     }
   }
 </figure>

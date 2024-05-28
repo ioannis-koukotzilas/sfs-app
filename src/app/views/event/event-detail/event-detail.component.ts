@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, Subscription, of, switchMap, tap } from 'rxjs';
+import { Observable, Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +9,8 @@ import { Title } from '@angular/platform-browser';
 import { Event } from '../../../models/entities/event';
 import { Media } from '../../../models/entities/media';
 import { Category } from '../../../models/entities/category';
+import { ViewportScroller } from '@angular/common';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -19,13 +21,18 @@ export class EventDetailComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   event!: Event;
   news!: News[];
   shareData?: ShareData;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _mediaService: MediaService, private _titleService: Title) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _mediaService: MediaService,
+    private _loadingService: LoadingService,
+    private _titleService: Title,
+    private _viewportScroller: ViewportScroller
+  ) {}
 
   ngOnInit(): void {
     this.getEvent();
@@ -35,34 +42,25 @@ export class EventDetailComponent {
     this._subscriptions.unsubscribe();
   }
 
-  private checkRouteParams(): Observable<Event | null> {
-    return this._route.paramMap.pipe(
-      switchMap((params) => {
-        const slug = params.get('slug');
-        return slug ? this._wpService.getEvent(slug) : of(null);
-      })
-    );
-  }
-
   private getEvent(): void {
-    const routeParamsSubscription = this.checkRouteParams()
+    const sub = this._route.data
       .pipe(
-        tap((event) => {
-          if (event) {
-            this.loading = true;
-            this.initEvent(event);
+        tap(({ data }) => {
+          if (data) {
+            this._viewportScroller.scrollToPosition([0, 0]);
+            this.initEvent(data);
           } else {
             throw new Error('No event found');
           }
         }),
-        switchMap(() => {
+        concatMap(() => {
           if (this.event.categoryIds && this.event.categoryIds.length > 0) {
             return this._wpService.getEventCategoriesByPostId(this.event.id);
           }
 
           return of(null);
         }),
-        switchMap((categories) => {
+        concatMap((categories) => {
           if (categories) {
             this.event.categories = this.initCategories(categories);
           }
@@ -73,7 +71,7 @@ export class EventDetailComponent {
 
           return of(null);
         }),
-        switchMap((featuredMedia) => {
+        concatMap((featuredMedia) => {
           if (featuredMedia) {
             this.event.featuredMedia = this.initFeaturedMedia(featuredMedia);
           }
@@ -84,16 +82,14 @@ export class EventDetailComponent {
 
           return of(null);
         }),
-        switchMap((galleryMedia) => {
+        concatMap((galleryMedia) => {
           if (galleryMedia) {
             this.event.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
-          // return this._wpService.getNewsByEventId(this.event.id, 8);
           return this._wpService.getEventsByEventCategoriesIds(this.event.categoryIds, 1, 10);
         }),
-
-        switchMap(({ events, headers }) => {
+        concatMap(({ events, headers }) => {
           if (events && events.length > 0) {
             const filteredEvents = events.filter((article) => article.id !== this.event.id);
             this.event.relatedEvents = this.initRelatedEvents(filteredEvents);
@@ -108,7 +104,6 @@ export class EventDetailComponent {
 
           return of([]);
         }),
-
         tap((relatedEventsFeaturedMedia) => {
           if (relatedEventsFeaturedMedia && relatedEventsFeaturedMedia.length > 0) {
             this.mapRelatedEventsMedia(relatedEventsFeaturedMedia);
@@ -119,15 +114,15 @@ export class EventDetailComponent {
         next: () => {
           this.initTitle();
           this.initShareData();
-          this.loading = false;
+          this._loadingService.set(false);
         },
         error: (error) => {
           console.error('Error:', error);
-          this.loading = false;
+          this._loadingService.set(false);
         },
       });
 
-    this._subscriptions.add(routeParamsSubscription);
+    this._subscriptions.add(sub);
   }
 
   private initEvent(event: any): void {
