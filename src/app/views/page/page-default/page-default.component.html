@@ -1,13 +1,9 @@
-<div class="page" *ngIf="page">
-
+<ng-container *ngIf="page">
   <div class="container">
-
     <header class="header">
       <h1 class="title">{{ page.title }}</h1>
     </header>
 
     <div class="content" *ngIf="page.content" [innerHTML]="page.content"></div>
-
   </div>
-
-</div>
+</ng-container>

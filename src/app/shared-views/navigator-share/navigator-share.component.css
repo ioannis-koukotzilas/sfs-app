@@ -4,6 +4,7 @@
 
 button {
   font-size: var(--font-sm);
+  font-weight: var(--font-normal);
 }
 
 .alert {

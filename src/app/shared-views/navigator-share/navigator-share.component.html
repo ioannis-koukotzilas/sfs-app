@@ -1,4 +1,9 @@
-<ng-container *ngIf="canShare; else copyToClipBoard">
+<button class="transparent accent" (click)="navigatorShare()"><span class="symbol">share</span> Κοινοποίηση</button>
+
+<div class="alert" *ngIf="copiedToClipboard">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.</div>
+
+
+<!-- <ng-container *ngIf="canShare; else copyToClipBoard">
   <button (click)="navigatorShare()">Κοινοποίηση</button>
 </ng-container>
 
@@ -6,4 +11,4 @@
   <button class="transparent accent" (click)="copyToClipboard()"><span class="symbol">share</span> Κοινοποίηση</button>
 
   <div class="alert" *ngIf="copiedToClipboard">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.</div>
-</ng-template>
+</ng-template> -->

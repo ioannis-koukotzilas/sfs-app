@@ -1,25 +1,12 @@
-body.route-about {
-  background-color: rgb(var(--cod-gray-950));
-  color: rgb(var(--punch-400));
+body.route-edition,
+body.route-edition app-header {
+  background-color: rgb(var(--gray-950));
 }
 
-/* body.route-editions {
-  background-color: rgb(var(--cod-gray-950));
-  color: rgb(var(--cod-gray-50));
+/* body.route-about,
+body.route-about app-header {
+  background-color: rgb(var(--red-300));
 } */
-
-/* body.route-editions,
-body.route-edition {
-  background-color: rgb(var(--cod-gray-950));
-} */
-
-app-page-about .content h2 {
-  /* font-family: var(--font-sans-condensed); */
-  font-weight: var(--font-bold);
-  font-size: var(--font-2xl);
-  line-height: var(--leading-tight);
-  margin-bottom: 1.5rem;
-}
 
 /* Articles Group
 --------------------------------------------- */
@@ -54,24 +41,32 @@ app-page-about .content h2 {
 
 /* move to global */
 
-::ng-deep .content a {
+.article-content a {
   text-decoration: underline;
-  color: rebeccapurple;
+  text-underline-offset: 0.15rem;
+  color: rgb(var(--red-500));
 }
 
-::ng-deep .content h2 {
+.article-content h2 {
   font-weight: var(--font-bold);
   font-size: var(--font-2xl);
   line-height: var(--leading-tight);
   margin-bottom: 1.5rem;
 }
 
-::ng-deep .content ul {
-  list-style: disc;
-  margin: 0 0 1.5rem 1.5rem;
+.article-content h3 {
+  font-weight: var(--font-bold);
+  font-size: var(--font-xl);
+  line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
 }
 
-::ng-deep .content li {
+.article-content ul {
+  list-style: disc;
+  margin: 0 0 1.5rem 3rem;
+}
+
+.article-content li {
   margin-bottom: 1.5rem;
 }
 
@@ -85,4 +80,8 @@ app-page-about .content h2 {
 body.cover-image app-header a,
 body.cover-image app-header button.transparent {
   color: rgb(var(--primary-50));
+} */
+
+/* .route-edition .cover-media figcaption > .wrapper {
+  max-width: var(--max-w-lg) !important;
 } */

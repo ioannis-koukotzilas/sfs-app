@@ -3,8 +3,8 @@
 --------------------------------------------------------------*/
 
 :host > .container {
-  max-width: var(--max-w-lg);
-  margin: 4.5rem auto;
+  max-width: var(--max-w-xl);
+  margin: 0 auto 4.5rem;
   padding: 0 20px;
 }
 
@@ -17,6 +17,7 @@
 
 .article-header {
   margin-bottom: 3rem;
+  max-width: var(--max-w-lg);
 }
 
 .article-title {

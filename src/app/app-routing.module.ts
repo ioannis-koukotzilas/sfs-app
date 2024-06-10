@@ -16,9 +16,13 @@ import { eventListResolver } from './views/event/event-list/event-list.resolver'
 import { editionListResolver } from './views/edition/edition-list/edition-list.resolver';
 import { eventDetailResolver } from './views/event/event-detail/event-detail.resolver';
 import { editionDetailResolver } from './views/edition/edition-detail/edition-detail.resolver';
+import { PageAboutComponent } from './views/page/page-about/page-about.component';
+import { pageAboutResolver } from './views/page/page-about/page-about.resolver';
+import { pageDefaultResolver } from './views/page/page-default/page-default.resolver';
 
 const routes: Routes = [
   { path: '', component: PageHomeComponent, resolve: { page: pageHomeResolver } },
+  { path: 'about', component: PageAboutComponent, resolve: { page: pageAboutResolver } },
 
   { path: 'editions', redirectTo: 'editions/page/1', pathMatch: 'full' },
   { path: 'editions/page/:page', component: EditionListComponent, resolve: { data: editionListResolver } },
@@ -35,7 +39,7 @@ const routes: Routes = [
   { path: 'news/category/:slug', redirectTo: 'news/category/:slug/page/1', pathMatch: 'full' },
   { path: 'news/category/:slug/page/:page', component: NewsCategoryDetailComponent },
 
-  { path: ':slug', component: PageWrapperComponent }, // Most generic route goes last
+  { path: ':slug', component: PageWrapperComponent, resolve: { page: pageDefaultResolver } }, // Most generic route goes last
 ];
 
 @NgModule({

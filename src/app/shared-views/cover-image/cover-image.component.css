@@ -41,6 +41,6 @@
 .cover-title {
   font-family: var(--font-serif);
   font-weight: var(--font-bold);
-  font-size: var(--font-3xl);
+  font-size: var(--font-2xl);
   line-height: var(--leading-tight);
 }

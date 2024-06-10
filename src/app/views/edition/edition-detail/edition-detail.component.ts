@@ -157,7 +157,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this.coverImage = new CoverImage();
     this.coverImage.media = this.edition.featuredMedia;
     this.coverImage.showTitle = true;
-    this.coverImage.title = this.edition.coverTitle;
+    this.coverImage.title = this.edition.title;
     this.coverImage.linkSlug = this.edition.coverLinkSlug;
     this.coverImage.linkPostType = this.edition.coverLinkPostType;
   }

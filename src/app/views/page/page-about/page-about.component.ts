@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PageDefault } from '../../../models/entities/pageDefault';
 import { ActivatedRoute } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { Title } from '@angular/platform-browser';
+import { LoadingService } from '../../../services/loading.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-page-about',
@@ -15,47 +17,49 @@ export class PageAboutComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
 
-  loading = false;
-
   page!: PageDefault;
 
-  constructor(private _route: ActivatedRoute, private _wpService: WpService, private _titleService: Title) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _wpService: WpService,
+    private _titleService: Title,
+    private _loadingService: LoadingService,
+    private _viewportScroller: ViewportScroller
+  ) {}
 
   ngOnInit(): void {
     this.getPage();
   }
 
-  ngOnDestroy(): void {}
-
-  private checkRouteParams(): Observable<PageDefault | null> {
-    return this._route.paramMap.pipe(
-      switchMap((params) => {
-        const slug = params.get('slug');
-        return slug ? this._wpService.getPageDefault(slug) : of(null);
-      })
-    );
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   private getPage(): void {
-    this.loading = true;
-    const routeParamsSubscription = this.checkRouteParams().subscribe({
-      next: (data) => {
-        if (data) {
-          this.initPageData(data);
+    const sub = this._route.data
+      .pipe(
+        tap(({ page }) => {
+          if (page) {
+            this._viewportScroller.scrollToPosition([0, 0]);
+            this.initPage(page);
+          }
+        })
+      )
+      .subscribe({
+        next: () => {
           this.initTitle();
-          this.loading = false;
-        }
-      },
-      error: (error) => {
-        console.error('Error:', error);
-        this.loading = false;
-      },
-    });
+          this._loadingService.set(false);
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this._loadingService.set(false);
+        },
+      });
 
-    this._subscriptions.add(routeParamsSubscription);
+    this._subscriptions.add(sub);
   }
 
-  private initPageData(data: any): void {
+  private initPage(data: any): void {
     this.page = new PageDefault();
     this.page.title = data.title.rendered;
     this.page.content = data.content.rendered;

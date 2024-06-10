@@ -1,0 +1,23 @@
+:host > .container {
+  max-width: var(--max-w-xl);
+  margin: 4.5rem auto;
+  padding: 0 20px;
+}
+
+.header {
+  margin-bottom: 3rem;
+  max-width: var(--max-w-lg);
+}
+
+.header .title {
+  font-family: var(--font-serif);
+  font-weight: var(--font-bold);
+  font-size: var(--font-3xl);
+  line-height: var(--leading-tight);
+  margin-bottom: 1.5rem;
+}
+
+.content {
+  max-width: var(--max-w-md);
+  font-family: var(--font-serif);
+}

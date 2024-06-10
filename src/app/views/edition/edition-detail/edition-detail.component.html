@@ -1,9 +1,9 @@
 <app-cover-image [coverImage]="coverImage"></app-cover-image>
 
-<div class="container" *ngIf="edition">
+<div class="container light" *ngIf="edition && coverImage">
   <article class="article">
     <header class="article-header">
-      <h1 class="article-title">{{ edition.title }}</h1>
+      <h1 class="article-title" *ngIf="!coverImage">{{ edition.title }}</h1>
 
       <div class="article-excerpt" *ngIf="edition.excerpt" [innerHTML]="edition.excerpt"></div>
 
@@ -18,7 +18,7 @@
   <section class="related-articles related-events" *ngIf="events && events.length > 0">
     <h2 class="section-title">Σχετικές Δράσεις - Εκδηλώσεις</h2>
     <div class="articles-wrapper">
-      <a class="grouped-link" *ngFor="let article of events" [routerLink]="['/event', article.slug]">
+      <a class="grouped-link light" *ngFor="let article of events" [routerLink]="['/event', article.slug]">
         <article class="related-article">
           <div class="col">
             <app-article-featured-media class="related-article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
@@ -40,7 +40,7 @@
   <section class="related-articles related-news" *ngIf="news && news.length > 0">
     <h2 class="section-title">Σχετικά άρθρα</h2>
     <div class="articles-wrapper">
-      <a class="grouped-link" *ngFor="let article of news" [routerLink]="['/news', article.slug]">
+      <a class="grouped-link light" *ngFor="let article of news" [routerLink]="['/news', article.slug]">
         <article class="related-article">
           <div class="col">
             <app-article-featured-media class="related-article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>

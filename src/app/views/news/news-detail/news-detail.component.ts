@@ -86,7 +86,7 @@ export class NewsDetailComponent {
             this.news.galleryMedia = this.initGalleryMedia(galleryMedia);
           }
 
-          return this._wpService.getNewsByNewsCategoriesIds(this.news.categoryIds, 1, 10);
+          return this._wpService.getNewsByNewsCategoriesIds(this.news.categoryIds, 1, 3);
         }),
         concatMap(({ news, headers }) => {
           if (news && news.length > 0) {

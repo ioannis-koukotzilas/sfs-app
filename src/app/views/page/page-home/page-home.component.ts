@@ -211,8 +211,8 @@ export class PageHomeComponent {
     this.page.content = page.content.rendered;
     this.page.featuredMediaId = page.featured_media;
     this.page.coverTitle = page.acf.cover_title;
-    this.page.coverLinkSlug = page.cover_link_info.slug;
-    this.page.coverLinkPostType = page.cover_link_info.post_type;
+    this.page.coverLinkSlug = page.cover_link_info?.slug ?? null;
+    this.page.coverLinkPostType = page.cover_link_info?.post_type ?? null;
   }
 
   private initCoverImage(): void {

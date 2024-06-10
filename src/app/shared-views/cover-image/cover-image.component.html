@@ -7,29 +7,35 @@
   </picture>
 
   @if (coverImage.showTitle && coverImage.title) {
+    <ng-template #coverTitle>
+      <h2 class="cover-title">{{ coverImage.title }}</h2>
+    </ng-template>
+
     @if (coverImage.linkPostType && coverImage.linkSlug) {
       @if (coverImage.linkPostType === "edition") {
       <figcaption>
         <div class="wrapper">
-          <a class="light" [routerLink]="['/edition', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
+          <a class="light" [routerLink]="['/edition', coverImage.linkSlug]"><ng-container *ngTemplateOutlet="coverTitle"></ng-container></a>
         </div>
       </figcaption>
       } @else if (coverImage.linkPostType === "event") {
       <figcaption>
         <div class="wrapper">
-          <a class="light" [routerLink]="['/event', coverImage.linkSlug]"><h2 class="cover-title">{{ coverImage.title }}</h2></a>
+          <a class="light" [routerLink]="['/event', coverImage.linkSlug]"><ng-container *ngTemplateOutlet="coverTitle"></ng-container></a>
         </div>
       </figcaption>
       } @else if (coverImage.linkPostType === "news") {
       <figcaption>
-        <a class="light" [routerLink]="['/news', coverImage.linkSlug]">{{ coverImage.title }}</a>
+        <div class="wrapper">
+          <a class="light" [routerLink]="['/news', coverImage.linkSlug]"><ng-container *ngTemplateOutlet="coverTitle"></ng-container></a>
+        </div>
       </figcaption>
       } @else if (coverImage.linkPostType === "page") {
       <figcaption>
-        <a class="light" [routerLink]="['/page', coverImage.linkSlug]">{{ coverImage.title }}</a>
+        <div class="wrapper">
+          <a class="light" [routerLink]="['/page', coverImage.linkSlug]"><ng-container *ngTemplateOutlet="coverTitle"></ng-container></a>
+        </div>
       </figcaption>
-      } @else {
-      <figcaption>{{ coverImage.title }}</figcaption>
       }
     } @else {
       <figcaption>
