@@ -1,0 +1,13 @@
+.secondary-menu.header-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  /* font-family: var(--font-mono); */
+  /* font-size: var(--font-md); */
+  /* font-weight: var(--font-bold); */
+  /* line-height: var(--leading-snug); */
+}
+
+.secondary-menu.header-sidebar a {
+  color: rgb(var(--primary-50));
+}

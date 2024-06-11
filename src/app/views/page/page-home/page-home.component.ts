@@ -12,6 +12,7 @@ import { CoverImage } from '../../../models/entities/cover';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '../../../services/loading.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { MetaService } from '../../../services/meta.service';
 
 
 
@@ -23,8 +24,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 export class PageHomeComponent {
   private _subscriptions: Subscription = new Subscription();
   private _appTitle = environment.appTitle;
-
-  //loading = false;
 
   page!: PageHome;
 
@@ -43,7 +42,8 @@ export class PageHomeComponent {
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
     private _breakpointObserver: BreakpointObserver,
-    private _titleService: Title
+    private _titleService: Title,
+    private _metaService: MetaService,
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class PageHomeComponent {
   }
 
   public initBreakpointObserver() {
-    const sub = this._breakpointObserver.observe(['(min-width: 2000px)']).subscribe((state: BreakpointState) => {
+    const sub = this._breakpointObserver.observe(['(min-width: 1280px)']).subscribe((state: BreakpointState) => {
       if (state.matches) {
         this.showMainNavigation = true;
       } else {
@@ -64,6 +64,7 @@ export class PageHomeComponent {
   }
 
   ngOnDestroy(): void {
+    this._metaService.removeAll();
     this._subscriptions.unsubscribe();
   }
 
@@ -195,6 +196,8 @@ export class PageHomeComponent {
       .subscribe({
         next: () => {
           this._loadingService.set(false);
+          this.initTitle();
+          this.initMetaData();
         },
         error: (error) => {
           console.error('Error:', error);
@@ -303,5 +306,18 @@ export class PageHomeComponent {
     featuredMedia.size = this._mediaService.mapMediaSize(media);
 
     return featuredMedia;
+  }
+
+  private initTitle(): void {
+    this._titleService.setTitle(this._appTitle);
+  }
+
+  private initMetaData(): void {
+    this._metaService.updateBaseTitle(this._appTitle);
+   // this._metaService.updateBaseDescription(this._metaService.formatDescription(this.page.content));
+    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateTitle(this._appTitle);
+   // this._metaService.updateDescription(this._metaService.formatDescription(this.page.content));
+    this._metaService.updateImage(this.page?.featuredMedia?.size?.xLarge?.src ?? '');
   }
 }

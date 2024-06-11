@@ -11,6 +11,7 @@ import { Media } from '../../../models/entities/media';
 import { Category } from '../../../models/entities/category';
 import { ViewportScroller } from '@angular/common';
 import { LoadingService } from '../../../services/loading.service';
+import { MetaService } from '../../../services/meta.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -31,6 +32,7 @@ export class EventDetailComponent {
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
     private _titleService: Title,
+    private _metaService: MetaService,
     private _viewportScroller: ViewportScroller
   ) {}
 
@@ -113,6 +115,7 @@ export class EventDetailComponent {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.initMetaData();
           this.initShareData();
           this._loadingService.set(false);
         },
@@ -204,6 +207,15 @@ export class EventDetailComponent {
     } else {
       this._titleService.setTitle(this._appTitle);
     }
+  }
+
+  private initMetaData(): void {
+    this._metaService.updateBaseTitle(this._appTitle);
+    this._metaService.updateBaseDescription(this._metaService.formatDescription(this.event.excerpt));
+    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateTitle(this._appTitle);
+    this._metaService.updateDescription(this._metaService.formatDescription(this.event.excerpt));
+    this._metaService.updateImage(this.event?.featuredMedia?.size?.xLarge?.src ?? '');
   }
 
   private initShareData(): void {

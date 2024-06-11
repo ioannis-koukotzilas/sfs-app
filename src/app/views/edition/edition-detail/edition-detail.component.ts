@@ -13,6 +13,7 @@ import { CoverImageComponent } from '../../../shared-views/cover-image/cover-ima
 import { LoadingService } from '../../../services/loading.service';
 import { ViewportScroller } from '@angular/common';
 import { CoverImage } from '../../../models/entities/cover';
+import { MetaService } from '../../../services/meta.service';
 
 @Component({
   selector: 'app-edition-detail',
@@ -36,6 +37,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
     private _titleService: Title,
+    private _metaService: MetaService,
     private _viewportScroller: ViewportScroller
   ) {}
 
@@ -128,6 +130,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.initMetaData();
           this.initShareData();
           this._loadingService.set(false);
         },
@@ -230,6 +233,15 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     } else {
       this._titleService.setTitle(this._appTitle);
     }
+  }
+
+  private initMetaData(): void {
+    this._metaService.updateBaseTitle(this._appTitle);
+    this._metaService.updateBaseDescription(this._metaService.formatDescription(this.edition.excerpt));
+    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateTitle(this._appTitle);
+    this._metaService.updateDescription(this._metaService.formatDescription(this.edition.excerpt));
+    this._metaService.updateImage(this.edition?.featuredMedia?.size?.xLarge?.src ?? '');
   }
 
   initShareData() {

@@ -1,1 +1,5 @@
-<p>secondary-menu works!</p>
+<ul [ngClass]="parent" class="secondary-menu">
+  <li><a (click)="navigate(['/about'])">Ταυτότητα</a></li>
+  <li><a (click)="navigate(['/contact'])">Επικοινωνία</a></li>
+  <li><a (click)="navigate(['/privacy-policy'])">Ασφάλεια</a></li>
+</ul>

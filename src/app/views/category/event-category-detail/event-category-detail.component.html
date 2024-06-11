@@ -1,1 +1,31 @@
-<p>event-category-detail works!</p>
+<div class="container">
+  <header class="page-header">
+    <h1 class="page-title">{{ category.name }}</h1>
+  </header>
+
+  <ng-container *ngIf="events && events.length > 0">
+    <div class="articles-wrapper">
+      <a class="grouped-link" *ngFor="let article of events" [routerLink]="['/event', article.slug]">
+        <article class="article">
+          <div class="col">
+            <app-article-featured-media class="article-featured-media" [media]="article.featuredMedia"></app-article-featured-media>
+          </div>
+
+          <div class="col">
+            <header class="article-header">
+              <h2 class="article-title">{{ article.title }}</h2>
+              <time class="article-date" [dateTime]="article.date | isoDate">{{ article.date | date }}</time>
+            </header>
+
+            <div class="article-excerpt">
+              <div [innerHTML]="article.excerpt"></div>
+            </div>
+          </div>
+        </article>
+      </a>
+    </div>
+
+    <app-list-pagination *ngIf="totalPages > 1" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-list-pagination>
+  </ng-container>
+</div>

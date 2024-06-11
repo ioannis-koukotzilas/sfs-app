@@ -13,5 +13,10 @@
 <aside class="sidebar" #sidebar *ngIf="sidebarActive" [@sidebarAnimation]="sidebarActive ? 'expanded' : 'collapsed'">
   <div class="wrapper">
     <app-main-menu [navigateAfterCloseSidebar]="navigateAfterCloseSidebar.bind(this)" [parent]="'header-sidebar'"></app-main-menu>
+
+    <div class="sidebar-footer">
+      <app-secondary-menu [navigateAfterCloseSidebar]="navigateAfterCloseSidebar.bind(this)" [parent]="'header-sidebar'"></app-secondary-menu>
+      <div class="msg">Τα περιθώρια έχουν στενέψει και η μόνη διέξοδος είναι η αυτοοργάνωση και η συλλογική δράση ενάντια σε κάθε βλαπτικότητα, αυτών που πιστεύουν ότι υπεύθυνοι για τη ζωή τους είναι οι ίδιοι.</div>
+    </div> 
   </div>
 </aside>

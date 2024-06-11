@@ -19,6 +19,9 @@ import { editionDetailResolver } from './views/edition/edition-detail/edition-de
 import { PageAboutComponent } from './views/page/page-about/page-about.component';
 import { pageAboutResolver } from './views/page/page-about/page-about.resolver';
 import { pageDefaultResolver } from './views/page/page-default/page-default.resolver';
+import { newsCategoryDetailResolver } from './views/category/news-category-detail/news-category-detail.resolver';
+import { EventCategoryDetailComponent } from './views/category/event-category-detail/event-category-detail.component';
+import { eventCategoryDetailResolver } from './views/category/event-category-detail/event-category-detail.resolver';
 
 const routes: Routes = [
   { path: '', component: PageHomeComponent, resolve: { page: pageHomeResolver } },
@@ -32,12 +35,15 @@ const routes: Routes = [
   { path: 'news/page/:page', component: NewsListComponent, resolve: { data: newsListResolver } },
   { path: 'news/:slug', component: NewsDetailComponent, resolve: { data: newsDetailResolver } },
 
+  { path: 'news/category/:slug', redirectTo: 'news/category/:slug/page/1', pathMatch: 'full' },
+  { path: 'news/category/:slug/page/:page', component: NewsCategoryDetailComponent, resolve: { data: newsCategoryDetailResolver } },
+
   { path: 'events', redirectTo: 'events/page/1', pathMatch: 'full' },
   { path: 'events/page/:page', component: EventListComponent, resolve: { data: eventListResolver } },
   { path: 'event/:slug', component: EventDetailComponent, resolve: { data: eventDetailResolver } },
 
-  { path: 'news/category/:slug', redirectTo: 'news/category/:slug/page/1', pathMatch: 'full' },
-  { path: 'news/category/:slug/page/:page', component: NewsCategoryDetailComponent },
+  { path: 'events/category/:slug', redirectTo: 'events/category/:slug/page/1', pathMatch: 'full' },
+  { path: 'events/category/:slug/page/:page', component: EventCategoryDetailComponent, resolve: { data: eventCategoryDetailResolver } },
 
   { path: ':slug', component: PageWrapperComponent, resolve: { page: pageDefaultResolver } }, // Most generic route goes last
 ];

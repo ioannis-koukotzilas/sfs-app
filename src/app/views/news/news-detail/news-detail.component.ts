@@ -10,6 +10,7 @@ import { Media } from '../../../models/entities/media';
 import { Category } from '../../../models/entities/category';
 import { ViewportScroller } from '@angular/common';
 import { LoadingService } from '../../../services/loading.service';
+import { MetaService } from '../../../services/meta.service';
 
 @Component({
   selector: 'app-news-detail',
@@ -19,7 +20,7 @@ import { LoadingService } from '../../../services/loading.service';
 export class NewsDetailComponent {
   private _subscriptions: Subscription = new Subscription();
 
-  appTitle = environment.appTitle;
+  private _appTitle = environment.appTitle;
 
   news!: News;
   shareData?: ShareData;
@@ -30,6 +31,7 @@ export class NewsDetailComponent {
     private _mediaService: MediaService,
     private _loadingService: LoadingService,
     private _titleService: Title,
+    private _metaService: MetaService,
     private _viewportScroller: ViewportScroller,
   ) {}
 
@@ -112,6 +114,7 @@ export class NewsDetailComponent {
       .subscribe({
         next: () => {
           this.initTitle();
+          this.initMetaData();
           this.initShareData();
           this._loadingService.set(false);
         },
@@ -202,10 +205,19 @@ export class NewsDetailComponent {
 
   private initTitle(): void {
     if (this.news.title) {
-      this._titleService.setTitle(this.news.title + ' - ' + this.appTitle);
+      this._titleService.setTitle(this.news.title + ' - ' + this._appTitle);
     } else {
-      this._titleService.setTitle(this.appTitle);
+      this._titleService.setTitle(this._appTitle);
     }
+  }
+
+  private initMetaData(): void {
+    this._metaService.updateBaseTitle(this._appTitle);
+    this._metaService.updateBaseDescription(this._metaService.formatDescription(this.news.excerpt));
+    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateTitle(this._appTitle);
+    this._metaService.updateDescription(this._metaService.formatDescription(this.news.excerpt));
+    this._metaService.updateImage(this.news?.featuredMedia?.size?.xLarge?.src ?? '');
   }
 
   initShareData() {
