@@ -91,6 +91,6 @@ export class PageContactComponent {
       .join('&');
 
     const fullUrl = `${baseActionUrl}?submit=Submit&usp=pp_url&${queryParams}`;
-    window.open(fullUrl, '_blank');
+    // window.open(fullUrl, '_blank');
   }
 }

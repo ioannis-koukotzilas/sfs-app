@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Observable, Subscription, concatMap, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ export class EventDetailComponent {
   shareData?: ShareData;
 
   constructor(
+    private _router: Router,
     private _route: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
@@ -212,7 +213,7 @@ export class EventDetailComponent {
   private initMetaData(): void {
     this._metaService.updateBaseTitle(this._appTitle);
     this._metaService.updateBaseDescription(this._metaService.formatDescription(this.event.excerpt));
-    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateUrl(environment.baseUrl + this._router.url);
     this._metaService.updateTitle(this._appTitle);
     this._metaService.updateDescription(this._metaService.formatDescription(this.event.excerpt));
     this._metaService.updateImage(this.event?.featuredMedia?.size?.xLarge?.src ?? '');
@@ -222,6 +223,6 @@ export class EventDetailComponent {
     this.shareData = { title: '', text: '', url: '' };
     this.shareData.title = this.event.title.replace(/<[^>]*>/g, '');
     this.shareData.text = this.event.excerpt.replace(/<[^>]*>/g, '');
-    this.shareData.url = window.location.href;
+    this.shareData.url = environment.baseUrl + this._router.url;
   }
 }

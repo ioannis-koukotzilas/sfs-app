@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnDestroy, Renderer2, ViewChild, afterNextRender } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoadingService } from './services/loading.service';
@@ -21,7 +21,9 @@ export class AppComponent implements OnDestroy {
   };
 
   constructor(private _router: Router, private _loadingService: LoadingService, private _renderer: Renderer2) {
-    this.checkRouterEvents();
+    afterNextRender(() => {
+      this.checkRouterEvents();
+    }); 
   }
 
   private checkRouterEvents(): void {

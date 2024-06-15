@@ -9,7 +9,7 @@ import { Title } from '@angular/platform-browser';
 import { Media } from '../../../models/entities/media';
 import { PageHome } from '../../../models/entities/pageHome';
 import { CoverImage } from '../../../models/entities/cover';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../../services/loading.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MetaService } from '../../../services/meta.service';
@@ -37,6 +37,7 @@ export class PageHomeComponent {
   showMainNavigation = false;
 
   constructor(
+    private _router: Router,
     private _route: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
@@ -315,7 +316,7 @@ export class PageHomeComponent {
   private initMetaData(): void {
     this._metaService.updateBaseTitle(this._appTitle);
    // this._metaService.updateBaseDescription(this._metaService.formatDescription(this.page.content));
-    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateUrl(environment.baseUrl + this._router.url);
     this._metaService.updateTitle(this._appTitle);
    // this._metaService.updateDescription(this._metaService.formatDescription(this.page.content));
     this._metaService.updateImage(this.page?.featuredMedia?.size?.xLarge?.src ?? '');

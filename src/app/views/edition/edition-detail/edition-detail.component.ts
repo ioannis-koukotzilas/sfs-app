@@ -1,15 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Edition } from '../../../models/entities/edition';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { Title } from '@angular/platform-browser';
-import { Observable, Subscription, concatMap, of, switchMap, tap } from 'rxjs';
+import { Subscription, concatMap, of, tap } from 'rxjs';
 import { News } from '../../../models/entities/news';
 import { Event } from '../../../models/entities/event';
 import { environment } from '../../../../environments/environment';
 import { Media } from '../../../models/entities/media';
 import { MediaService } from '../../../services/media.service';
-import { CoverImageComponent } from '../../../shared-views/cover-image/cover-image.component';
 import { LoadingService } from '../../../services/loading.service';
 import { ViewportScroller } from '@angular/common';
 import { CoverImage } from '../../../models/entities/cover';
@@ -32,6 +31,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
   coverImage?: CoverImage;
 
   constructor(
+    private _router: Router,
     private _route: ActivatedRoute,
     private _wpService: WpService,
     private _mediaService: MediaService,
@@ -238,7 +238,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
   private initMetaData(): void {
     this._metaService.updateBaseTitle(this._appTitle);
     this._metaService.updateBaseDescription(this._metaService.formatDescription(this.edition.excerpt));
-    this._metaService.updateUrl(window.location.href);
+    this._metaService.updateUrl(environment.baseUrl + this._router.url);
     this._metaService.updateTitle(this._appTitle);
     this._metaService.updateDescription(this._metaService.formatDescription(this.edition.excerpt));
     this._metaService.updateImage(this.edition?.featuredMedia?.size?.xLarge?.src ?? '');
@@ -248,6 +248,6 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this.shareData = { title: '', text: '', url: '' };
     this.shareData.title = this.edition.title.replace(/<[^>]*>/g, '');
     this.shareData.text = this.edition.excerpt.replace(/<[^>]*>/g, '');
-    this.shareData.url = window.location.href;
+    this.shareData.url = environment.baseUrl + this._router.url;
   }
 }

@@ -7,6 +7,8 @@ export class LazyLoadDirective {
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngAfterViewInit() {
+    if (typeof window !== 'undefined') {
+
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -22,7 +24,11 @@ export class LazyLoadDirective {
         }
       });
     });
+
+    
     obs.observe(this.el.nativeElement);
+
+  }
   }
 
   @HostListener('load', ['$event.target'])

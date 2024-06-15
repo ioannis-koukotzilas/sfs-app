@@ -63,16 +63,18 @@ export class NewsCategoryDetailComponent {
           if (news && news.length > 0) {
             this.category.news = this.initNews(news);
             this.totalPages = Number(headers.get('X-WP-TotalPages'));
-            const mediaIds = news.map((x) => x.featuredMediaId).filter((id) => id !== null);
+            const mediaIds = this.category.news?.map((x) => x.featuredMediaId).filter((id) => id !== null);
             return this._wpService.getMediaByIds(mediaIds);
           }
 
           return of([]);
         }),
-        tap((newsFeaturedMedia) => {
+        concatMap((newsFeaturedMedia) => {
           if (newsFeaturedMedia && newsFeaturedMedia.length > 0) {
             this.mapNewsMedia(newsFeaturedMedia);
           }
+
+          return of(null);
         })
       )
       .subscribe({
