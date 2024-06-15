@@ -7,7 +7,7 @@ import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { PageDefaultComponent } from './views/page/page-default/page-default.component';
 import { PageHomeComponent } from './views/page/page-home/page-home.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { EditionDetailComponent } from './views/edition/edition-detail/edition-detail.component';
 import { NewsDetailComponent } from './views/news/news-detail/news-detail.component';
 import { EditionListComponent } from './views/edition/edition-list/edition-list.component';
@@ -38,58 +38,48 @@ import { MainMenuComponent } from './shared-views/main-menu/main-menu.component'
 import { SecondaryMenuComponent } from './shared-views/secondary-menu/secondary-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    PageDefaultComponent,
-    PageHomeComponent,
-    EditionListComponent,
-    EditionDetailComponent,
-    NewsListComponent,
-    NewsDetailComponent,
-    EventListComponent,
-    EventDetailComponent,
-    GalleryComponent,
-    ListPaginationComponent,
-    ProgressBarComponent,
-
-    // Pipes
-    RemoveGreekAccentsPipe,
-     
-
-     PageInfoComponent,
-     PageContactComponent,
-     PageWrapperComponent,
-     IsoDatePipe,
-     DateTimePipe,
-     DatePipe,
-     PageAboutComponent,
-     NavigatorShareComponent,
-     NewsCategoryDetailComponent,
-     EventCategoryDetailComponent,
-     CoverImageComponent,
-
-     // directives
-     LazyLoadDirective,
-      ArticleFeaturedMediaComponent,
-      MainMenuComponent,
-      SecondaryMenuComponent
-
-      // ang
-      
-     
-  ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, LayoutModule],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true,
-    },
-    provideAnimationsAsync(),
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        PageDefaultComponent,
+        PageHomeComponent,
+        EditionListComponent,
+        EditionDetailComponent,
+        NewsListComponent,
+        NewsDetailComponent,
+        EventListComponent,
+        EventDetailComponent,
+        GalleryComponent,
+        ListPaginationComponent,
+        ProgressBarComponent,
+        // Pipes
+        RemoveGreekAccentsPipe,
+        PageInfoComponent,
+        PageContactComponent,
+        PageWrapperComponent,
+        IsoDatePipe,
+        DateTimePipe,
+        DatePipe,
+        PageAboutComponent,
+        NavigatorShareComponent,
+        NewsCategoryDetailComponent,
+        EventCategoryDetailComponent,
+        CoverImageComponent,
+        // directives
+        LazyLoadDirective,
+        ArticleFeaturedMediaComponent,
+        MainMenuComponent,
+        SecondaryMenuComponent
+        // ang
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, LayoutModule], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor,
+            multi: true,
+        },
+        provideAnimationsAsync(),
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
