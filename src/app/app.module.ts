@@ -80,6 +80,6 @@ import { LayoutModule } from '@angular/cdk/layout';
             multi: true,
         },
         provideAnimationsAsync(),
-        provideHttpClient(withFetch()),
+        provideHttpClient(withFetch())
     ] })
 export class AppModule {}
