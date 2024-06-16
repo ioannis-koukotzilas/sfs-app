@@ -239,7 +239,7 @@ export class EditionDetailComponent implements OnInit, OnDestroy {
     this._metaService.updateBaseTitle(this._appTitle);
     this._metaService.updateBaseDescription(this._metaService.formatDescription(this.edition.excerpt));
     this._metaService.updateUrl(environment.baseUrl + this._router.url);
-    this._metaService.updateTitle(this._appTitle);
+    this._metaService.updateTitle(this.edition.title);
     this._metaService.updateDescription(this._metaService.formatDescription(this.edition.excerpt));
     this._metaService.updateImage(this.edition?.featuredMedia?.size?.xLarge?.src ?? '');
   }

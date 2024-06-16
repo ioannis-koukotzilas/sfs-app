@@ -214,7 +214,7 @@ export class EventDetailComponent {
     this._metaService.updateBaseTitle(this._appTitle);
     this._metaService.updateBaseDescription(this._metaService.formatDescription(this.event.excerpt));
     this._metaService.updateUrl(environment.baseUrl + this._router.url);
-    this._metaService.updateTitle(this._appTitle);
+    this._metaService.updateTitle(this.event.title);
     this._metaService.updateDescription(this._metaService.formatDescription(this.event.excerpt));
     this._metaService.updateImage(this.event?.featuredMedia?.size?.xLarge?.src ?? '');
   }

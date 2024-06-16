@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { Subscription, concatMap, of, tap } from 'rxjs';
+import { ApplicationRef, Component } from '@angular/core';
+import { Subscription, concatMap, filter, map, mergeMap, of, take, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { News } from '../../../models/entities/news';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WpService } from '../../../services/wp.service';
 import { MediaService } from '../../../services/media.service';
 import { Title } from '@angular/platform-browser';
@@ -33,11 +33,22 @@ export class NewsDetailComponent {
     private _loadingService: LoadingService,
     private _titleService: Title,
     private _metaService: MetaService,
-    private _viewportScroller: ViewportScroller,
-  ) {}
+    private _viewportScroller: ViewportScroller
+  ) {
+    this.getNews();
+  }
+
+  private initMetaData(data: any): void {
+    this._metaService.updateBaseTitle(this._appTitle);
+    this._metaService.updateBaseDescription(this._metaService.formatDescription(data.excerpt.rendered));
+    // this._metaService.updateUrl(environment.baseUrl + this._router.url);
+    this._metaService.updateTitle(this._metaService.formatDescription(data.title.rendered));
+    this._metaService.updateDescription(this._metaService.formatDescription(data.excerpt.rendered));
+    // this._metaService.updateImage(this.news?.featuredMedia?.size?.xLarge?.src ?? '');
+  }
 
   ngOnInit(): void {
-    this.getNews();
+    //this.getNews();
   }
 
   ngOnDestroy(): void {
@@ -49,6 +60,7 @@ export class NewsDetailComponent {
       .pipe(
         tap(({ data }) => {
           if (data) {
+            this.initMetaData(data);
             this._viewportScroller.scrollToPosition([0, 0]);
             this.initNews(data);
           } else {
@@ -115,7 +127,7 @@ export class NewsDetailComponent {
       .subscribe({
         next: () => {
           this.initTitle();
-          this.initMetaData();
+         // this.initMetaData();
           this.initShareData();
           this._loadingService.set(false);
         },
@@ -212,14 +224,7 @@ export class NewsDetailComponent {
     }
   }
 
-  private initMetaData(): void {
-    this._metaService.updateBaseTitle(this._appTitle);
-    this._metaService.updateBaseDescription(this._metaService.formatDescription(this.news.excerpt));
-    this._metaService.updateUrl(environment.baseUrl + this._router.url);
-    this._metaService.updateTitle(this._appTitle);
-    this._metaService.updateDescription(this._metaService.formatDescription(this.news.excerpt));
-    this._metaService.updateImage(this.news?.featuredMedia?.size?.xLarge?.src ?? '');
-  }
+
 
   initShareData() {
     this.shareData = { title: '', text: '', url: '' };

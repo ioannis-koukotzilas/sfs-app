@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -7,7 +7,7 @@ import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { PageDefaultComponent } from './views/page/page-default/page-default.component';
 import { PageHomeComponent } from './views/page/page-home/page-home.component';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
 import { EditionDetailComponent } from './views/edition/edition-detail/edition-detail.component';
 import { NewsDetailComponent } from './views/news/news-detail/news-detail.component';
 import { EditionListComponent } from './views/edition/edition-list/edition-list.component';
@@ -80,7 +80,6 @@ import { LayoutModule } from '@angular/cdk/layout';
             multi: true,
         },
         provideAnimationsAsync(),
-        provideHttpClient(withInterceptorsFromDi()),
-        provideClientHydration(),
+        provideHttpClient(withFetch()),
     ] })
 export class AppModule {}
