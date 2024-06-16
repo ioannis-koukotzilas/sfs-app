@@ -53,12 +53,15 @@ export class MetaService {
   }
 
   formatDescription(html: string): string {
-    return (
-      html
-        .replace(/<[^>]*>/g, ' ') // Remove HTML tags
-        .replace(/\s+/g, ' ') // Remove double white spaces
-        .trim()
-        .slice(0, 500) + ' [...]'
-    );
+    const string = html
+      .replace(/<[^>]*>/g, ' ') // Remove HTML tags
+      .replace(/\s+/g, ' ') // Collapse multiple white spaces into one
+      .trim();
+
+    if (string.length > 500) {
+      return string.slice(0, 500) + ' [...]';
+    } else {
+      return string;
+    }
   }
 }
