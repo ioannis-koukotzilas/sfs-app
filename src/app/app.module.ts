@@ -38,49 +38,50 @@ import { MainMenuComponent } from './shared-views/main-menu/main-menu.component'
 import { SecondaryMenuComponent } from './shared-views/secondary-menu/secondary-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
-@NgModule({ declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        PageDefaultComponent,
-        PageHomeComponent,
-        EditionListComponent,
-        EditionDetailComponent,
-        NewsListComponent,
-        NewsDetailComponent,
-        EventListComponent,
-        EventDetailComponent,
-        GalleryComponent,
-        ListPaginationComponent,
-        ProgressBarComponent,
-        // Pipes
-        RemoveGreekAccentsPipe,
-        PageInfoComponent,
-        PageContactComponent,
-        PageWrapperComponent,
-        IsoDatePipe,
-        DateTimePipe,
-        DatePipe,
-        PageAboutComponent,
-        NavigatorShareComponent,
-        NewsCategoryDetailComponent,
-        EventCategoryDetailComponent,
-        CoverImageComponent,
-        // directives
-        LazyLoadDirective,
-        ArticleFeaturedMediaComponent,
-        MainMenuComponent,
-        SecondaryMenuComponent
-        // ang
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, LayoutModule], providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpErrorInterceptor,
-            multi: true,
-        },
-        provideAnimationsAsync(),
-        provideHttpClient(withFetch()),
-        provideClientHydration()
-    ] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    PageDefaultComponent,
+    PageHomeComponent,
+    EditionListComponent,
+    EditionDetailComponent,
+    NewsListComponent,
+    NewsDetailComponent,
+    EventListComponent,
+    EventDetailComponent,
+    GalleryComponent,
+    ListPaginationComponent,
+    ProgressBarComponent,
+    RemoveGreekAccentsPipe,
+    PageInfoComponent,
+    PageContactComponent,
+    PageWrapperComponent,
+    IsoDatePipe,
+    DateTimePipe,
+    DatePipe,
+    PageAboutComponent,
+    NavigatorShareComponent,
+    NewsCategoryDetailComponent,
+    EventCategoryDetailComponent,
+    CoverImageComponent,
+    LazyLoadDirective,
+    ArticleFeaturedMediaComponent,
+    MainMenuComponent,
+    SecondaryMenuComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, LayoutModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+    provideAnimationsAsync(),
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+  ],
+})
 export class AppModule {}

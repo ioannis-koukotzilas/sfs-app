@@ -1,10 +1,22 @@
 /
-/news/sintentefksi-epitropi-panagias-akadimia-dimokratikis-neoterikotitas
-/news/i-synexeia-tou-kratous-i-riparotita
-/news/exoriktiki-drastiriotita-sti-halkidiki
-/news/to-vromiko-nero-den-plenetai
+
 /news/stous-apologites-tis-anaptiksis
+/news/to-vromiko-nero-den-plenetai
+/news/exoriktiki-drastiriotita-sti-halkidiki
+/news/defteri-panelladiki-sinantisi-gia-tin-enrgeia
+/news/skouries-i-fthinoteri-eksoryksi-ston-planiti
+/news/paremvasi-tis-epitropis-sto-dimotiko-symvoulio
+/news/mikrofwniki-paremvasi-stin-plateia-megalis-panagias
+/news/nees-gewtriseis-sto-xontro-raxwni
+/news/parastasi-allileggyis-stin-puebla-mexico
+/news/ellinikos-xrysos-to-megalytero-fytwrio-psevdwn-minysewn
+/news/archise-to-dekaimero-agona-kai-eleftherias-sto-dasos-ton-skourion-21-30-7
+/antistasi-stin-epivevlimeni-kanonikotita
+/news/sintentefksi-epitropi-panagias-akadimia-dimokratikis-neoterikotitas
+/news/paremvasi-tis-epitropis-agwna-sti-vouli
 
+/event/pezoporia-sto-dasos-twn-skoyriwn
 /event/tsiritsantsoules-ponaei-to-myalo-mou
-
+/event/istories-patriarxias-rabbia-viola
+ 
 /edition/dekaimero-agona-2024

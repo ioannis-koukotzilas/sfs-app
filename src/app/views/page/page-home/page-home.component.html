@@ -39,7 +39,7 @@
   <div class="category-news-wrapper" *ngIf="(analysisNews && analysisNews.length > 0) || (observatoryNews && observatoryNews.length > 0)">
     <section class="category-news" *ngIf="analysisNews && analysisNews.length > 0">
       <div class="wrapper">
-        <h2 class="section-title">Ανάλυση</h2>
+        <h2 class="section-title">Αντιπληροφόρηση</h2>
         <div class="articles-wrapper">
           <a *ngIf="analysisNews.length > 0" class="grouped-link first-article" [routerLink]="['/news', analysisNews[0].slug]">
             <article class="article">

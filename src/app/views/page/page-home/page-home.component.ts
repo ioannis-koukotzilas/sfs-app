@@ -14,8 +14,6 @@ import { LoadingService } from '../../../services/loading.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MetaService } from '../../../services/meta.service';
 
-
-
 @Component({
   selector: 'app-page-home',
   templateUrl: './page-home.component.html',
@@ -44,7 +42,7 @@ export class PageHomeComponent {
     private _loadingService: LoadingService,
     private _breakpointObserver: BreakpointObserver,
     private _titleService: Title,
-    private _metaService: MetaService,
+    private _metaService: MetaService
   ) {}
 
   ngOnInit(): void {
@@ -107,7 +105,11 @@ export class PageHomeComponent {
 
   private getFeaturedNews(): void {
     const analysisCategoryId = 6;
+    const justiceCategoryId = 10;
+    const actionsCategoryId = 13;
+
     const observatoryCategoryId = 9;
+
     let featuredNewsIds: number[];
     const sub = this._wpService
       .getFeaturedNews()
@@ -136,7 +138,7 @@ export class PageHomeComponent {
             this.mapFeaturedNewsMedia(featuredNewsMedia);
           }
 
-          return this._wpService.getFilteredNewsByNewsCategoriesIds([analysisCategoryId], featuredNewsIds, 1, 4);
+          return this._wpService.getFilteredNewsByNewsCategoriesIds([analysisCategoryId, justiceCategoryId, actionsCategoryId], featuredNewsIds, 1, 4);
         }),
         concatMap((analysisNews) => {
           if (analysisNews && analysisNews.length > 0) {
@@ -315,10 +317,10 @@ export class PageHomeComponent {
 
   private initMetaData(): void {
     this._metaService.updateBaseTitle(this._appTitle);
-   // this._metaService.updateBaseDescription(this._metaService.formatDescription(this.page.content));
+    // this._metaService.updateBaseDescription(this._metaService.formatDescription(this.page.content));
     this._metaService.updateUrl(environment.baseUrl + this._router.url);
     this._metaService.updateTitle(this._appTitle);
-   // this._metaService.updateDescription(this._metaService.formatDescription(this.page.content));
+    // this._metaService.updateDescription(this._metaService.formatDescription(this.page.content));
     this._metaService.updateImage(this.page?.featuredMedia?.size?.xLarge?.src ?? '');
   }
 }
