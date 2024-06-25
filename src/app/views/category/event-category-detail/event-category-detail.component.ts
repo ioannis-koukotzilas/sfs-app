@@ -133,7 +133,7 @@ export class EventCategoryDetailComponent {
     if (this.category.name) {
       this._titleService.setTitle(this.category.name + ' - ' + this._appTitle);
     } else {
-      this._titleService.setTitle(this._appTitle);
+      this._titleService.setTitle(this._appTitle ?? '');
     }
   }
 

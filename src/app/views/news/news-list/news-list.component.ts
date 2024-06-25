@@ -112,7 +112,7 @@ export class NewsListComponent {
   }
 
   private initTitle(): void {
-    this._titleService.setTitle('Ενημέρωση' + ' - ' + this._appTitle);
+    this._titleService.setTitle('Αντιπληροφόρηση' + ' - ' + this._appTitle);
   }
 
   onPageChange(page: number): void {

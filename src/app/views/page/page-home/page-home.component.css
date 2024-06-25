@@ -28,7 +28,13 @@
 .featured-news > .wrapper {
   max-width: var(--max-w-xl);
   margin: 0 auto;
-  padding: 4.5rem 20px;
+  padding: 1.5rem 20px 4.5rem;
+}
+
+@media (min-width: 1280px) {
+  .featured-news > .wrapper {
+    padding: 4.5rem 20px;
+  }
 }
 
 .featured-news .section-title {
@@ -36,6 +42,13 @@
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1279px) {
+  .featured-news .section-title {
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(var(--primary-900));
+  }
 }
 
 .featured-news .articles-wrapper {

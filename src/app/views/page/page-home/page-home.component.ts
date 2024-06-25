@@ -312,7 +312,7 @@ export class PageHomeComponent {
   }
 
   private initTitle(): void {
-    this._titleService.setTitle(this._appTitle);
+    this._titleService.setTitle(this._appTitle ?? '');
   }
 
   private initMetaData(): void {
