@@ -1,0 +1,28 @@
+@if (loading) {
+  <app-loader />
+}
+
+@if (post) {
+  @if (post.featuredImage) {
+    <img [src]="post.featuredImage.sourceUrl" [alt]="post.title" />
+  }
+
+  <div class="wrapper">
+    <h2 class="title" [innerHTML]="post.title"></h2>
+
+    <div class="date">{{ post.date | date: 'd MMM y' : '' : 'el-GR' }}</div>
+
+    @if (post.categories.length > 0) {
+      <div class="categories">
+        @for (category of post.categories; track category.databaseId; let last = $last) {
+          {{ category.name }}
+          @if (!last) {
+            /
+          }
+        }
+      </div>
+    }
+
+    <div class="content inner-html" [innerHTML]="post.content"></div>
+  </div>
+}

@@ -1,0 +1,14 @@
+@if (loading) {
+  <app-loader />
+}
+
+@if (page) {
+  @if (page.featuredImage) {
+    <img class="featured-image" [src]="page.featuredImage.sourceUrl" [alt]="page.title" />
+  }
+
+  <div class="wrapper">
+    <h1 class="title">{{ page.title }}</h1>
+    <div class="content inner-html" [innerHTML]="page.content"></div>
+  </div>
+}

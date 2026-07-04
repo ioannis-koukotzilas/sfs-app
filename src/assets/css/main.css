@@ -1,0 +1,132 @@
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+/* Box sizing
+--------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+/* Typography
+--------------------------------------------- */
+
+html {
+  font-size: 16px;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0.1em;
+}
+
+@media (min-width: 960px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-base);
+  font-weight: normal;
+  line-height: 1.25;
+  color: var(--base-950);
+}
+
+body.dark {
+  background-color: var(--base-950);
+  color: var(--base-100);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-base);
+  font-weight: normal;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+strong,
+b {
+  font-weight: bold;
+}
+
+/* Elements
+--------------------------------------------- */
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+/* Links
+--------------------------------------------- */
+a {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--base-950);
+  text-decoration: none;
+}
+
+body.dark a {
+  color: var(--base-100);
+}
+
+a:focus,
+a:hover,
+a:active {
+  outline: 0;
+}
+
+/* Symbol
+--------------------------------------------- */
+.symbol {
+  font-family: var(--font-symbol);
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48;
+}
+
+.symbol::after {
+  display: inline-block;
+}

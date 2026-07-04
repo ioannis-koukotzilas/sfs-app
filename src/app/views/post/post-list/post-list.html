@@ -1,0 +1,35 @@
+@if (loading) {
+  <app-loader />
+}
+
+@if (posts.length > 0) {
+  <ul class="posts">
+    @for (post of posts; track post.databaseId) {
+      <li class="post">
+        <a [routerLink]="['/post', post.slug]">
+          @if (post.featuredImage) {
+            <img [src]="post.featuredImage.sourceUrl" [alt]="post.title" />
+          }
+
+          <h3 class="title" [innerHTML]="post.title"></h3>
+
+          <div class="meta">
+            <span class="date">{{ post.date | date: 'd MMM y' : '' : 'el-GR' }}</span>
+
+            @if (post.categories.length > 0) {
+              <span class="categories">
+                /
+                @for (category of post.categories; track category.databaseId; let last = $last) {
+                  {{ category.name }}
+                  @if (!last) {
+                    /
+                  }
+                }
+              </span>
+            }
+          </div>
+        </a>
+      </li>
+    }
+  </ul>
+}

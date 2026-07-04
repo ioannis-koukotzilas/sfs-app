@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <h1 class="site-title">
+    <a routerLink="/">Struggle for Skouries</a>
+  </h1>
+
+  <div #menuContainer>
+    <button class="toggle-menu" (click)="toggleMenu()">
+      <span class="symbol">{{ menuVisible ? 'close' : 'menu' }}</span>
+    </button>
+
+    @if (menuVisible) {
+      <nav class="menu">
+        <ul class="menu-wrapper">
+          <li class="menu-item">
+            <a
+              routerLink="/"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="closeMenu()"
+              >Αρχική</a
+            >
+          </li>
+          <li class="menu-item">
+            <a routerLink="/ten-days-struggle" routerLinkActive="active" (click)="closeMenu()">Δεκαήμερο Αγώνα 2026</a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/events" routerLinkActive="active" (click)="closeMenu()">Εκδηλώσεις</a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/posts" routerLinkActive="active" (click)="closeMenu()">Κείμενα</a>
+          </li>
+          <li class="menu-item">
+            <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">Ταυτότητα</a>
+          </li>
+        </ul>
+      </nav>
+    }
+  </div>
+</div>

@@ -1,0 +1,28 @@
+@if (loading) {
+  <app-loader />
+}
+
+@if (event) {
+  @if (event.featuredImage) {
+    <img [src]="event.featuredImage.sourceUrl" [alt]="event.title" />
+  }
+
+  <div class="wrapper">
+    <h2 class="title" [innerHTML]="event.title"></h2>
+
+    <div class="date">{{ event.eventDate | date: 'd MMM y' : '' : 'el-GR' }}</div>
+
+    @if (event.categories.length > 0) {
+      <div class="categories">
+        @for (category of event.categories; track category.databaseId; let last = $last) {
+          {{ category.name }}
+          @if (!last) {
+            /
+          }
+        }
+      </div>
+    }
+
+    <div class="content inner-html" [innerHTML]="event.content"></div>
+  </div>
+}

@@ -1,0 +1,51 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.wrapper {
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-title {
+  font-size: var(--font-xl);
+}
+
+button.toggle-menu {
+  cursor: pointer;
+  background: transparent;
+  margin: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+
+  .menu-wrapper {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 0.5rem;
+
+    a {
+      padding: 0.65rem 1rem;
+      background-color: var(--base-950);
+      color: var(--base-100);
+      border-radius: 10rem;
+    }
+  }
+}

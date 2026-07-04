@@ -1,0 +1,7 @@
+@if (loading) {
+  <app-loader />
+}
+
+@if (coverImage) {
+  <img class="cover-image" [src]="coverImage.sourceUrl" />
+}

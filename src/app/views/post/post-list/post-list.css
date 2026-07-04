@@ -1,0 +1,17 @@
+.posts {
+  max-width: 720px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.post {
+  padding-top: 1rem;
+  border-top: 1px solid;
+
+  .title {
+    font-size: var(--font-lg);
+    margin-bottom: 0.25rem;
+  }
+}

@@ -1,1 +1,51 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('./assets/css/normalize.css');
+@import url('./assets/css/variables.css');
+@import url('./assets/css/main.css');
+
+app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex-grow: 1;
+  padding: 0 1rem;
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.inner-html {
+  font-family: var(--font-serif);
+
+  p:not(:last-of-type) {
+    margin: 0 0 1rem;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  strong,
+  b {
+    font-family: var(--font-sans);
+  }
+}
+
+/* App Header
+--------------------------------------------- */
+
+body:not(.dark) app-header {
+  background-color: #fff;
+}
+
+body.dark:not(.home) app-header {
+  background-color: var(--base-950);
+}
+
+/* Menu
+--------------------------------------------- */
+body.dark button.toggle-menu {
+  border-color: var(--base-100);
+  color: var(--base-100);
+}

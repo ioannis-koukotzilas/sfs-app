@@ -1,0 +1,33 @@
+:root {
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-serif: 'GFS Didot', serif;
+  --font-symbol: 'Material Symbols Outlined';
+
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+
+  --max-w-base: 2560px;
+  --max-w-sm: 540px;
+  --max-w-md: 720px;
+  --max-w-lg: 960px;
+  --max-w-xl: 1140px;
+  --max-w-xxl: 1320px;
+  --max-w-full: 100%;
+
+  --base-50: #f6f6f6;
+  --base-100: #e7e7e7;
+  --base-200: #d1d1d1;
+  --base-300: #b0b0b0;
+  --base-400: #888888;
+  --base-500: #6d6d6d;
+  --base-600: #5d5d5d;
+  --base-700: #4f4f4f;
+  --base-800: #454545;
+  --base-900: #3d3d3d;
+  --base-950: #111111;
+}

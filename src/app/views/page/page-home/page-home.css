@@ -1,0 +1,20 @@
+.manifesto {
+  font-size: var(--font-2xl);
+  margin-bottom: 1rem;
+
+  > .wrapper {
+    max-width: 960px;
+    margin-right: auto;
+  }
+}
+
+.cover-image {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  object-fit: cover;
+  width: 100%;
+  height: 100vh;
+  opacity: 0.5;
+}
