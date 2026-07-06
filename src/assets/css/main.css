@@ -19,7 +19,7 @@ html {
 --------------------------------------------- */
 
 html {
-  font-size: 16px;
+  font-size: 14px;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   letter-spacing: 0.1em;
@@ -27,7 +27,7 @@ html {
 
 @media (min-width: 960px) {
   html {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -37,6 +37,11 @@ body {
   font-weight: normal;
   line-height: 1.25;
   color: var(--base-950);
+  font-feature-settings:
+    'pnum' 1,
+    'kern' 1,
+    'ss01' 1,
+    'ss03' 1;
 }
 
 body.dark {

@@ -5,13 +5,8 @@
   flex-direction: column-reverse;
   gap: 1rem;
 
-  @media (min-width: 960px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: end;
-  }
-
   .cc {
     font-size: var(--font-sm);
+    font-family: var(--font-mono);
   }
 }

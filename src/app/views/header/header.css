@@ -16,6 +16,8 @@
 
 .site-title {
   font-size: var(--font-xl);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
 }
 
 button.toggle-menu {

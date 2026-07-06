@@ -1,0 +1,20 @@
+<audio
+  #audio
+  preload="none"
+  (loadstart)="isLoading = true"
+  (waiting)="isLoading = true"
+  (canplay)="isLoading = false"
+  (playing)="onPlaying()"
+  (pause)="isPlaying = false"
+  (error)="onError()"
+></audio>
+
+<button
+  type="button"
+  class="audio-toggle"
+  (click)="toggleAudio()"
+  [class.loading]="isLoading"
+  [attr.aria-label]="isPlaying || isLoading ? 'Stop radio' : 'Play radio'"
+>
+  <span class="symbol">{{ isPlaying || isLoading ? 'pause' : 'play_arrow' }}</span>
+</button>

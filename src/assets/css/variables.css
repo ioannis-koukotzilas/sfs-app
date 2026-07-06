@@ -1,6 +1,8 @@
 :root {
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: 'GT-America Standard', sans-serif;
+  --font-sans-condensed: 'GT-America Condensed', sans-serif;
   --font-serif: 'GFS Didot', serif;
+  --font-mono: 'GT-America Mono', monospace;
   --font-symbol: 'Material Symbols Outlined';
 
   --font-xs: 0.75rem;
